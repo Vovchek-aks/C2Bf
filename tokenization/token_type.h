@@ -14,6 +14,7 @@ typedef enum {
     int32,
     uint64,
     int64,
+    type_names_count
 } type_name_t;
 
 typedef struct {
@@ -22,8 +23,10 @@ typedef struct {
 
 void token_type_init(void);
 
-tokenization_status_t get_token_type_status(char *line);
+tokenization_status_t token_type_get_status(char *line);
 
-char *str_token_type_data(token_type_data_t data);
+token_type_data_t token_type_get_data_from(char *line);
+
+char *token_type_data_to_str(token_type_data_t data);
 
 #endif

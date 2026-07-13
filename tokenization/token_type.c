@@ -21,7 +21,7 @@ void token_type_init(void) {
     type_name_to_str_set(int64, "int64_t");
 }
 
-tokenization_status_t get_token_type_status(char *line) {
+tokenization_status_t token_type_get_status(char *line) {
     dict_for(type_name_to_str, type_and_name_t, item) {
         size_t len_line = strlen(line);
 
@@ -37,7 +37,16 @@ tokenization_status_t get_token_type_status(char *line) {
     return incorrect;
 }
 
-char *str_token_type_data(token_type_data_t data) {
+token_type_data_t token_type_get_data_from(char *line) {
+    type_name_t name;
+    dict_get_key_cmp(type_name_to_str, type_and_name_t, line, name, strcmp);
+
+    return (token_type_data_t){
+        .name = name
+    };
+}
+
+char *token_type_data_to_str(token_type_data_t data) {
     char *line = NULL;
     dict_get(type_name_to_str, type_and_name_t, data.name, line);
     assert(line != NULL);

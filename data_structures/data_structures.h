@@ -1,4 +1,5 @@
 #include <malloc.h>
+#include <assert.h>
 
 #ifndef DATA_STRUCTURES
 #define DATA_STRUCTURES
@@ -57,6 +58,28 @@
     }}                                                                                                                \
 } while (0)
 
+#define dict_get_key(dict, type, value_to_check, result) do {                                                         \
+    {dict_for(dict, type, item) {                                                                                     \
+        if (item.value == value_to_check) {                                                                           \
+            result = item.key;                                                                                        \
+            break;                                                                                                    \
+        }                                                                                                             \
+    }                                                                                                                 \
+    assert(FOR_IDX < dict.count);                                                                                                        \
+    }                                                                                                                 \
+} while (0)
+
+#define dict_get_key_cmp(dict, type, value_to_check, result, cmp) do {                                                         \
+    {dict_for(dict, type, item) {                                                                                     \
+        if (cmp(item.value, value_to_check) == 0) {                                                                           \
+            result = item.key;                                                                                        \
+            break;                                                                                                    \
+        }                                                                                                             \
+    }                                                                                                                 \
+    assert(FOR_IDX < dict.count);                                                                                                        \
+    }                                                                                                                 \
+} while (0)
+
 #define dict_contains(dict, type, key_to_check, result) do {                                                          \
     result = 0;                                                                                                       \
     {dict_for(dict, type, item) {                                                                                     \
@@ -67,8 +90,18 @@
     }}                                                                                                                \
 } while (0)
 
+#define dict_contains_value(dict, type, value_to_check, result) do {                                                          \
+    result = 0;                                                                                                       \
+    {dict_for(dict, type, item) {                                                                                     \
+        if (item.value == value_to_check) {                                                                               \
+            result = 1;                                                                                               \
+            break;                                                                                                    \
+        }                                                                                                             \
+    }}                                                                                                                \
+} while (0)
+
 #define dict_set(dict, type, TV, key, value_to_set) do {                                                              \
-    int is_contains;                                                                                                  \
+    uint8_t is_contains;                                                                                                  \
     dict_contains(dict, type, key, is_contains);                                                                      \
     if (!is_contains) {                                                                                               \
         type item = {key, value_to_set};                                                                              \
