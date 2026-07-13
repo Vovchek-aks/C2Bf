@@ -1,3 +1,5 @@
+#include <malloc.h>
+
 #ifndef DATA_STRUCTURES
 #define DATA_STRUCTURES
 
@@ -56,17 +58,17 @@
 } while (0)
 
 #define dict_contains(dict, type, key_to_check, result) do {                                                          \
-    result = false;                                                                                                   \
+    result = 0;                                                                                                       \
     {dict_for(dict, type, item) {                                                                                     \
         if (item.key == key_to_check) {                                                                               \
-            result = true;                                                                                            \
+            result = 1;                                                                                               \
             break;                                                                                                    \
         }                                                                                                             \
     }}                                                                                                                \
 } while (0)
 
 #define dict_set(dict, type, TV, key, value_to_set) do {                                                              \
-    bool is_contains;                                                                                                 \
+    int is_contains;                                                                                                  \
     dict_contains(dict, type, key, is_contains);                                                                      \
     if (!is_contains) {                                                                                               \
         type item = {key, value_to_set};                                                                              \

@@ -1,14 +1,14 @@
 #include "token_type.h"
 #include "tokenizer.h"
-#include "data_structures/data_structures.h"
+#include "../data_structures/data_structures.h"
 
 #ifndef TOKENIZATION
 #define TOKENIZATION
 
 typedef enum {
-    type,
+    c_type,
     name,
-    operator,
+    c_operator,
     keyword,
     literal,
 } token_kind_t;
@@ -38,8 +38,14 @@ typedef DICT(tokenizers_item_t) tokenizers_t;
 
 typedef LIST(token_t) tokens_t;
 
+void tokenization_init(void);
+
 tokens_t tokenize(char *code);
 
-tokenizers_t make_tokenizers();
+tokenizers_t make_tokenizers(void);
+
+void print_token(token_t token);
+
+void print_tokens(tokens_t tokens);
 
 #endif
