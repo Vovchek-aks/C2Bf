@@ -96,16 +96,14 @@ token_data_t get_data_from(char *line, token_kind_t kind) {
 
 void print_tokens(tokens_t tokens)
 {
-    list_for(tokens, token_t, token)
-    {
+    list_for(tokens, token_t, token) {
         print_token(token);
     }
 }
 
 static char *str_token_name(token_t token)
 {
-    switch (token.kind)
-    {
+    switch (token.kind) {
     case type_:
         return TOKEN_TYPE_NAME;
     default:
@@ -115,8 +113,7 @@ static char *str_token_name(token_t token)
 
 static char *str_token_data(token_t token)
 {
-    switch (token.kind)
-    {
+    switch (token.kind) {
     case type_:
         return token_type_data_to_str(token.data.type);
     default:

@@ -14,6 +14,7 @@
 
 #define list_alloc(list, type) do {                                                                                   \
     type *data = malloc(sizeof(type) * LIST_INITIAL_SIZE);                                                            \
+    assert(data != NULL);                                                                                             \
     list.data = data;                                                                                                 \
     list.count = 0;                                                                                                   \
     list.capacity = LIST_INITIAL_SIZE;                                                                                \
@@ -22,11 +23,11 @@
 #define list_push(list, element) do {                                                                                 \
     if (list.count == list.capacity) {                                                                                \
         list.capacity *= 2;                                                                                           \
-        list.data = realloc(list.data, list.capacity);                                                                \
+        list.data = realloc(list.data, sizeof(element) * list.capacity);                                                 \
+        assert(list.data != NULL);                                                                                    \
     }                                                                                                                 \
                                                                                                                       \
-    *(list.data + list.count) = element;                                                                              \
-    list.count++;                                                                                                     \
+    list.data[list.count++] = element;                                                                                \
 } while (0)
 
 #define list_for(list, type, name)                                                                                    \

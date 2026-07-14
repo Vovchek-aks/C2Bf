@@ -5,7 +5,7 @@
 #ifndef TOKENIZATION
 #define TOKENIZATION
 
-#define TOKEN_MAX_LENGTH 256
+#define TOKEN_MAX_LENGTH 255
 
 typedef enum {
     type_,
