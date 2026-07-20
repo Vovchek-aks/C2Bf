@@ -1,13 +1,12 @@
-#include <assert.h>
 #include "token_type.h"
-#include <string.h>
+#include "token_dict_macro.h"
 
 #define type_name_to_str_set(key, value) dict_set(type_name_to_str, type_and_name_t, char *, key, value)
 
 typedef key_value(type_name_t, char *) type_and_name_t;
-typedef DICT(type_and_name_t) type_name_to_str_t;
 
-static type_name_to_str_t type_name_to_str;
+TOKEN_DICT(type_name_t, token_type_data_t, type_and_name_t, type_name_to_str_t, type_name_to_str,
+           token_type_get_status, token_type_get_data_from, write_token_type_data)
 
 void token_type_init(void) {
     dict_alloc(type_name_to_str, type_and_name_t);
@@ -19,37 +18,4 @@ void token_type_init(void) {
     type_name_to_str_set(int32, "int32_t");
     type_name_to_str_set(uint64, "uint64_t");
     type_name_to_str_set(int64, "int64_t");
-}
-
-tokenization_status_t token_type_get_status(char *line) {
-    dict_for(type_name_to_str, type_and_name_t, item) {
-        size_t len_line = strlen(line);
-
-        if (len_line > strlen(item.value))
-            continue;
-
-        if (strcmp(line, item.value) == 0)
-            return correct;
-
-        if (strncmp(line, item.value, len_line) == 0)
-            return can_become_correct;
-    }
-    return incorrect;
-}
-
-token_type_data_t token_type_get_data_from(char *line) {
-    type_name_t name;
-    dict_get_key_cmp(type_name_to_str, type_and_name_t, line, name, strcmp);
-
-    return (token_type_data_t) {
-        .name = name
-    };
-}
-
-void write_token_type_data(token_type_data_t data, char *buffer) {
-    char *line = NULL;
-    dict_get(type_name_to_str, type_and_name_t, data.name, line);
-    assert(line != NULL);
-
-    strcpy(buffer, line);
 }

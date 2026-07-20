@@ -1,6 +1,7 @@
 #include "tokenization.h"
 #include "token_type.c"
 #include "token_name.c"
+#include "token_operator.c"
 #include <assert.h>
 #include <ctype.h>
 
@@ -11,8 +12,10 @@ void tokenization_init(void) {
     dict_alloc(tokenizers, tokenizers_item_t);
     dict_set(tokenizers, tokenizers_item_t, tokenizer_t, type_, token_type_get_status);
     dict_set(tokenizers, tokenizers_item_t, tokenizer_t, name, token_name_get_status);
+    dict_set(tokenizers, tokenizers_item_t, tokenizer_t, operator_, token_operator_get_status);
 
     token_type_init();
+    token_operator_init();
 }
 
 static tokenization_status_t get_best_status(char *line, token_kind_t *kind) {
@@ -89,9 +92,11 @@ tokens_t tokenize(char *code)
 token_data_t get_data_from(char *line, token_kind_t kind) {
     switch (kind) {
         case type_:
-            return (token_data_t){.type = token_type_get_data_from(line)};
+            return (token_data_t){.type_ = token_type_get_data_from(line)};
         case name:
             return (token_data_t){.name = token_name_get_data_from(line)};
+        case operator_:
+            return (token_data_t){.operator_ = token_operator_get_data_from(line)};
         default:
             assert(0);
     }
@@ -109,6 +114,8 @@ static char *str_token_name(token_t token) {
         return TOKEN_TYPE_NAME;
     case name:
         return TOKEN_NAME_NAME;
+    case operator_:
+        return TOKEN_OPERATOR_NAME;
     default:
         assert(0);
     }
@@ -117,10 +124,13 @@ static char *str_token_name(token_t token) {
 static void write_token_data(token_t token, char *buffer) {
     switch (token.kind) {
     case type_:
-        write_token_type_data(token.data.type, buffer);
+        write_token_type_data(token.data.type_, buffer);
         return;
     case name:
         write_token_name_data(token.data.name, buffer);
+        return;
+    case operator_:
+        write_token_operator_data(token.data.operator_, buffer);
         return;
     default:
         assert(0);

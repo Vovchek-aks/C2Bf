@@ -1,5 +1,6 @@
 #include <malloc.h>
 #include <assert.h>
+#include <stdint.h>
 
 #ifndef DATA_STRUCTURES
 #define DATA_STRUCTURES
