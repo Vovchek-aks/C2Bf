@@ -3,6 +3,7 @@
 #include "token_name.c"
 #include "token_operator.c"
 #include "token_keyword.c"
+#include "token_literal.c"
 #include <assert.h>
 #include <ctype.h>
 
@@ -15,6 +16,7 @@ void tokenization_init(void) {
     dict_set(tokenizers, tokenizers_item_t, tokenizer_t, keyword, token_keyword_get_status);
     dict_set(tokenizers, tokenizers_item_t, tokenizer_t, name, token_name_get_status);
     dict_set(tokenizers, tokenizers_item_t, tokenizer_t, operator_, token_operator_get_status);
+    dict_set(tokenizers, tokenizers_item_t, tokenizer_t, literal, token_literal_get_status);
 
     token_type_init();
     token_operator_init();
@@ -95,13 +97,15 @@ tokens_t tokenize(char *code)
 token_data_t get_data_from(char *line, token_kind_t kind) {
     switch (kind) {
         case type_:
-            return (token_data_t){.type_ = token_type_get_data_from(line)};
+            return (token_data_t){.as_type = token_type_get_data_from(line)};
         case name:
-            return (token_data_t){.name = token_name_get_data_from(line)};
+            return (token_data_t){.as_name = token_name_get_data_from(line)};
         case operator_:
-            return (token_data_t){.operator_ = token_operator_get_data_from(line)};
+            return (token_data_t){.as_operator = token_operator_get_data_from(line)};
         case keyword:
-            return (token_data_t){.keyword = token_keyword_get_data_from(line)};
+            return (token_data_t){.as_keyword = token_keyword_get_data_from(line)};
+        case literal:
+            return (token_data_t){.as_literal = token_literal_get_data_from(line)};
         default:
             assert(0);
     }
@@ -123,6 +127,8 @@ static char *str_token_name(token_t token) {
         return TOKEN_OPERATOR_NAME;
     case keyword:
         return TOKEN_KEYWORD_NAME;
+    case literal:
+        return TOKEN_LITERAL_NAME;
     default:
         assert(0);
     }
@@ -131,16 +137,19 @@ static char *str_token_name(token_t token) {
 static void write_token_data(token_t token, char *buffer) {
     switch (token.kind) {
     case type_:
-        write_token_type_data(token.data.type_, buffer);
+        write_token_type_data(token.data.as_type, buffer);
         return;
     case name:
-        write_token_name_data(token.data.name, buffer);
+        write_token_name_data(token.data.as_name, buffer);
         return;
     case operator_:
-        write_token_operator_data(token.data.operator_, buffer);
+        write_token_operator_data(token.data.as_operator, buffer);
         return;
     case keyword:
-        write_token_keyword_data(token.data.keyword, buffer);
+        write_token_keyword_data(token.data.as_keyword, buffer);
+        return;
+    case literal:
+        write_token_literal_data(token.data.as_literal, buffer);
         return;
     default:
         assert(0);
