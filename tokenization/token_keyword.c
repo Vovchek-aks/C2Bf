@@ -5,8 +5,8 @@
 
 typedef key_value(keyword_t, char *) keyword_KV_t;
 
-TOKEN_DICT(keyword_t, token_keyword_data_t, keyword_KV_t, keyword_name_to_str_t, keyword_to_str,
-           token_keyword_get_status, token_keyword_get_data_from, write_token_keyword_data)
+TOKEN_DICT_WITH_WRITE(keyword_t, token_keyword_data_t, keyword_KV_t, keyword_name_to_str_t, keyword_to_str,
+                      token_keyword_get_status, token_keyword_get_data_from, write_token_keyword_data)
 
 void token_keyword_init(void) {
     dict_alloc(keyword_to_str, keyword_KV_t);

@@ -5,8 +5,8 @@
 
 typedef key_value(type_name_t, char *) type_and_name_t;
 
-TOKEN_DICT(type_name_t, token_type_data_t, type_and_name_t, type_name_to_str_t, type_name_to_str,
-           token_type_get_status, token_type_get_data_from, write_token_type_data)
+TOKEN_DICT_WITH_WRITE(type_name_t, token_type_data_t, type_and_name_t, type_name_to_str_t, type_name_to_str,
+                      token_type_get_status, token_type_get_data_from, write_token_type_data)
 
 void token_type_init(void) {
     dict_alloc(type_name_to_str, type_and_name_t);

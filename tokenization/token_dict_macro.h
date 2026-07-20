@@ -5,7 +5,7 @@
 #ifndef TOKEN_DICT_MACRO
 #define TOKEN_DICT_MACRO
 
-#define TOKEN_DICT(key_t, data_t, KV_t, dict_t, dict_name, get_status_name, get_data_name, write_data_name)            \
+#define TOKEN_DICT(key_t, data_t, KV_t, dict_t, dict_name, get_status_name, get_data_name)                             \
     typedef DICT(KV_t) dict_t;                                                                                         \
                                                                                                                        \
     static dict_t dict_name;                                                                                           \
@@ -33,7 +33,11 @@
         return (data_t) {                                                                                              \
                 .name = name                                                                                           \
         };                                                                                                             \
-    }                                                                                                                  \
+    }
+
+
+#define TOKEN_DICT_WITH_WRITE(key_t, data_t, KV_t, dict_t, dict_name, get_status_name, get_data_name, write_data_name) \
+    TOKEN_DICT(key_t, data_t, KV_t, dict_t, dict_name, get_status_name, get_data_name)                                 \
                                                                                                                        \
     void write_data_name(data_t data, char *buffer) {                                                                  \
         char *line = NULL;                                                                                             \
