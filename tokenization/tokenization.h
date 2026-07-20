@@ -1,6 +1,7 @@
 #include "token_type.h"
 #include "token_name.h"
 #include "token_operator.h"
+#include "token_keyword.h"
 #include "tokenizer.h"
 #include "../data_structures/data_structures.h"
 
@@ -22,6 +23,7 @@ typedef union {
     token_type_data_t type_;
     token_name_data_t name;
     token_operator_data_t operator_;
+    token_keyword_data_t keyword;
 } token_data_t;
 
 typedef struct {

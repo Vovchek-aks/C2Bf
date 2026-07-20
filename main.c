@@ -7,9 +7,7 @@
 
 int32_t main() {
     tokenization_init();
-    char *code = "uint8_t _aboba ; ";
-
-    int a = 0;
+    char *code = "uint8_t _aboba ; return sizeof(uint8_t**) ";
 
     tokens_t tokens = tokenize(code);
     print_tokens(tokens);

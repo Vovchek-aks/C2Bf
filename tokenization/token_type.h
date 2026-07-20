@@ -6,6 +6,7 @@
 #define TOKEN_TYPE_NAME "TOKEN_TYPE"
 
 typedef enum {
+    void_,
     uint8,
     int8,
     uint16,
