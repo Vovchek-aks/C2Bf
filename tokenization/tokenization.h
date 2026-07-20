@@ -1,4 +1,5 @@
 #include "token_type.h"
+#include "token_name.h"
 #include "tokenizer.h"
 #include "../data_structures/data_structures.h"
 
@@ -18,6 +19,7 @@ typedef enum {
 
 typedef union {
     token_type_data_t type;
+    token_name_data_t name;
 } token_data_t;
 
 typedef struct {

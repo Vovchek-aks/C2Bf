@@ -41,14 +41,15 @@ token_type_data_t token_type_get_data_from(char *line) {
     type_name_t name;
     dict_get_key_cmp(type_name_to_str, type_and_name_t, line, name, strcmp);
 
-    return (token_type_data_t){
+    return (token_type_data_t) {
         .name = name
     };
 }
 
-char *token_type_data_to_str(token_type_data_t data) {
+void write_token_type_data(token_type_data_t data, char *buffer) {
     char *line = NULL;
     dict_get(type_name_to_str, type_and_name_t, data.name, line);
     assert(line != NULL);
-    return line;
+
+    strcpy(buffer, line);
 }
