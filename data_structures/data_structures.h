@@ -60,6 +60,15 @@
     }}                                                                                                                \
 } while (0)
 
+#define dict_get_cmp(dict, type, key_to_check, result, cmp) do {                                                      \
+    {dict_for(dict, type, item) {                                                                                     \
+        if (cmp(item.key, key_to_check) == 0) {                                                                       \
+            result = item.value;                                                                                      \
+            break;                                                                                                    \
+        }                                                                                                             \
+    }}                                                                                                                \
+} while (0)
+
 #define dict_get_key(dict, type, value_to_check, result) do {                                                         \
     {dict_for(dict, type, item) {                                                                                     \
         if (item.value == value_to_check) {                                                                           \
@@ -71,9 +80,9 @@
     }                                                                                                                 \
 } while (0)
 
-#define dict_get_key_cmp(dict, type, value_to_check, result, cmp) do {                                                         \
+#define dict_get_key_cmp(dict, type, value_to_check, result, cmp) do {                                                \
     {dict_for(dict, type, item) {                                                                                     \
-        if (cmp(item.value, value_to_check) == 0) {                                                                           \
+        if (cmp(item.value, value_to_check) == 0) {                                                                   \
             result = item.key;                                                                                        \
             break;                                                                                                    \
         }                                                                                                             \

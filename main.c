@@ -1,13 +1,11 @@
 #include <stdint.h>
-#include <stdio.h>
 #include "tokenization/tokenization.c"
 #include "parsing/parsing.c"
 #include "translation/translation.c"
 
-
-int32_t main() {
+int32_t main(void) {
     tokenization_init();
-    char *code = "int32_t main() {\n    return 0;\n}\n";
+    char *code = "int32_t main(void) { printf(\"Hello, World!\"); return 0; } ";
 
     tokens_t tokens = tokenize(code);
     print_tokens(tokens);

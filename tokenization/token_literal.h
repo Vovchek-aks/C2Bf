@@ -8,6 +8,7 @@
 typedef enum {
     int_,
     float_,
+    char_,
     str,
     token_literal_kinds,
 } token_literal_kind_t;
@@ -18,9 +19,11 @@ typedef struct {
     char *line;
 } token_literal_data_t;
 
-tokenization_status_t token_literal_get_status(char *line);
+tokenization_status_t token_literal_number_get_status(char *line);
 
-token_literal_data_t token_literal_get_data_from(char *line);
+token_literal_data_t token_literal_number_get_data_from(char *line);
+
+token_literal_data_t token_literal_str_or_char_try_get_data_from(char *line);
 
 void write_token_literal_data(token_literal_data_t data, char *buffer);
 

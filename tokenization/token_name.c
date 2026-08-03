@@ -6,8 +6,8 @@ tokenization_status_t token_name_get_status(char *line) {
     if (isdigit(*line))
         return incorrect;
 
-    for (char c = *line; c; c = *(++line))
-        if (!(isalnum(c) || c == '_'))
+    for (char alpha = *line; alpha; alpha = *(++line))
+        if (!(isalnum(alpha) || alpha == '_'))
             return incorrect;
 
     return correct;
