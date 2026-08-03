@@ -6,7 +6,7 @@
 #define TOKEN_NAME_NAME "TOKEN_NAME"
 
 typedef struct {
-    char *line;
+    char *name;
 } token_name_data_t;
 
 tokenization_status_t token_name_get_status(char *line);

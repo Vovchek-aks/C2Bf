@@ -22,6 +22,6 @@ token_name_data_t token_name_get_data_from(char *line) {
 
 void write_token_name_data(token_name_data_t data, char *buffer) {
     buffer[0] = '"';
-    strcpy(buffer + 1, data.line);
+    strcpy(buffer + 1, data.name);
     buffer[strlen(buffer)] = '"';
 }

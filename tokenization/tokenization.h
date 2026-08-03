@@ -12,11 +12,11 @@
 #define TOKEN_MAX_LENGTH 255
 
 typedef enum {
-    type_,
-    name,
-    operator_,
-    keyword,
-    literal,
+    token_kind_type,
+    token_kind_name,
+    token_kind_operator,
+    token_kind_keyword,
+    token_kind_literal,
     token_kinds_count
 } token_kind_t;
 

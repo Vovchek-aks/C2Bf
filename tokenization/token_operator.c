@@ -103,10 +103,10 @@ void token_operator_init(void) {
     name_of_set(close_square, "close_square");
 }
 
-void write_token_operator_data(token_operator_data_t data, char *buffer) {                                                                  \
-    char *line = NULL;                                                                                             \
-    dict_get(name_of, operator_KV_t , data.name, line);                                                                    \
-    assert(line != NULL);                                                                                          \
-                                                                                                                   \
-    strcpy(buffer, line);                                                                                          \
+void write_token_operator_data(token_operator_data_t data, char *buffer) {
+    char *line = NULL;
+    dict_get(name_of, operator_KV_t , data.name, line);
+    assert(line != NULL);
+
+    strcpy(buffer, line);
 }

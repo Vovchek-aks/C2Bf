@@ -1,0 +1,35 @@
+#include "../../tokenization/tokenization.h"
+#include "expressions_datas.h"
+
+#ifndef EXPRESSIONS
+#define EXPRESSIONS
+
+typedef enum {
+    expression_kind_unary_prefix_operation,
+    expression_kind_unary_postfix_operation,
+    expression_kind_binary_operation,
+    expression_kind_indexing,
+    expression_kind_name,
+    expression_kind_struct_creation,
+    expression_kind_literal,
+    expression_kind_function_call,
+    expression_kind_field_access,
+    expression_kinds_count
+} expression_kind_t;
+
+typedef struct {
+    tokens_t tokens;
+    expression_kind_t kind;
+    expression_data_t data;
+} expression_t;
+
+typedef key_value(expression_kind_t, expression_parser_t) expression_parsers_KV_t;
+typedef DICT(expression_parsers_KV_t) expression_parsers_t;
+
+void expressions_parsing_init();
+
+expression_t *parse_expression(tokens_t tokens);
+
+void print_expression(expression_t expression);
+
+#endif

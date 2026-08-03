@@ -8,16 +8,15 @@
 #include <ctype.h>
 #include <stdio.h>
 
-
 static tokenizers_t tokenizers;
 
 void tokenization_init(void) {
     dict_alloc(tokenizers, tokenizers_item_t);
-    dict_set(tokenizers, tokenizers_item_t, tokenizer_t, type_, token_type_get_status);
-    dict_set(tokenizers, tokenizers_item_t, tokenizer_t, keyword, token_keyword_get_status);
-    dict_set(tokenizers, tokenizers_item_t, tokenizer_t, name, token_name_get_status);
-    dict_set(tokenizers, tokenizers_item_t, tokenizer_t, operator_, token_operator_get_status);
-    dict_set(tokenizers, tokenizers_item_t, tokenizer_t, literal, token_literal_number_get_status);
+    dict_set(tokenizers, tokenizers_item_t, tokenizer_t, token_kind_type, token_type_get_status);
+    dict_set(tokenizers, tokenizers_item_t, tokenizer_t, token_kind_keyword, token_keyword_get_status);
+    dict_set(tokenizers, tokenizers_item_t, tokenizer_t, token_kind_name, token_name_get_status);
+    dict_set(tokenizers, tokenizers_item_t, tokenizer_t, token_kind_operator, token_operator_get_status);
+    dict_set(tokenizers, tokenizers_item_t, tokenizer_t, token_kind_literal, token_literal_number_get_status);
 
     token_type_init();
     token_operator_init();
@@ -81,12 +80,13 @@ tokens_t tokenize(char *code) {
         assert(index < sizeof(buffer));
 
         if (is_line_literal) {
-            if (index >= 2 && buffer[index - 2] == '\\' && !(index >= 3 && buffer[index - 3] == '\\') || index == 1 || buffer[0] != alpha)
+            if (index >= 2 && buffer[index - 2] == '\\' && !(index >= 3 && buffer[index - 3] == '\\') ||
+                index == 1 || buffer[0] != alpha)
                 continue;
 
             is_line_literal = 0;
             token_t token = {
-                    .kind = literal,
+                    .kind = token_kind_literal,
                     .data = (token_data_t) token_literal_str_or_char_try_get_data_from(buffer)
             };
             list_push(tokens, token);
@@ -119,15 +119,15 @@ tokens_t tokenize(char *code) {
 
 token_data_t get_data_from(char *line, token_kind_t kind) {
     switch (kind) {
-        case type_:
+        case token_kind_type:
             return (token_data_t) {.as_type = token_type_get_data_from(line)};
-        case name:
+        case token_kind_name:
             return (token_data_t) {.as_name = token_name_get_data_from(line)};
-        case operator_:
+        case token_kind_operator:
             return (token_data_t) {.as_operator = token_operator_get_data_from(line)};
-        case keyword:
+        case token_kind_keyword:
             return (token_data_t) {.as_keyword = token_keyword_get_data_from(line)};
-        case literal:
+        case token_kind_literal:
             return (token_data_t) {.as_literal = token_literal_number_get_data_from(line)};
         default:
             assert(0);
@@ -142,15 +142,15 @@ void print_tokens(tokens_t tokens) {
 
 static char *str_token_name(token_t token) {
     switch (token.kind) {
-        case type_:
+        case token_kind_type:
             return TOKEN_TYPE_NAME;
-        case name:
+        case token_kind_name:
             return TOKEN_NAME_NAME;
-        case operator_:
+        case token_kind_operator:
             return TOKEN_OPERATOR_NAME;
-        case keyword:
+        case token_kind_keyword:
             return TOKEN_KEYWORD_NAME;
-        case literal:
+        case token_kind_literal:
             return TOKEN_LITERAL_NAME;
         default:
             assert(0);
@@ -159,19 +159,19 @@ static char *str_token_name(token_t token) {
 
 static void write_token_data(token_t token, char *buffer) {
     switch (token.kind) {
-        case type_:
+        case token_kind_type:
             write_token_type_data(token.data.as_type, buffer);
             return;
-        case name:
+        case token_kind_name:
             write_token_name_data(token.data.as_name, buffer);
             return;
-        case operator_:
+        case token_kind_operator:
             write_token_operator_data(token.data.as_operator, buffer);
             return;
-        case keyword:
+        case token_kind_keyword:
             write_token_keyword_data(token.data.as_keyword, buffer);
             return;
-        case literal:
+        case token_kind_literal:
             write_token_literal_data(token.data.as_literal, buffer);
             return;
         default:
