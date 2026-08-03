@@ -23,8 +23,12 @@ typedef struct {
     expression_data_t data;
 } expression_t;
 
-typedef key_value(expression_kind_t, expression_parser_t) expression_parsers_KV_t;
-typedef DICT(expression_parsers_KV_t) expression_parsers_t;
+typedef struct {
+    expression_kind_t kind;
+    expression_parser_t parse;
+} typed_expression_parser_t;
+
+typedef LIST(typed_expression_parser_t) expression_parsers_t;
 
 void expressions_parsing_init();
 

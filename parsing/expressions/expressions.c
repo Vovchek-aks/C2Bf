@@ -7,10 +7,16 @@
 
 expression_parsers_t expression_parsers;
 
-#define expression_parsers_set(key, value) dict_set(expression_parsers, expression_parsers_KV_t, expression_parser_t, key, value);
+#define expression_parsers_set(kind_to_set, parser_to_set) do {                                                        \
+    typed_expression_parser_t element = {                                                                              \
+        .kind = kind_to_set,                                                                                           \
+        .parse = parser_to_set                                                                                        \
+    };                                                                                                                 \
+    list_push(expression_parsers, element);                                                                            \
+} while(0)
 
 void expressions_parsing_init() {
-    dict_alloc(expression_parsers, expression_parsers_KV_t);
+    list_alloc(expression_parsers, typed_expression_parser_t);
     expression_parsers_set(expression_kind_name, expression_name_get_data_from);
     expression_parsers_set(expression_kind_literal, expression_literal_get_data_from);
 }
@@ -19,12 +25,12 @@ expression_t *parse_expression(tokens_t tokens) {
     expression_t *expression = malloc(sizeof(expression_t));
     expression->tokens = tokens;
 
-    dict_for(expression_parsers, expression_parsers_KV_t, item) {
-        expression_parsing_result_t result = item.value(tokens);
+    list_for(expression_parsers, typed_expression_parser_t , item) {
+        expression_parsing_result_t result = item.parse(tokens);
         if (result.status == expression_parsing_result_fail)
             continue;
 
-        expression->kind = item.key;
+        expression->kind = item.kind;
         expression->data = result.data;
         return expression;
     }

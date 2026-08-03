@@ -8,7 +8,7 @@ int32_t main(void) {
     parsing_init();
 
 //    char *code = "int32_t main(void) { printf(\"Hello, World!\"); return 0; } ";
-    char *code = "\"AAAAAAAAAAAAAAAAAAAAAAAAAA\" ";
+    char *code = "aboba ";
 
     tokens_t tokens = tokenize(code);
 //    print_tokens(tokens);
