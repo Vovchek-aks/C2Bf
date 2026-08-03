@@ -48,7 +48,9 @@ token_literal_data_t token_literal_number_get_data_from(char *line) {
     size_t dots_count = strcnt(line, '.');
     assert(dots_count <= 1);
 
-    char *buffer = malloc(strlen(line));
+    size_t length = strlen(line);
+    char *buffer = malloc(length + 1);
+    buffer[length] = 0;
     strcpy(buffer, line);
 
     token_literal_data_t data = {

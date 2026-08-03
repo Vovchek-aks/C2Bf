@@ -30,6 +30,6 @@ void expressions_parsing_init();
 
 expression_t *parse_expression(tokens_t tokens);
 
-void print_expression(expression_t expression);
+void print_expression(expression_t *expression);
 
 #endif

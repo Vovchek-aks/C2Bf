@@ -4,11 +4,16 @@
 #define EXPRESSIONS_DATAS
 
 typedef struct {
-    token_name_data_t token;
+    token_name_data_t *token;
 } expression_name_data_t;
+
+typedef struct {
+    token_literal_data_t *token;
+} expression_literal_data_t;
 
 typedef union {
     expression_name_data_t as_name;
+    expression_literal_data_t as_literal;
 } expression_data_t;
 
 typedef enum {

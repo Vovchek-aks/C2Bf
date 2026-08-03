@@ -8,13 +8,13 @@ int32_t main(void) {
     parsing_init();
 
 //    char *code = "int32_t main(void) { printf(\"Hello, World!\"); return 0; } ";
-    char *code = "chunky ";
+    char *code = "\"AAAAAAAAAAAAAAAAAAAAAAAAAA\" ";
 
     tokens_t tokens = tokenize(code);
 //    print_tokens(tokens);
 
     expression_t *expression = parse_expression(tokens);
-    print_expression(*expression);
+    print_expression(expression);
 
 //    program_t *program = parse(tokens);
 //    char *bf = translate_to_bf(program);

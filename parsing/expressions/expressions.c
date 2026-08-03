@@ -3,6 +3,7 @@
 #include "../../data_structures/data_structures.h"
 #include "stdio.h"
 #include "expression_name.c"
+#include "expression_literal.c"
 
 expression_parsers_t expression_parsers;
 
@@ -11,6 +12,7 @@ expression_parsers_t expression_parsers;
 void expressions_parsing_init() {
     dict_alloc(expression_parsers, expression_parsers_KV_t);
     expression_parsers_set(expression_kind_name, expression_name_get_data_from);
+    expression_parsers_set(expression_kind_literal, expression_literal_get_data_from);
 }
 
 expression_t *parse_expression(tokens_t tokens) {
@@ -26,31 +28,36 @@ expression_t *parse_expression(tokens_t tokens) {
         expression->data = result.data;
         return expression;
     }
-    printf("Tokens below cannot be parsed as an expression:\n");
+    printf("Cannot parse expression from:\n");
     print_tokens(tokens);
     assert(0);
 }
 
-static char *str_expression_name(expression_t expression) {
-    switch (expression.kind) {
+static char *str_expression_name(expression_t *expression) {
+    switch (expression->kind) {
         case expression_kind_name:
             return EXPRESSION_NAME_NAME;
+        case expression_kind_literal:
+            return EXPRESSION_LITERAL_NAME;
         default:
             assert(0);
     }
 }
 
-static void write_expression_data(expression_t expression, char *buffer) {
-    switch (expression.kind) {
+static void write_expression_data(expression_t *expression, char *buffer) {
+    switch (expression->kind) {
         case expression_kind_name:
-            write_expression_name_data_from(expression.data.as_name, buffer);
+            write_expression_name_data_from(expression->data.as_name, buffer);
+            break;
+        case expression_kind_literal:
+            write_expression_literal_data_from(expression->data.as_literal, buffer);
             break;
         default:
             assert(0);
     }
 }
 
-void print_expression(expression_t expression) {
+void print_expression(expression_t *expression) {
     char buffer[256] = {};
     write_expression_data(expression, buffer);
     printf("%s(%s)\n", str_expression_name(expression), buffer);
