@@ -25,12 +25,12 @@ expression_t *parse_expression(tokens_t tokens) {
     expression_t *expression = malloc(sizeof(expression_t));
     expression->tokens = tokens;
 
-    list_for(expression_parsers, typed_expression_parser_t , item) {
-        expression_parsing_result_t result = item.parse(tokens);
+    list_for(expression_parsers, typed_expression_parser_t , parser) {
+        expression_parsing_result_t result = parser.parse(tokens);
         if (result.status == expression_parsing_result_fail)
             continue;
 
-        expression->kind = item.kind;
+        expression->kind = parser.kind;
         expression->data = result.data;
         return expression;
     }
