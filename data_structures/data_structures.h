@@ -13,6 +13,8 @@
     size_t capacity;                                                                                                  \
 }
 
+#define list_get_view(list, list_type) (list_type) { .data = (list).data, .count = (list).count, .capacity = 0}
+
 #define list_alloc(list, type) do {                                                                                   \
     type *data = malloc(sizeof(type) * LIST_INITIAL_SIZE);                                                            \
     assert(data != NULL);                                                                                             \
@@ -22,6 +24,7 @@
 } while(0)
 
 #define list_push(list, element) do {                                                                                 \
+    assert(list.capacity > 0);                                                                                        \
     if (list.count == list.capacity) {                                                                                \
         list.capacity *= 2;                                                                                           \
         list.data = realloc(list.data, sizeof(element) * list.capacity);                                              \

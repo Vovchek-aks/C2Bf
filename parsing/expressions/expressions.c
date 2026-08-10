@@ -24,6 +24,7 @@ void expressions_parsing_init(void) {
 }
 
 expression_t *parse_expression(tokens_t tokens) {
+    assert(tokens.capacity == 0);
     list_for(expression_parsers, typed_expression_parser_t , parser) {
         expression_parsing_result_t result = parser.parse(tokens);
         if (result.status == expression_parsing_result_fail)
