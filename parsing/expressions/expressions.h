@@ -4,6 +4,8 @@
 #ifndef EXPRESSIONS
 #define EXPRESSIONS
 
+#define EXPRESSION_PRINTING_MAX_LENGTH (1024 * 1024)
+
 typedef enum {
     expression_kind_unary_prefix_operation,
     expression_kind_unary_postfix_operation,

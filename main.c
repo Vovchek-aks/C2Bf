@@ -9,7 +9,9 @@ int32_t main(void) {
     parsing_init();
 
 //    char *code = "int32_t main(void) { printf(\"Hello, World!\"); return 0; } ";
-    char *code = "aboba.biba ";
+    char *code = "aboba.biba[bar[69].baz[420]].fiz[555] ";
+
+    printf("%s\n=====================================================================\n", code);
 
     tokens_t tokens = tokenize(code);
 //    print_tokens(tokens);

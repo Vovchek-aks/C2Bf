@@ -2,12 +2,14 @@
 #include "../tokens_operations.h"
 
 expression_parsing_result_t expression_element_access_get_data_from(tokens_t tokens) {
+    if (tokens.count < 3)
+        return FAILED_TO_PARSE_EXPRESSION;
+
     token_t *element = chop_back(&tokens, token_kind_name);
     if (!element)
         return FAILED_TO_PARSE_EXPRESSION;
 
-    token_t *dot = chop_back(&tokens, token_kind_operator);
-    if (!dot || dot->data.as_operator.name != operator_dot)
+    if (!chop_operator(&tokens, operator_kind_dot, chop_direction_back))
         return FAILED_TO_PARSE_EXPRESSION;
 
     expression_t *source = parse_expression(tokens);

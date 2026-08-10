@@ -18,10 +18,16 @@ typedef struct {
     token_name_data_t *element;
 } expression_element_access_data_t;
 
+typedef struct {
+    expression_t *array;
+    expression_t *index;
+} expression_indexing_data_t;
+
 typedef union {
     expression_name_data_t as_name;
     expression_literal_data_t as_literal;
     expression_element_access_data_t as_element_access;
+    expression_indexing_data_t as_indexing;
 } expression_data_t;
 
 typedef enum {
