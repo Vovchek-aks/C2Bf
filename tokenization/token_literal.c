@@ -1,4 +1,5 @@
 #include "token_literal.h"
+#include "../string_helper/string_helper.h"
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
@@ -129,7 +130,7 @@ token_literal_data_t token_literal_str_or_char_try_get_data_from(char *line) {
     return data;
 }
 
-void write_token_literal_data(token_literal_data_t data, char *buffer) {
+void write_token_literal_data(token_literal_data_t data, char **buffer) {
     char *type_;
     switch (data.kind) {
         case int_:
@@ -147,16 +148,20 @@ void write_token_literal_data(token_literal_data_t data, char *buffer) {
         default:
             assert(0);
     }
-    strcpy(buffer, type_);
-    strcpy(buffer + strlen(buffer), ": ");
+    string_extend(buffer, type_);
+    string_extend(buffer, ": ");
 
     if (data.kind == float_ || data.kind == int_) {
-        strcpy(buffer + strlen(buffer), data.line);
+        string_extend(buffer, data.line);
         return;
     }
 
-    char quote = data.kind == str ? '"' : '\'';
-    buffer[strlen(buffer)] = quote;
-    unescape_str(data.line, buffer + strlen(buffer));
-    buffer[strlen(buffer)] = quote;
+    char sub_buffer[256] = {};
+    unescape_str(data.line, sub_buffer);
+
+    char *quote = data.kind == str ? "\"" : "'";
+
+    string_extend(buffer, quote);
+    string_extend(buffer, sub_buffer);
+    string_extend(buffer, quote);
 }

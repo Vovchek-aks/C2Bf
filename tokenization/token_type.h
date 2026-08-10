@@ -28,6 +28,6 @@ tokenization_status_t token_type_get_status(char *line);
 
 token_type_data_t token_type_get_data_from(char *line);
 
-void write_token_type_data(token_type_data_t data, char *buffer);
+void write_token_type_data(token_type_data_t data, char **buffer);
 
 #endif

@@ -3,6 +3,8 @@
 #ifndef EXPRESSIONS_DATAS
 #define EXPRESSIONS_DATAS
 
+typedef struct expression_t expression_t;
+
 typedef struct {
     token_name_data_t *token;
 } expression_name_data_t;
@@ -11,9 +13,15 @@ typedef struct {
     token_literal_data_t *token;
 } expression_literal_data_t;
 
+typedef struct {
+    expression_t *source;
+    token_name_data_t *element;
+} expression_element_access_data_t;
+
 typedef union {
     expression_name_data_t as_name;
     expression_literal_data_t as_literal;
+    expression_element_access_data_t as_element_access;
 } expression_data_t;
 
 typedef enum {

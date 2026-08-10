@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <string.h>
 #include "../data_structures/data_structures.h"
+#include "../string_helper/string_helper.h"
 
 #ifndef TOKEN_DICT_MACRO
 #define TOKEN_DICT_MACRO
@@ -39,12 +40,12 @@
 #define TOKEN_DICT_WITH_WRITE(key_t, data_t, KV_t, dict_t, dict_name, get_status_name, get_data_name, write_data_name) \
     TOKEN_DICT(key_t, data_t, KV_t, dict_t, dict_name, get_status_name, get_data_name)                                 \
                                                                                                                        \
-    void write_data_name(data_t data, char *buffer) {                                                                  \
+    void write_data_name(data_t data, char **buffer) {                                                                 \
         char *line = NULL;                                                                                             \
         dict_get(dict_name, KV_t, data.name, line);                                                                    \
         assert(line != NULL);                                                                                          \
                                                                                                                        \
-        strcpy(buffer, line);                                                                                          \
+        string_append(buffer, line);                                                                                   \
     }
 
 #endif

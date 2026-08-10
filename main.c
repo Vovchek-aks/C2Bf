@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include "string_helper/string_helper.c"
 #include "tokenization/tokenization.c"
 #include "parsing/parsing.c"
 #include "translation/translation.c"
@@ -8,12 +9,12 @@ int32_t main(void) {
     parsing_init();
 
 //    char *code = "int32_t main(void) { printf(\"Hello, World!\"); return 0; } ";
-    char *code = "aboba ";
+    char *code = "aboba.biba ";
 
     tokens_t tokens = tokenize(code);
 //    print_tokens(tokens);
 
-    expression_t *expression = parse_expression(tokens);
+    expression_t *expression = strictly_parse_expression(tokens);
     print_expression(expression);
 
 //    program_t *program = parse(tokens);

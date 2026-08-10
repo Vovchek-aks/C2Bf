@@ -25,6 +25,6 @@ token_literal_data_t token_literal_number_get_data_from(char *line);
 
 token_literal_data_t token_literal_str_or_char_try_get_data_from(char *line);
 
-void write_token_literal_data(token_literal_data_t data, char *buffer);
+void write_token_literal_data(token_literal_data_t data, char **buffer);
 
 #endif

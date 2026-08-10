@@ -157,7 +157,7 @@ static char *str_token_name(token_t token) {
     }
 }
 
-static void write_token_data(token_t token, char *buffer) {
+static void write_token_data(token_t token, char **buffer) {
     switch (token.kind) {
         case token_kind_type:
             write_token_type_data(token.data.as_type, buffer);
@@ -181,6 +181,8 @@ static void write_token_data(token_t token, char *buffer) {
 
 void print_token(token_t token) {
     char buffer[256] = {};
-    write_token_data(token, buffer);
-    printf("[%s(%s)]\n", str_token_name(token), buffer);
+    char *line = buffer;
+    char *initial_line = line;
+    write_token_data(token, &line);
+    printf("[%s(%s)]\n", str_token_name(token), initial_line);
 }

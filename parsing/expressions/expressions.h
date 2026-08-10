@@ -13,15 +13,15 @@ typedef enum {
     expression_kind_struct_creation,
     expression_kind_literal,
     expression_kind_function_call,
-    expression_kind_field_access,
+    expression_kind_element_access,
     expression_kinds_count
 } expression_kind_t;
 
-typedef struct {
+struct expression_t {
     tokens_t tokens;
     expression_kind_t kind;
     expression_data_t data;
-} expression_t;
+};
 
 typedef struct {
     expression_kind_t kind;
@@ -30,9 +30,13 @@ typedef struct {
 
 typedef LIST(typed_expression_parser_t) expression_parsers_t;
 
-void expressions_parsing_init();
+void expressions_parsing_init(void);
 
 expression_t *parse_expression(tokens_t tokens);
+
+expression_t *strictly_parse_expression(tokens_t tokens);
+
+void write_expression(expression_t *expression, char **buffer);
 
 void print_expression(expression_t *expression);
 

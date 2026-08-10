@@ -24,7 +24,7 @@
 #define list_push(list, element) do {                                                                                 \
     if (list.count == list.capacity) {                                                                                \
         list.capacity *= 2;                                                                                           \
-        list.data = realloc(list.data, sizeof(element) * list.capacity);                                                 \
+        list.data = realloc(list.data, sizeof(element) * list.capacity);                                              \
         assert(list.data != NULL);                                                                                    \
     }                                                                                                                 \
                                                                                                                       \
@@ -76,7 +76,7 @@
             break;                                                                                                    \
         }                                                                                                             \
     }                                                                                                                 \
-    assert(FOR_IDX < dict.count);                                                                                                        \
+    assert(FOR_IDX < dict.count);                                                                                     \
     }                                                                                                                 \
 } while (0)
 
@@ -87,7 +87,7 @@
             break;                                                                                                    \
         }                                                                                                             \
     }                                                                                                                 \
-    assert(FOR_IDX < dict.count);                                                                                                        \
+    assert(FOR_IDX < dict.count);                                                                                     \
     }                                                                                                                 \
 } while (0)
 
@@ -101,10 +101,10 @@
     }}                                                                                                                \
 } while (0)
 
-#define dict_contains_value(dict, type, value_to_check, result) do {                                                          \
+#define dict_contains_value(dict, type, value_to_check, result) do {                                                  \
     result = 0;                                                                                                       \
     {dict_for(dict, type, item) {                                                                                     \
-        if (item.value == value_to_check) {                                                                               \
+        if (item.value == value_to_check) {                                                                           \
             result = 1;                                                                                               \
             break;                                                                                                    \
         }                                                                                                             \
@@ -112,7 +112,7 @@
 } while (0)
 
 #define dict_set(dict, type, TV, key, value_to_set) do {                                                              \
-    uint8_t is_contains;                                                                                                  \
+    uint8_t is_contains;                                                                                              \
     dict_contains(dict, type, key, is_contains);                                                                      \
     if (!is_contains) {                                                                                               \
         type item = {key, value_to_set};                                                                              \

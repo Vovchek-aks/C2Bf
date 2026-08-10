@@ -37,6 +37,6 @@ tokenization_status_t token_keyword_get_status(char *line);
 
 token_keyword_data_t token_keyword_get_data_from(char *line);
 
-void write_token_keyword_data(token_keyword_data_t data, char *buffer);
+void write_token_keyword_data(token_keyword_data_t data, char **buffer);
 
 #endif

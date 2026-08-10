@@ -1,4 +1,5 @@
 #include "token_name.h"
+#include "../string_helper/string_helper.h"
 #include <string.h>
 #include <ctype.h>
 
@@ -20,8 +21,8 @@ token_name_data_t token_name_get_data_from(char *line) {
     return data;
 }
 
-void write_token_name_data(token_name_data_t data, char *buffer) {
-    buffer[0] = '"';
-    strcpy(buffer + 1, data.name);
-    buffer[strlen(buffer)] = '"';
+void write_token_name_data(token_name_data_t data, char **buffer) {
+    string_extend(buffer, "\"");
+    string_extend(buffer, data.name);
+    string_extend(buffer, "\"");
 }
