@@ -148,9 +148,9 @@
         }                                                                                                              \
 } while (0)
 
-#define dict_set_cmp(dict, key, value_to_set, keycmp, valcmp) do {                                                     \
+#define dict_set_cmp(dict, key, value_to_set, cmp) do {                                                                \
     uint8_t is_contains;                                                                                               \
-    dict_contains_cmp((dict), (key), is_contains, (keycmp));                                                           \
+    dict_contains_cmp((dict), (key), is_contains, (cmp));                                                              \
     if (!is_contains) {                                                                                                \
         typeof(*(dict).data) item = {(key), (value_to_set)};                                                           \
         list_push((dict), item);                                                                                       \
@@ -159,7 +159,7 @@
                                                                                                                        \
     size_t index = 0;                                                                                                  \
     typeof(&(dict).data->value) old_value = NULL;                                                                      \
-    dict_get_cmp((dict), (key), *old_value, valcmp);                                                                   \
+    dict_get_cmp((dict), (key), *old_value, cmp);                                                                      \
     typeof(*(dict).data) item = {(key), *old_value};                                                                   \
     _dict_index((dict), item, index);                                                                                  \
     (dict).data[index].value = (value_to_set);                                                                         \

@@ -6,11 +6,11 @@
 #define TOKEN_LITERAL_NAME "TOKEN_LITERAL"
 
 typedef enum {
-    int_,
-    float_,
-    char_,
-    str,
-    token_literal_kinds __attribute__((unused)),
+    token_literal_kind_int,
+    token_literal_kind_float,
+    token_literal_kind_char,
+    token_literal_kind_str,
+    token_literal_kinds_count __attribute__((unused)),
 } token_literal_kind_t;
 
 

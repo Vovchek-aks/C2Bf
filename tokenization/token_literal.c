@@ -5,7 +5,7 @@
 
 #define CANNOT_BE_ESCAPE_RESULT ' '
 
-#define set_escape_character_of(key, value) dict_set_cmp(escape_character_of, key, value, strcmp, strcmp)
+#define set_escape_character_of(key, value) dict_set_cmp(escape_character_of, key, value, strcmp)
 
 DICT(char *, char) escape_character_of;
 
@@ -42,7 +42,7 @@ token_literal_data_t token_literal_number_get_data_from(char *line) {
     strcpy(buffer, line);
 
     token_literal_data_t data = {
-        .kind = dots_count == 0 ? int_ : float_,
+        .kind = dots_count == 0 ? token_literal_kind_int : token_literal_kind_float,
         .line = buffer
     };
 
@@ -96,7 +96,7 @@ token_literal_data_t token_literal_str_or_char_try_get_data_from(char *line) {
     assert(line[0] == line[length - 1]);
     assert(strcnt("'\"", line[0]) != 0);
 
-    token_literal_kind_t kind = line[0] == '"' ? str : char_;
+    token_literal_kind_t kind = line[0] == '"' ? token_literal_kind_str : token_literal_kind_char;
 
     length -= 2;
     char buffer[length + 1] = {};
@@ -109,7 +109,7 @@ token_literal_data_t token_literal_str_or_char_try_get_data_from(char *line) {
     char *escaped = malloc(length + 1);
     strcpy(escaped, raw_escaped);
 
-    assert(kind != char_ || length == 1);
+    assert(kind != token_literal_kind_char || length == 1);
     token_literal_data_t data = {
         .kind = kind,
         .line = escaped
@@ -120,17 +120,17 @@ token_literal_data_t token_literal_str_or_char_try_get_data_from(char *line) {
 void write_token_literal_data(token_literal_data_t data, char **buffer) {
     char *type_;
     switch (data.kind) {
-        case int_:
+        case token_literal_kind_int:
             type_ = "int";
             break;
-        case float_:
+        case token_literal_kind_float:
             type_ = "float";
             break;
-        case char_:
+        case token_literal_kind_char:
             type_ = "char";
             break;
-        case str:
-            type_ = "str";
+        case token_literal_kind_str:
+            type_ = "token_literal_kind_str";
             break;
         default:
             assert(0);
@@ -138,7 +138,7 @@ void write_token_literal_data(token_literal_data_t data, char **buffer) {
     string_extend(buffer, type_);
     string_extend(buffer, ": ");
 
-    if (data.kind == float_ || data.kind == int_) {
+    if (data.kind == token_literal_kind_float || data.kind == token_literal_kind_int) {
         string_extend(buffer, data.line);
         return;
     }
@@ -146,7 +146,7 @@ void write_token_literal_data(token_literal_data_t data, char **buffer) {
     char sub_buffer[256] = {};
     unescape_str(data.line, sub_buffer);
 
-    char *quote = data.kind == str ? "\"" : "'";
+    char *quote = data.kind == token_literal_kind_str ? "\"" : "'";
 
     string_extend(buffer, quote);
     string_extend(buffer, sub_buffer);
