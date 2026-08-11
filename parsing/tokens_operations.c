@@ -25,7 +25,7 @@ token_t *chop_back(tokens_t *tokens, token_kind_t kind) {
     return token;
 }
 
-token_t *chop_operator(tokens_t *tokens, operator_kind_t kind, chop_direction_t direction) {
+token_t *chop_operator(tokens_t *tokens, operator_t kind, chop_direction_t direction) {
     tokens_t changed_tokens = *tokens;
     token_t *op = (direction == chop_direction_front ? chop_front : chop_back)(&changed_tokens, token_kind_operator);
     if (!op || op->data.as_operator.name != kind)
@@ -36,8 +36,8 @@ token_t *chop_operator(tokens_t *tokens, operator_kind_t kind, chop_direction_t 
 }
 
 token_t *get_paired_bracket(tokens_t *tokens,
-                            operator_kind_t target,
-                            operator_kind_t initial,
+                            operator_t target,
+                            operator_t initial,
                             chop_direction_t direction) {
     tokens_t changed_tokens = *tokens;
     size_t level = 1;

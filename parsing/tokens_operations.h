@@ -12,11 +12,11 @@ token_t *chop_front(tokens_t *tokens, token_kind_t kind);
 
 token_t *chop_back(tokens_t *tokens, token_kind_t kind);
 
-token_t *chop_operator(tokens_t *tokens, operator_kind_t kind, chop_direction_t direction);
+token_t *chop_operator(tokens_t *tokens, operator_t kind, chop_direction_t direction);
 
 token_t *get_paired_bracket(tokens_t *tokens,
-                            operator_kind_t target,
-                            operator_kind_t initial,
+                            operator_t target,
+                            operator_t initial,
                             chop_direction_t direction);
 
 tokens_t split_by(token_t *separator, tokens_t *right);

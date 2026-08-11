@@ -8,7 +8,7 @@
 #include "expression_indexing.c"
 #include "../tokens_operations.c"
 
-expression_parsers_t expression_parsers;
+static expression_parsers_t expression_parsers;
 
 #define expression_parsers_set(kind_to_set, parser_to_set) do {                                                        \
     typed_expression_parser_t element = { kind_to_set, parser_to_set };                                                \
@@ -16,7 +16,7 @@ expression_parsers_t expression_parsers;
 } while(0)
 
 void expressions_parsing_init(void) {
-    list_alloc(expression_parsers, typed_expression_parser_t);
+    list_alloc(expression_parsers);
     expression_parsers_set(expression_kind_name, expression_name_get_data_from);
     expression_parsers_set(expression_kind_literal, expression_literal_get_data_from);
     expression_parsers_set(expression_kind_element_access, expression_element_access_get_data_from);
@@ -25,7 +25,7 @@ void expressions_parsing_init(void) {
 
 expression_t *parse_expression(tokens_t tokens) {
     assert(tokens.capacity == 0);
-    list_for(expression_parsers, typed_expression_parser_t , parser) {
+    list_for(expression_parsers, parser) {
         expression_parsing_result_t result = parser.parse(tokens);
         if (result.status == expression_parsing_result_fail)
             continue;
@@ -89,15 +89,14 @@ static void adjust_level(char *line, char **buffer) {
     }
 }
 
-void print_expression(expression_t *expression) {
-    char *line = malloc(EXPRESSION_PRINTING_MAX_LENGTH);
-    memset(line, 0, EXPRESSION_PRINTING_MAX_LENGTH);
-    char *line_end = line;
+static char print_buffer[EXPRESSION_PRINTING_MAX_LENGTH] = {};
 
+void print_expression(expression_t *expression) {
+    char *line_end = print_buffer;
     write_expression(expression, &line_end);
 
-    printf("%s", line);
-    free(line);
+    printf("%s\n", print_buffer);
+    memset(print_buffer, 0, EXPRESSION_PRINTING_MAX_LENGTH);
 }
 
 void write_expression(expression_t *expression, char **buffer) {

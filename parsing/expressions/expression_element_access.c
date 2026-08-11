@@ -9,7 +9,7 @@ expression_parsing_result_t expression_element_access_get_data_from(tokens_t tok
     if (!element)
         return FAILED_TO_PARSE_EXPRESSION;
 
-    if (!chop_operator(&tokens, operator_kind_dot, chop_direction_back))
+    if (!chop_operator(&tokens, operator_dot, chop_direction_back))
         return FAILED_TO_PARSE_EXPRESSION;
 
     expression_t *source = parse_expression(tokens);

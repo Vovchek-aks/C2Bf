@@ -1,7 +1,7 @@
 #include "token_type.h"
 #include "token_dict_macro.h"
 
-#define type_name_to_str_set(key, value) dict_set(type_name_to_str, type_and_name_t, char *, key, value)
+#define type_name_to_str_set(key, value) dict_set(type_name_to_str, key, value)
 
 typedef key_value(type_name_t, char *) type_and_name_t;
 
@@ -9,7 +9,7 @@ TOKEN_DICT_WITH_WRITE(type_name_t, token_type_data_t, type_and_name_t, type_name
                       token_type_get_status, token_type_get_data_from, write_token_type_data)
 
 void token_type_init(void) {
-    dict_alloc(type_name_to_str, type_and_name_t);
+    dict_alloc(type_name_to_str);
     type_name_to_str_set(void_, "void");
     type_name_to_str_set(uint8, "uint8_t");
     type_name_to_str_set(int8, "int8_t");

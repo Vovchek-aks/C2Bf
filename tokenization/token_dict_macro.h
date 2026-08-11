@@ -12,7 +12,7 @@
     static dict_t dict_name;                                                                                           \
                                                                                                                        \
     tokenization_status_t get_status_name(char *line) {                                                                \
-        dict_for(dict_name, KV_t, item) {                                                                              \
+        dict_for(dict_name, item) {                                                                                    \
             size_t len_line = strlen(line);                                                                            \
                                                                                                                        \
             if (len_line > strlen(item.value))                                                                         \
@@ -29,7 +29,7 @@
                                                                                                                        \
     data_t get_data_name(char *line) {                                                                                 \
         key_t name;                                                                                                    \
-        dict_get_key_cmp(dict_name, KV_t, line, name, strcmp);                                                         \
+        dict_get_key_cmp(dict_name, line, name, strcmp);                                                               \
                                                                                                                        \
         return (data_t) {                                                                                              \
                 .name = name                                                                                           \
@@ -42,10 +42,10 @@
                                                                                                                        \
     void write_data_name(data_t data, char **buffer) {                                                                 \
         char *line = NULL;                                                                                             \
-        dict_get(dict_name, KV_t, data.name, line);                                                                    \
+        dict_get(dict_name, data.name, line);                                                                          \
         assert(line != NULL);                                                                                          \
                                                                                                                        \
-        string_append(buffer, line);                                                                                   \
+        string_extend(buffer, line);                                                                                   \
     }
 
 #endif

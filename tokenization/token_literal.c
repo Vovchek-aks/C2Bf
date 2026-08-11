@@ -4,8 +4,6 @@
 #include <ctype.h>
 #include <assert.h>
 
-#define escape_character_of_set(key, value) dict_set(escape_character_of, escape_KV_t, char, key, value)
-
 #define CANNOT_BE_ESCAPE_RESULT ' '
 
 typedef key_value(char *, char) escape_KV_t;
@@ -14,14 +12,14 @@ typedef DICT(escape_KV_t) escape_character_of_t;
 escape_character_of_t escape_character_of;
 
 void token_literal_init(void) {
-    dict_alloc(escape_character_of, escape_KV_t);
-    escape_character_of_set("\\n", '\n');
-    escape_character_of_set("\\r", '\n');
-    escape_character_of_set("\\t", '\t');
-    escape_character_of_set("\\0", '\0');
-    escape_character_of_set("\\\'", '\'');
-    escape_character_of_set("\\\"", '\"');
-    escape_character_of_set("\\\\", '\\');
+    dict_alloc(escape_character_of);
+    dict_set(escape_character_of, "\\n", '\n');
+    dict_set(escape_character_of, "\\r", '\n');
+    dict_set(escape_character_of, "\\t", '\t');
+    dict_set(escape_character_of, "\\0", '\0');
+    dict_set(escape_character_of, "\\\'", '\'');
+    dict_set(escape_character_of, "\\\"", '\"');
+    dict_set(escape_character_of, "\\\\", '\\');
 }
 
 static size_t strcnt(char *line, char target) {
@@ -78,7 +76,7 @@ static void escape_str(char *line, char *buffer) {
         }
 
         char escaped = CANNOT_BE_ESCAPE_RESULT;
-        dict_get_cmp(escape_character_of, escape_KV_t , &buffer[index - 2], escaped, strcmp);
+        dict_get_cmp(escape_character_of, &buffer[index - 2], escaped, strcmp);
         assert(escaped != CANNOT_BE_ESCAPE_RESULT);
         buffer[--index - 1] = escaped;
         buffer[index] = 0;
@@ -90,14 +88,14 @@ static void unescape_str(char *line, char *buffer) {
     size_t index = 0;
     for (char alpha = *line; alpha; alpha = *(++line)) {
         uint8_t is_contains;
-        dict_contains_value(escape_character_of, escape_KV_t, alpha, is_contains);
+        dict_contains_value(escape_character_of, alpha, is_contains);
         if (!is_contains) {
             buffer[index++] = alpha;
             continue;
         }
 
         char *key;
-        dict_get_key(escape_character_of, escape_KV_t, alpha, key);
+        dict_get_key(escape_character_of, alpha, key);
         strcpy(&buffer[index], key);
         index += strlen(key);
     }

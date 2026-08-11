@@ -16,7 +16,7 @@ int32_t main(void) {
     tokens_t tokens = tokenize(code);
 //    print_tokens(tokens);
 
-    expression_t *expression = strictly_parse_expression(list_get_view(tokens, tokens_t));
+    expression_t *expression = strictly_parse_expression(list_get_view(tokens));
     print_expression(expression);
 
 //    program_t *program = parse(tokens);

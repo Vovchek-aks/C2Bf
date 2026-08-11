@@ -11,12 +11,12 @@
 static tokenizers_t tokenizers;
 
 void tokenization_init(void) {
-    dict_alloc(tokenizers, tokenizers_item_t);
-    dict_set(tokenizers, tokenizers_item_t, tokenizer_t, token_kind_type, token_type_get_status);
-    dict_set(tokenizers, tokenizers_item_t, tokenizer_t, token_kind_keyword, token_keyword_get_status);
-    dict_set(tokenizers, tokenizers_item_t, tokenizer_t, token_kind_name, token_name_get_status);
-    dict_set(tokenizers, tokenizers_item_t, tokenizer_t, token_kind_operator, token_operator_get_status);
-    dict_set(tokenizers, tokenizers_item_t, tokenizer_t, token_kind_literal, token_literal_number_get_status);
+    dict_alloc(tokenizers);
+    dict_set(tokenizers, token_kind_type, token_type_get_status);
+    dict_set(tokenizers, token_kind_keyword, token_keyword_get_status);
+    dict_set(tokenizers, token_kind_name, token_name_get_status);
+    dict_set(tokenizers, token_kind_operator, token_operator_get_status);
+    dict_set(tokenizers, token_kind_literal, token_literal_number_get_status);
 
     token_type_init();
     token_operator_init();
@@ -26,7 +26,7 @@ void tokenization_init(void) {
 
 static tokenization_status_t get_best_status(char *line, token_kind_t *kind) {
     tokenization_status_t min = tokenization_statuses_count;
-    dict_for(tokenizers, tokenizers_item_t, item) {
+    dict_for(tokenizers, item) {
         tokenization_status_t status = item.value(line);
         if (status < min) {
             min = status;
@@ -51,7 +51,7 @@ tokens_t tokenize(char *code) {
     assert(isspace(code[strlen(code) - 1]));
 
     tokens_t tokens = {};
-    list_alloc(tokens, token_t);
+    list_alloc(tokens);
 
     char buffer[TOKEN_MAX_LENGTH + 1] = {};
     size_t index = 0;
@@ -135,7 +135,7 @@ token_data_t get_data_from(char *line, token_kind_t kind) {
 }
 
 void print_tokens(tokens_t tokens) {
-    list_for(tokens, token_t, token) {
+    list_for(tokens, token) {
         print_token(token);
     }
 }

@@ -1,8 +1,6 @@
 #include "token_keyword.h"
 #include "token_dict_macro.h"
 
-#define keyword_name_to_str_set(key, value) dict_set(keyword_to_str, keyword_KV_t, char *, key, value)
-
 typedef key_value(keyword_t, char *) keyword_KV_t;
 
 TOKEN_DICT_WITH_WRITE(keyword_t, token_keyword_data_t, keyword_KV_t, keyword_name_to_str_t, keyword_to_str,
@@ -10,23 +8,24 @@ TOKEN_DICT_WITH_WRITE(keyword_t, token_keyword_data_t, keyword_KV_t, keyword_nam
 
 
 void token_keyword_init(void) {
-    dict_alloc(keyword_to_str, keyword_KV_t);
-    keyword_name_to_str_set(return_, "return");
-    keyword_name_to_str_set(if_, "if");
-    keyword_name_to_str_set(else_, "else");
-    keyword_name_to_str_set(switch_, "switch");
-    keyword_name_to_str_set(case_, "case");
-    keyword_name_to_str_set(default_, "default");
-    keyword_name_to_str_set(for_, "for");
-    keyword_name_to_str_set(while_, "while");
-    keyword_name_to_str_set(do_, "do");
-    keyword_name_to_str_set(break_, "break");
-    keyword_name_to_str_set(continue_, "continue");
-    keyword_name_to_str_set(static_, "static");
-    keyword_name_to_str_set(struct_, "struct");
-    keyword_name_to_str_set(union_, "union");
-    keyword_name_to_str_set(enum_, "enum");
-    keyword_name_to_str_set(typedef_, "typedef");
-    keyword_name_to_str_set(const_, "const");
-    keyword_name_to_str_set(sizeof_, "sizeof");
+    dict_alloc(keyword_to_str);
+    dict_set(keyword_to_str, keyword_return, "return");
+    dict_set(keyword_to_str, keyword_if, "if");
+    dict_set(keyword_to_str, keyword_else, "else");
+    dict_set(keyword_to_str, keyword_switch, "switch");
+    dict_set(keyword_to_str, keyword_case, "case");
+    dict_set(keyword_to_str, keyword_default, "default");
+    dict_set(keyword_to_str, keyword_for, "for");
+    dict_set(keyword_to_str, keyword_while, "while");
+    dict_set(keyword_to_str, keyword_do, "do");
+    dict_set(keyword_to_str, keyword_break, "break");
+    dict_set(keyword_to_str, keyword_continue, "continue");
+    dict_set(keyword_to_str, keyword_static, "static");
+    dict_set(keyword_to_str, keyword_struct, "struct");
+    dict_set(keyword_to_str, keyword_union, "union");
+    dict_set(keyword_to_str, keyword_enum, "enum");
+    dict_set(keyword_to_str, keyword_typedef, "typedef");
+    dict_set(keyword_to_str, keyword_const, "const");
+    dict_set(keyword_to_str, keyword_sizeof, "sizeof");
+    dict_set(keyword_to_str, keyword_typeof, "typeof");
 }

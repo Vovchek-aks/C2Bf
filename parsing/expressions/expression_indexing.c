@@ -5,10 +5,10 @@ expression_parsing_result_t expression_indexing_get_data_from(tokens_t tokens) {
     if (tokens.count < 4)
         return FAILED_TO_PARSE_EXPRESSION;
 
-    if (!chop_operator(&tokens, operator_kind_close_square, chop_direction_back))
+    if (!chop_operator(&tokens, operator_close_square, chop_direction_back))
         return FAILED_TO_PARSE_EXPRESSION;
 
-    token_t *bracket = get_paired_bracket(&tokens, operator_kind_open_square, operator_kind_close_square,
+    token_t *bracket = get_paired_bracket(&tokens, operator_open_square, operator_close_square,
                                           chop_direction_back);
     if (!bracket)
         return FAILED_TO_PARSE_EXPRESSION;
