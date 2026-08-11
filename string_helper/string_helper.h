@@ -7,4 +7,6 @@
 
 void string_extend(char **buffer, char *source);
 
+size_t strcnt(char *line, char target);
+
 #endif

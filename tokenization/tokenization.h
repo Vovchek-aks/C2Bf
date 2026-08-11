@@ -17,7 +17,7 @@ typedef enum {
     token_kind_operator,
     token_kind_keyword,
     token_kind_literal,
-    token_kinds_count
+    token_kinds_count __attribute__((unused))
 } token_kind_t;
 
 typedef union {
@@ -39,9 +39,6 @@ typedef struct {
     token_data_t data;
     token_info_t info;
 } token_t;
-
-typedef key_value(token_kind_t, tokenizer_t) tokenizers_item_t;
-typedef DICT(tokenizers_item_t) tokenizers_t;
 
 typedef LIST(token_t) tokens_t;
 

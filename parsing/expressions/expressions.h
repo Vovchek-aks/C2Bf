@@ -16,7 +16,7 @@ typedef enum {
     expression_kind_literal,
     expression_kind_function_call,
     expression_kind_element_access,
-    expression_kinds_count
+    expression_kinds_count __attribute__((unused))
 } expression_kind_t;
 
 struct expression_t {
@@ -25,12 +25,10 @@ struct expression_t {
     expression_data_t data;
 };
 
-typedef struct {
+typedef LIST(struct {
     expression_kind_t kind;
     expression_parser_t parse;
-} typed_expression_parser_t;
-
-typedef LIST(typed_expression_parser_t) expression_parsers_t;
+}) expression_parsers_t;
 
 void expressions_parsing_init(void);
 

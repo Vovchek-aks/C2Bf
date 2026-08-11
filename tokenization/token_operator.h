@@ -49,7 +49,7 @@ typedef enum {
     operator_close_curly,
     operator_open_square,
     operator_close_square,
-    operator_count
+    operator_count __attribute__((unused))
 } operator_t;
 
 typedef struct {

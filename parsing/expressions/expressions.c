@@ -11,7 +11,7 @@
 static expression_parsers_t expression_parsers;
 
 #define expression_parsers_set(kind_to_set, parser_to_set) do {                                                        \
-    typed_expression_parser_t element = { kind_to_set, parser_to_set };                                                \
+    typeof(*expression_parsers.data) element = { kind_to_set, parser_to_set };                                         \
     list_push(expression_parsers, element);                                                                            \
 } while(0)
 

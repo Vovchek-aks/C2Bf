@@ -8,7 +8,7 @@
 #include <ctype.h>
 #include <stdio.h>
 
-static tokenizers_t tokenizers;
+static DICT(token_kind_t, tokenizer_t) tokenizers;
 
 void tokenization_init(void) {
     dict_alloc(tokenizers);
@@ -40,7 +40,7 @@ static token_t try_get_token(char *line) {
     token_kind_t kind;
     tokenization_status_t status = get_best_status(line, &kind);
 
-    assert(status == correct);
+    assert(status == tokenization_status_correct);
     return (token_t) {
             .kind = kind,
             .data = get_data_from(line, kind)
@@ -98,11 +98,11 @@ tokens_t tokenize(char *code) {
         token_kind_t kind;
         tokenization_status_t status = get_best_status(buffer, &kind);
 
-        if (status != incorrect)
+        if (status != tokenization_status_incorrect)
             continue;
 
         if (index <= 1) {
-            printf("No token can start with '%alpha'.", alpha);
+            printf("No token can start with '%c'.", alpha);
             assert(0);
         }
 

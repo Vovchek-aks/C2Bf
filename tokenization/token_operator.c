@@ -1,10 +1,7 @@
 #include "token_operator.h"
 #include "token_dict_macro.h"
-#include "../string_helper/string_helper.h"
 
-typedef key_value(operator_t, char *) operator_KV_t;
-
-TOKEN_DICT(operator_t, token_operator_data_t, operator_KV_t, operator_to_str_t, operator_to_str,
+TOKEN_DICT(token_operator_data_t, operator_t, char *, operator_to_str_t, operator_to_str,
            token_operator_get_status, token_operator_get_data_from)
 
 operator_to_str_t name_of;
@@ -101,6 +98,7 @@ void token_operator_init(void) {
     dict_set(name_of, operator_close_square, "close_square");
 }
 
+#pragma ide diagnostic ignored "modernize-use-nullptr"
 void write_token_operator_data(token_operator_data_t data, char **buffer) {
     char *line = NULL;
     dict_get(name_of, data.name, line);

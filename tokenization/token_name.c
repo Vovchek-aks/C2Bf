@@ -5,13 +5,13 @@
 
 tokenization_status_t token_name_get_status(char *line) {
     if (isdigit(*line))
-        return incorrect;
+        return tokenization_status_incorrect;
 
     for (char alpha = *line; alpha; alpha = *(++line))
         if (!(isalnum(alpha) || alpha == '_'))
-            return incorrect;
+            return tokenization_status_incorrect;
 
-    return correct;
+    return tokenization_status_correct;
 }
 
 token_name_data_t token_name_get_data_from(char *line) {

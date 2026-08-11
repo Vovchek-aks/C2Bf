@@ -1,9 +1,7 @@
 #include "token_keyword.h"
 #include "token_dict_macro.h"
 
-typedef key_value(keyword_t, char *) keyword_KV_t;
-
-TOKEN_DICT_WITH_WRITE(keyword_t, token_keyword_data_t, keyword_KV_t, keyword_name_to_str_t, keyword_to_str,
+TOKEN_DICT_WITH_WRITE(token_keyword_data_t, keyword_t, char *, keyword_name_to_str_t, keyword_to_str,
                       token_keyword_get_status, token_keyword_get_data_from, write_token_keyword_data)
 
 

@@ -10,7 +10,7 @@ typedef enum {
     float_,
     char_,
     str,
-    token_literal_kinds,
+    token_literal_kinds __attribute__((unused)),
 } token_literal_kind_t;
 
 

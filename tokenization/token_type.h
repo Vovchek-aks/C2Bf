@@ -6,20 +6,20 @@
 #define TOKEN_TYPE_NAME "TOKEN_TYPE"
 
 typedef enum {
-    void_,
-    uint8,
-    int8,
-    uint16,
-    int16,
-    uint32,
-    int32,
-    uint64,
-    int64,
-    type_names_count
-} type_name_t;
+    builtin_type_void,
+    builtin_type_uint8,
+    builtin_type_int8,
+    builtin_type_uint16,
+    builtin_type_int16,
+    builtin_type_uint32,
+    builtin_type_int32,
+    builtin_type_uint64,
+    builtin_type_int64,
+    type_names_count __attribute__((unused))
+} builtin_type_t;
 
 typedef struct {
-    type_name_t name;
+    builtin_type_t name;
 } token_type_data_t;
 
 void token_type_init(void);

@@ -25,7 +25,7 @@ typedef enum {
     keyword_const,
     keyword_sizeof,
     keyword_typeof,
-    keywords_count
+    keywords_count __attribute__((unused))
 } keyword_t;
 
 typedef struct {

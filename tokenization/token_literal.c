@@ -1,46 +1,35 @@
 #include "token_literal.h"
-#include "../string_helper/string_helper.h"
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
 
 #define CANNOT_BE_ESCAPE_RESULT ' '
 
-typedef key_value(char *, char) escape_KV_t;
-typedef DICT(escape_KV_t) escape_character_of_t;
+#define set_escape_character_of(key, value) dict_set_cmp(escape_character_of, key, value, strcmp, strcmp)
 
-escape_character_of_t escape_character_of;
+DICT(char *, char) escape_character_of;
 
 void token_literal_init(void) {
     dict_alloc(escape_character_of);
-    dict_set(escape_character_of, "\\n", '\n');
-    dict_set(escape_character_of, "\\r", '\n');
-    dict_set(escape_character_of, "\\t", '\t');
-    dict_set(escape_character_of, "\\0", '\0');
-    dict_set(escape_character_of, "\\\'", '\'');
-    dict_set(escape_character_of, "\\\"", '\"');
-    dict_set(escape_character_of, "\\\\", '\\');
-}
-
-static size_t strcnt(char *line, char target) {
-    size_t count = 0;
-    for (char alpha = *line; alpha; alpha = *(++line))
-        if (alpha == target)
-            count++;
-
-    return count;
+    set_escape_character_of("\\n", '\n');
+    set_escape_character_of("\\r", '\n');
+    set_escape_character_of("\\t", '\t');
+    set_escape_character_of("\\0", '\0');
+    set_escape_character_of("\\\'", '\'');
+    set_escape_character_of("\\\"", '\"');
+    set_escape_character_of("\\\\", '\\');
 }
 
 tokenization_status_t token_literal_number_get_status(char *line) {
     size_t dots_count = strcnt(line, '.');
     if (dots_count > 1)
-        return incorrect;
+        return tokenization_status_incorrect;
 
     for (char alpha = *line; alpha; alpha = *(++line))
         if (!(isdigit(alpha) || alpha == '.'))
-            return incorrect;
+            return tokenization_status_incorrect;
 
-    return correct;
+    return tokenization_status_correct;
 }
 
 token_literal_data_t token_literal_number_get_data_from(char *line) {
