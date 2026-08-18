@@ -13,7 +13,6 @@ typedef enum {
     token_literal_kinds_count __attribute__((unused)),
 } token_literal_kind_t;
 
-
 typedef struct {
     token_literal_kind_t kind;
     char *line;

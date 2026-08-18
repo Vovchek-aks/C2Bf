@@ -4,7 +4,7 @@
 TOKEN_DICT(token_operator_data_t, operator_t, char *, operator_to_str_t, operator_to_str,
            token_operator_get_status, token_operator_get_data_from)
 
-operator_to_str_t name_of;
+static operator_to_str_t name_of;
 
 void token_operator_init(void) {
     dict_alloc(operator_to_str);
