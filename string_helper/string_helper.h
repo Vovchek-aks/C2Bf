@@ -1,3 +1,5 @@
+#include <string.h>
+
 #ifndef STRING_HELPER
 #define STRING_HELPER
 
