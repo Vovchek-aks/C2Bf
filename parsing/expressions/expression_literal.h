@@ -10,4 +10,6 @@ expression_parsing_result_t expression_literal_get_data_from(tokens_t tokens);
 
 void write_expression_literal_data_from(expression_literal_data_t data, char **buffer);
 
+void free_expression_literal_data(expression_literal_data_t data);
+
 #endif

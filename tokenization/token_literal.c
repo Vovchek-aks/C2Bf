@@ -130,7 +130,7 @@ void write_token_literal_data(token_literal_data_t data, char **buffer) {
             type_ = "char";
             break;
         case token_literal_kind_str:
-            type_ = "token_literal_kind_str";
+            type_ = "str";
             break;
         default:
             assert(0);

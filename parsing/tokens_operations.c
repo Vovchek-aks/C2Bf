@@ -1,6 +1,7 @@
 #include "tokens_operations.h"
 #include "../data_structures/data_structures.h"
 #include <assert.h>
+#pragma ide diagnostic ignored "modernize-use-nullptr"
 
 token_t *chop_front(tokens_t *tokens, token_kind_t kind) {
     assert(tokens->count > 0);
@@ -35,27 +36,43 @@ token_t *chop_operator(tokens_t *tokens, operator_t kind, chop_direction_t direc
     return op;
 }
 
-token_t *get_paired_bracket(tokens_t *tokens,
+token_t *find_operator(tokens_t tokens,
+                       operator_t target,
+                       chop_direction_t direction) {
+    while (tokens.count > 0) {
+        token_t *op = chop_operator(&tokens, target, direction);
+        if (op)
+            return op;
+
+        tokens.count--;
+        if (direction == chop_direction_front)
+            tokens.data++;
+    }
+
+    return NULL;
+}
+
+
+token_t *get_paired_bracket(tokens_t tokens,
                             operator_t target,
                             operator_t initial,
                             chop_direction_t direction) {
-    tokens_t changed_tokens = *tokens;
     size_t level = 1;
     token_t *op;
-    while (changed_tokens.count > 0) {
-        op = chop_operator(&changed_tokens, target, direction);
+    while (tokens.count > 0) {
+        op = chop_operator(&tokens, target, direction);
         if (op && --level == 0)
             break;
 
-        op = chop_operator(&changed_tokens, initial, direction);
+        op = chop_operator(&tokens, initial, direction);
         if (op) {
             level++;
             continue;
         }
 
-        changed_tokens.count--;
+        tokens.count--;
         if (direction == chop_direction_front)
-            changed_tokens.data++;
+            tokens.data++;
     }
 
     if (level > 0)
@@ -65,6 +82,8 @@ token_t *get_paired_bracket(tokens_t *tokens,
 }
 
 tokens_t split_by(token_t *separator, tokens_t *right) {
+    assert(right->data <= separator && separator < right->data + right->count);
+
     size_t index = separator - right->data;
 
     tokens_t left = {
@@ -76,4 +95,22 @@ tokens_t split_by(token_t *separator, tokens_t *right) {
     right->count -= index + 1;
 
     return left;
+}
+
+void combine(tokens_t *left, tokens_t right) {
+    assert(left->data + left->count <= right.data || !left->data);
+
+    if (!left->data) {
+        *left = right;
+        return;
+    }
+
+    left->count = right.data + right.count - left->data;
+}
+
+tokens_t move(tokens_t *tokens) {
+    tokens_t new_tokens = *tokens;
+    tokens->count = 0;
+    tokens->data = 0;
+    return new_tokens;
 }

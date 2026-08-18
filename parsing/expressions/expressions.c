@@ -6,6 +6,7 @@
 #include "expression_literal.c"
 #include "expression_element_access.c"
 #include "expression_indexing.c"
+#include "expression_function_call.c"
 #include "../tokens_operations.c"
 
 static expression_parsers_t expression_parsers;
@@ -21,8 +22,10 @@ void expressions_parsing_init(void) {
     expression_parsers_set(expression_kind_literal, expression_literal_get_data_from);
     expression_parsers_set(expression_kind_element_access, expression_element_access_get_data_from);
     expression_parsers_set(expression_kind_indexing, expression_indexing_get_data_from);
+    expression_parsers_set(expression_kind_function_call, expression_function_call_get_data_from);
 }
 
+#pragma ide diagnostic ignored "modernize-use-nullptr"
 expression_t *parse_expression(tokens_t tokens) {
     assert(tokens.capacity == 0);
     list_for(expression_parsers, parser) {
@@ -61,6 +64,8 @@ static char *str_expression_name(expression_t *expression) {
             return EXPRESSION_ELEMENT_ACCESS_NAME;
         case expression_kind_indexing:
             return EXPRESSION_INDEXING_NAME;
+        case expression_kind_function_call:
+            return EXPRESSION_FUNCTION_CALL_NAME;
         default:
             assert(0);
     }
@@ -76,6 +81,8 @@ static void write_expression_data(expression_t *expression, char **buffer) {
             return write_expression_element_access_data_from(expression->data.as_element_access, buffer);
         case expression_kind_indexing:
             return write_expression_indexing_data_from(expression->data.as_indexing, buffer);
+        case expression_kind_function_call:
+            return write_expression_function_call_data_from(expression->data.as_function_call, buffer);
         default:
             assert(0);
     }
@@ -109,4 +116,35 @@ void write_expression(expression_t *expression, char **buffer) {
 
     adjust_level(line, buffer);
     free(line);
+}
+
+void free_expression(expression_t *expression) {
+    switch (expression->kind) {
+        case expression_kind_name:
+            free_expression_name_data(expression->data.as_name);
+            break;
+        case expression_kind_literal:
+            free_expression_literal_data(expression->data.as_literal);
+            break;
+        case expression_kind_element_access:
+            free_expression_element_access_data(expression->data.as_element_access);
+            break;
+        case expression_kind_indexing:
+            free_expression_indexing_data(expression->data.as_indexing);
+            break;
+        case expression_kind_function_call:
+            free_expression_function_call_data(expression->data.as_function_call);
+            break;
+        default:
+            assert(0);
+    }
+
+    free(expression);
+}
+
+void free_expressions(expressions_t expressions) {
+    list_for(expressions, expression)
+        free_expression(expression);
+
+    free(expressions.data);
 }

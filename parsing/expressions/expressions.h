@@ -7,9 +7,6 @@
 #define EXPRESSION_PRINTING_MAX_LENGTH (1024 * 1024)
 
 typedef enum {
-    expression_kind_unary_prefix_operation,
-    expression_kind_unary_postfix_operation,
-    expression_kind_binary_operation,
     expression_kind_indexing,
     expression_kind_name,
     expression_kind_struct_creation,
@@ -39,5 +36,9 @@ expression_t *strictly_parse_expression(tokens_t tokens);
 void write_expression(expression_t *expression, char **buffer);
 
 void print_expression(expression_t *expression);
+
+void free_expression(expression_t *expression);
+
+void free_expressions(expressions_t expressions);
 
 #endif

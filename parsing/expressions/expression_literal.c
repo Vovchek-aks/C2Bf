@@ -16,3 +16,5 @@ void write_expression_literal_data_from(expression_literal_data_t data, char **b
     write_token_literal_data(*data.token, buffer);
     string_extend(buffer, ")");
 }
+
+void free_expression_literal_data(expression_literal_data_t data) {}

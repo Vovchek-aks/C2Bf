@@ -30,3 +30,7 @@ void write_expression_element_access_data_from(expression_element_access_data_t 
     string_extend(buffer, ".source = ");
     write_expression(data.source, buffer);
 }
+
+void free_expression_element_access_data(expression_element_access_data_t data) {
+    free_expression(data.source);
+}

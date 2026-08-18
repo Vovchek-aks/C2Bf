@@ -5,6 +5,8 @@
 
 typedef struct expression_t expression_t;
 
+typedef LIST(expression_t *) expressions_t;
+
 typedef struct {
     token_name_data_t *token;
 } expression_name_data_t;
@@ -23,11 +25,17 @@ typedef struct {
     expression_t *index;
 } expression_indexing_data_t;
 
+typedef struct {
+    expression_t *function;
+    expressions_t arguments;
+} expression_function_call_data_t;
+
 typedef union {
     expression_name_data_t as_name;
     expression_literal_data_t as_literal;
     expression_element_access_data_t as_element_access;
     expression_indexing_data_t as_indexing;
+    expression_function_call_data_t as_function_call;
 } expression_data_t;
 
 typedef enum {

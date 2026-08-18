@@ -45,8 +45,8 @@ void token_operator_init(void) {
     dict_set(operator_to_str, operator_double_smaller, "<<");
     dict_set(operator_to_str, operator_double_smaller_equals, "<<=");
     dict_set(operator_to_str, operator_smaller_equals, "<=");
-    dict_set(operator_to_str, operator_open_bracket, "(");
-    dict_set(operator_to_str, operator_close_bracket, ")");
+    dict_set(operator_to_str, operator_open_round, "(");
+    dict_set(operator_to_str, operator_close_round, ")");
     dict_set(operator_to_str, operator_open_curly, "{");
     dict_set(operator_to_str, operator_close_curly, "}");
     dict_set(operator_to_str, operator_open_square, "[");
@@ -90,8 +90,8 @@ void token_operator_init(void) {
     dict_set(name_of, operator_double_smaller, "double_smaller");
     dict_set(name_of, operator_double_smaller_equals, "double_smaller_equals");
     dict_set(name_of, operator_smaller_equals, "smaller_equals");
-    dict_set(name_of, operator_open_bracket, "open_bracket");
-    dict_set(name_of, operator_close_bracket, "close_bracket");
+    dict_set(name_of, operator_open_round, "open_round");
+    dict_set(name_of, operator_close_round, "close_round");
     dict_set(name_of, operator_open_curly, "open_curly");
     dict_set(name_of, operator_close_curly, "close_curly");
     dict_set(name_of, operator_open_square, "open_square");

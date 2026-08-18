@@ -10,4 +10,6 @@ expression_parsing_result_t expression_element_access_get_data_from(tokens_t tok
 
 void write_expression_element_access_data_from(expression_element_access_data_t data, char **buffer);
 
+void free_expression_element_access_data(expression_element_access_data_t data);
+
 #endif

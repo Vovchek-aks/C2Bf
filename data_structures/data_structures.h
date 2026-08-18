@@ -27,7 +27,7 @@
     assert((list).capacity > 0);                                                                                       \
     if ((list).count == (list).capacity) {                                                                             \
         (list).capacity *= 2;                                                                                          \
-        typeof((list).data) new_data = realloc((list).data, sizeof(element) * (list).capacity);\
+        typeof((list).data) new_data = realloc((list).data, sizeof(element) * (list).capacity);                        \
         assert(new_data != NULL);                                                                                      \
         (list).data = new_data;                                                                                        \
     }                                                                                                                  \

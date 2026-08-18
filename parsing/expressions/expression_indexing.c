@@ -8,7 +8,7 @@ expression_parsing_result_t expression_indexing_get_data_from(tokens_t tokens) {
     if (!chop_operator(&tokens, operator_close_square, chop_direction_back))
         return FAILED_TO_PARSE_EXPRESSION;
 
-    token_t *bracket = get_paired_bracket(&tokens, operator_open_square, operator_close_square,
+    token_t *bracket = get_paired_bracket(tokens, operator_open_square, operator_close_square,
                                           chop_direction_back);
     if (!bracket)
         return FAILED_TO_PARSE_EXPRESSION;
@@ -20,8 +20,10 @@ expression_parsing_result_t expression_indexing_get_data_from(tokens_t tokens) {
         return FAILED_TO_PARSE_EXPRESSION;
 
     expression_t *index = parse_expression(tokens);
-    if (!index)
+    if (!index) {
+        free_expression(array);
         return FAILED_TO_PARSE_EXPRESSION;
+    }
 
     expression_indexing_data_t data = {
             .array = array,
@@ -37,4 +39,9 @@ void write_expression_indexing_data_from(expression_indexing_data_t data, char *
     write_expression(data.array, buffer);
     string_extend(buffer, "\n.index = ");
     write_expression(data.index, buffer);
+}
+
+void free_expression_indexing_data(expression_indexing_data_t data) {
+    free_expression(data.array);
+    free_expression(data.index);
 }
