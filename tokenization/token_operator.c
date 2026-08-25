@@ -14,6 +14,7 @@ void token_operator_init(void) {
     dict_set(operator_to_str, operator_dot, ".");
     dict_set(operator_to_str, operator_exclamation, "!");
     dict_set(operator_to_str, operator_question, "?");
+    dict_set(operator_to_str, operator_tilda, "~");
     dict_set(operator_to_str, operator_equals, "=");
     dict_set(operator_to_str, operator_double_equals, "==");
     dict_set(operator_to_str, operator_exclamation_equals, "!=");
@@ -59,6 +60,7 @@ void token_operator_init(void) {
     dict_set(name_of, operator_dot, "dot");
     dict_set(name_of, operator_exclamation, "exclamation");
     dict_set(name_of, operator_question, "question");
+    dict_set(name_of, operator_tilda, "tilda");
     dict_set(name_of, operator_equals, "equals");
     dict_set(name_of, operator_double_equals, "double_equals");
     dict_set(name_of, operator_exclamation_equals, "exclamation_equals");

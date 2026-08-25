@@ -7,7 +7,7 @@
 #include "expression_element_access.c"
 #include "expression_indexing.c"
 #include "expression_function_call.c"
-#include "expression_unary_prefix_operation.c"
+#include "expression_unary_operation.c"
 #include "../tokens_operations.c"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
@@ -26,8 +26,9 @@ void expressions_parsing_init(void) {
     expression_parsers_set(expression_kind_indexing, expression_indexing_get_data_from);
     expression_parsers_set(expression_kind_function_call, expression_function_call_get_data_from);
     expression_parsers_set(expression_kind_function_call, expression_unary_prefix_operation_get_data_from);
+    expression_parsers_set(expression_kind_function_call, expression_unary_postfix_operation_get_data_from);
 
-    expression_unary_prefix_operation_init();
+    expression_unary_operation_init();
 }
 
 expression_t *parse_expression(tokens_t tokens) {

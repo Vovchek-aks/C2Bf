@@ -12,6 +12,7 @@ typedef enum {
     operator_dot,
     operator_exclamation,
     operator_question,
+    operator_tilda,
     operator_equals,
     operator_double_equals,
     operator_exclamation_equals,

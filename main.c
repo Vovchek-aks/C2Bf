@@ -9,7 +9,7 @@ int32_t main(void) {
     parsing_init();
 
 //    char *code = "int32_t main(void) { printf(\"Hello, World!\"); return 0; } ";
-    char *code = "biba[++aboba] ";
+    char *code = "biba[++aboba]-- ";
 
     printf("%s\n=====================================================================\n", code);
 
