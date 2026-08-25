@@ -40,7 +40,7 @@ expression_parsing_result_t expression_function_call_get_data_from(tokens_t toke
         return FAILED_TO_PARSE_EXPRESSION;
 
     expressions_t arguments;
-    list_alloc(arguments);
+    list_sized_alloc(arguments, 4);
     if (!parse_arguments(tokens, &arguments)) {
         free_expression(function);
         free_expressions(arguments);
@@ -55,15 +55,13 @@ expression_parsing_result_t expression_function_call_get_data_from(tokens_t toke
 }
 
 void write_expression_function_call_data_from(expression_function_call_data_t data, char **buffer) {
-    string_extend(buffer, "(");
-    *buffer += snprintf(*buffer, 20, "args=%llu", data.arguments.count);
-    string_extend(buffer, "):");
+    *buffer += snprintf(*buffer, 20, "(args=%llu):", data.arguments.count);
     string_extend(buffer, "\n.function = ");
     write_expression(data.function, buffer);
 
     size_t index = 0;
     list_for(data.arguments, argument) {
-        *buffer += snprintf(*buffer, 20, "\n.argument%llu = ", index++);
+        *buffer += snprintf(*buffer, 20, "\n.argument_%llu = ", index++);
         write_expression(argument, buffer);
     }
 }

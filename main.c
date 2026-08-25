@@ -9,14 +9,14 @@ int32_t main(void) {
     parsing_init();
 
 //    char *code = "int32_t main(void) { printf(\"Hello, World!\"); return 0; } ";
-    char *code = "aboba[256](biba[0], \"Hello, World!\", desvor99(420, 69), biba[3]()) ";
+    char *code = "biba[++aboba] ";
 
     printf("%s\n=====================================================================\n", code);
 
     tokens_t tokens = tokenize(code);
 //    print_tokens(tokens);
 
-    expression_t *expression = strictly_parse_expression(list_get_view(tokens));
+    expression_t *expression = strictly_parse_expression(list_view(tokens));
     print_expression(expression);
 
 //    program_t *program = parse(tokens);

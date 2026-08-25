@@ -1,6 +1,7 @@
 #include <malloc.h>
 #include <assert.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #ifndef DATA_STRUCTURES
 #define DATA_STRUCTURES
@@ -13,15 +14,20 @@
     size_t capacity;                                                                                                   \
 }
 
-#define list_get_view(list) (typeof(list)) { .data = (list).data, .count = (list).count, .capacity = 0}
+#define list_view(list) (typeof(list)) { .data = (list).data, .count = (list).count, .capacity = 0}
 
-#define list_alloc(list) do {                                                                                          \
-    typeof(*(list).data) *data = malloc(sizeof(typeof(*(list).data)) * LIST_INITIAL_SIZE);                             \
+#define list_sized_alloc(list, size) do {                                                                              \
+    assert(size > 0);                                                                                                  \
+    typeof(*(list).data) *data = malloc(sizeof(*(list).data) * size);                                                  \
     assert(data != NULL);                                                                                              \
     (list).data = data;                                                                                                \
     (list).count = 0;                                                                                                  \
-    (list).capacity = LIST_INITIAL_SIZE;                                                                               \
+    (list).capacity = size;                                                                                            \
 } while(0)
+
+#define list_last(list) ((list).data[(list).count - 1])
+
+#define list_alloc(list) list_sized_alloc(list, LIST_INITIAL_SIZE)
 
 #define list_push(list, element) do {                                                                                  \
     assert((list).capacity > 0);                                                                                       \
@@ -49,7 +55,7 @@
 
 #define DICT(TK, TV) LIST(struct {TK key; TV value;})
 
-#define dict_alloc(dict) list_alloc(dict)
+#define dict_alloc(dict) list_sized_alloc(dict, 8)
 
 #define dict_for(dict, name) list_for(dict, name)
 
@@ -94,37 +100,37 @@
 } while (0)
 
 #define dict_contains(dict, key_to_check, result) do {                                                                 \
-    (result) = 0;                                                                                                      \
+    (result) = false;                                                                                                  \
     {dict_for((dict), item) {                                                                                          \
         if (item.key == (key_to_check)) {                                                                              \
-            (result) = 1;                                                                                              \
+            (result) = true;                                                                                           \
             break;                                                                                                     \
         }                                                                                                              \
     }}                                                                                                                 \
 } while (0)
 
 #define dict_contains_cmp(dict, key_to_check, result, cmp) do {                                                        \
-    (result) = 0;                                                                                                      \
+    (result) = false;                                                                                                  \
     {dict_for((dict), item) {                                                                                          \
         if ((cmp)(item.key, (key_to_check)) == 0) {                                                                    \
-            (result) = 1;                                                                                              \
+            (result) = true;                                                                                           \
             break;                                                                                                     \
         }                                                                                                              \
     }}                                                                                                                 \
 } while (0)
 
 #define dict_contains_value(dict, value_to_check, result) do {                                                         \
-    (result) = 0;                                                                                                      \
+    (result) = false;                                                                                                  \
     {dict_for((dict), item) {                                                                                          \
         if (item.value == (value_to_check)) {                                                                          \
-            (result) = 1;                                                                                              \
+            (result) = true;                                                                                           \
             break;                                                                                                     \
         }                                                                                                              \
     }}                                                                                                                 \
 } while (0)
 
 #define dict_set(dict, key, value_to_set) do {                                                                         \
-    uint8_t is_contains;                                                                                               \
+    bool is_contains;                                                                                                  \
     dict_contains((dict), (key), is_contains);                                                                         \
     if (!is_contains) {                                                                                                \
         typeof(*(dict).data) item = {(key), (value_to_set)};                                                           \
@@ -149,7 +155,7 @@
 } while (0)
 
 #define dict_set_cmp(dict, key, value_to_set, cmp) do {                                                                \
-    uint8_t is_contains;                                                                                               \
+    bool is_contains;                                                                                                  \
     dict_contains_cmp((dict), (key), is_contains, (cmp));                                                              \
     if (!is_contains) {                                                                                                \
         typeof(*(dict).data) item = {(key), (value_to_set)};                                                           \

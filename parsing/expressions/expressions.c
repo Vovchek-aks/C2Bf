@@ -7,7 +7,9 @@
 #include "expression_element_access.c"
 #include "expression_indexing.c"
 #include "expression_function_call.c"
+#include "expression_unary_prefix_operation.c"
 #include "../tokens_operations.c"
+#pragma ide diagnostic ignored "modernize-use-nullptr"
 
 static expression_parsers_t expression_parsers;
 
@@ -23,9 +25,11 @@ void expressions_parsing_init(void) {
     expression_parsers_set(expression_kind_element_access, expression_element_access_get_data_from);
     expression_parsers_set(expression_kind_indexing, expression_indexing_get_data_from);
     expression_parsers_set(expression_kind_function_call, expression_function_call_get_data_from);
+    expression_parsers_set(expression_kind_function_call, expression_unary_prefix_operation_get_data_from);
+
+    expression_unary_prefix_operation_init();
 }
 
-#pragma ide diagnostic ignored "modernize-use-nullptr"
 expression_t *parse_expression(tokens_t tokens) {
     assert(tokens.capacity == 0);
     list_for(expression_parsers, parser) {
