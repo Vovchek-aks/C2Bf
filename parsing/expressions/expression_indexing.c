@@ -1,5 +1,4 @@
 #include "expression_indexing.h"
-#include "../tokens_operations.h"
 
 expression_parsing_result_t expression_indexing_get_data_from(tokens_t tokens) {
     if (tokens.count < 4)

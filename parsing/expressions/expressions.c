@@ -9,6 +9,7 @@
 #include "expression_unary_operation.c"
 #include "expression_binary_operation.c"
 #include "../tokens_operations.c"
+#include "../../string_helper/string_helper.h"
 
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
@@ -35,8 +36,23 @@ void expressions_parsing_init(void) {
     expression_binary_operation_init();
 }
 
+static void strip_brackets(tokens_t *tokens) {
+    tokens_t stripped = *tokens;
+    while (stripped.count > 1) {
+        if (!chop_operator(&stripped, operator_open_round, chop_direction_front))
+            break;
+
+        if (!chop_operator(&stripped, operator_close_round, chop_direction_back))
+            break;
+
+        *tokens = stripped;
+    }
+}
+
 expression_t *parse_expression(tokens_t tokens) {
     assert(tokens.capacity == 0);
+
+    strip_brackets(&tokens);
     list_for(expression_parsers, parser) {
         expression_parsing_result_t result = parser.parse(tokens);
         if (result.status == expression_parsing_result_fail)

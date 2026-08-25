@@ -1,5 +1,4 @@
 #include "expression_function_call.h"
-#include "../tokens_operations.h"
 
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
@@ -17,19 +16,27 @@
     if (!function_name)                                                                                                \
         return FAILED_TO_PARSE_EXPRESSION;                                                                             \
                                                                                                                        \
-    fake_tokens_new(tokens.count + 2);                                                                                 \
+    fake_tokens_new(1);                                                                                                \
     fake_tokens_append_token_name(function_name);                                                                      \
-    fake_tokens_append_token_operator(operator_open_round);                                                            \
-    fake_tokens_extend(tokens);                                                                                        \
-    fake_tokens_append_token_operator(operator_close_round);                                                           \
-                                                                                                                       \
-    expression_parsing_result_t result = expression_function_call_get_data_from(list_view(fake_tokens_current));       \
-    if (result.status == expression_parsing_result_fail) {                                                             \
+    expression_t *function = parse_expression(list_view(fake_tokens_current));                                         \
+    if (!function) {                                                                                                   \
         fake_tokens_remove_last_list();                                                                                \
         return FAILED_TO_PARSE_EXPRESSION;                                                                             \
     }                                                                                                                  \
                                                                                                                        \
-    return result;                                                                                                     \
+    expression_t *argument = parse_expression(list_view(fake_tokens_current));                                         \
+    if (!argument) {                                                                                                   \
+        fake_tokens_remove_last_list();                                                                                \
+        free_expression(function);                                                                                     \
+        return FAILED_TO_PARSE_EXPRESSION;                                                                             \
+    }                                                                                                                  \
+                                                                                                                       \
+    expressions_t arguments;                                                                                           \
+    list_alloc(arguments);                                                                                             \
+    list_push(arguments, argument);                                                                                    \
+                                                                                                                       \
+    expression_function_call_data_t data = {function, arguments};                                                      \
+    return EXPRESSION_PARSED(.as_function_call, data);                                                                 \
 }
 
 static DICT(operator_t, char *) function_of_unary_prefix;
