@@ -17,13 +17,13 @@
     if (!function_name)                                                                                                \
         return FAILED_TO_PARSE_EXPRESSION;                                                                             \
                                                                                                                        \
-    fake_tokens_start_new_list(tokens.count + 2);                                                                      \
+    fake_tokens_new(tokens.count + 2);                                                                                 \
     fake_tokens_append_token_name(function_name);                                                                      \
     fake_tokens_append_token_operator(operator_open_round);                                                            \
     fake_tokens_extend(tokens);                                                                                        \
     fake_tokens_append_token_operator(operator_close_round);                                                           \
                                                                                                                        \
-    expression_parsing_result_t result = expression_function_call_get_data_from(list_view(fake_tokens_last_list));     \
+    expression_parsing_result_t result = expression_function_call_get_data_from(list_view(fake_tokens_current));       \
     if (result.status == expression_parsing_result_fail) {                                                             \
         fake_tokens_remove_last_list();                                                                                \
         return FAILED_TO_PARSE_EXPRESSION;                                                                             \

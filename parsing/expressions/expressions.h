@@ -31,6 +31,13 @@ void expressions_parsing_init(void);
 
 expression_t *parse_expression(tokens_t tokens);
 
+bool parse_expressions_separated_by(operator_t separator, tokens_t tokens, expressions_t *result);
+
+bool specifying_parse_expressions_separated_by(operator_t target,
+                                               tokens_t tokens,
+                                               expressions_t *result,
+                                               bool require_at_least_one_split);
+
 expression_t *strictly_parse_expression(tokens_t tokens);
 
 void write_expression(expression_t *expression, char **buffer);

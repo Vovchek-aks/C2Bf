@@ -3,24 +3,6 @@
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
-static bool parse_arguments(tokens_t tokens, expressions_t *arguments) {
-    tokens_t accumulator = {};
-    while (tokens.count > 0) {
-        token_t *comma = find_operator(tokens, operator_comma, chop_direction_front);
-        tokens_t part = comma ? split_by(comma, &tokens) : move(&tokens);
-        combine(&accumulator, part);
-
-        expression_t *expression = parse_expression(accumulator);
-        if (expression) {
-            list_push(*arguments, expression);
-            accumulator.count = 0;
-            accumulator.data = NULL;
-        }
-    }
-
-    return accumulator.count == 0;
-}
-
 expression_parsing_result_t expression_function_call_get_data_from(tokens_t tokens) {
     if (tokens.count < 3)
         return FAILED_TO_PARSE_EXPRESSION;
@@ -41,7 +23,7 @@ expression_parsing_result_t expression_function_call_get_data_from(tokens_t toke
 
     expressions_t arguments;
     list_sized_alloc(arguments, 4);
-    if (!parse_arguments(tokens, &arguments)) {
+    if (!parse_expressions_separated_by(operator_comma, tokens, &arguments)) {
         free_expression(function);
         free_expressions(arguments);
         return FAILED_TO_PARSE_EXPRESSION;

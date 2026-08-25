@@ -1,6 +1,5 @@
 #include "expressions.h"
 #include "expression_name.h"
-#include "../../data_structures/data_structures.h"
 #include "stdio.h"
 #include "expression_name.c"
 #include "expression_literal.c"
@@ -8,7 +7,10 @@
 #include "expression_indexing.c"
 #include "expression_function_call.c"
 #include "expression_unary_operation.c"
+#include "expression_binary_operation.c"
 #include "../tokens_operations.c"
+
+#pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
 static expression_parsers_t expression_parsers;
@@ -25,10 +27,12 @@ void expressions_parsing_init(void) {
     expression_parsers_set(expression_kind_element_access, expression_element_access_get_data_from);
     expression_parsers_set(expression_kind_indexing, expression_indexing_get_data_from);
     expression_parsers_set(expression_kind_function_call, expression_function_call_get_data_from);
+    expression_parsers_set(expression_kind_function_call, expression_binary_operation_get_data_from);
     expression_parsers_set(expression_kind_function_call, expression_unary_prefix_operation_get_data_from);
     expression_parsers_set(expression_kind_function_call, expression_unary_postfix_operation_get_data_from);
 
     expression_unary_operation_init();
+    expression_binary_operation_init();
 }
 
 expression_t *parse_expression(tokens_t tokens) {
@@ -57,6 +61,35 @@ expression_t *strictly_parse_expression(tokens_t tokens) {
     printf("Cannot parse expression from:\n");
     print_tokens(tokens);
     assert(0);
+}
+
+bool parse_expressions_separated_by(operator_t target, tokens_t tokens, expressions_t *result) {
+    return specifying_parse_expressions_separated_by(target, tokens, result, false);
+}
+
+bool specifying_parse_expressions_separated_by(operator_t target,
+                                               tokens_t tokens,
+                                               expressions_t *result,
+                                               bool require_at_least_one_split) {
+    tokens_t original = tokens;
+    tokens_t accumulator = {};
+    while (tokens.count > 0) {
+        token_t *separator = find_operator(tokens, target, chop_direction_front);
+        tokens_t part = separator ? split_by(separator, &tokens) : absorb(&tokens);
+        combine(&accumulator, part);
+
+        if (accumulator.count == original.count && require_at_least_one_split)
+            return false;
+
+        expression_t *expression = parse_expression(accumulator);
+        if (expression) {
+            list_push(*result, expression);
+            accumulator.count = 0;
+            accumulator.data = NULL;
+        }
+    }
+
+    return accumulator.count == 0;
 }
 
 static char *str_expression_name(expression_t *expression) {
@@ -151,5 +184,5 @@ void free_expressions(expressions_t expressions) {
     list_for(expressions, expression)
         free_expression(expression);
 
-    free(expressions.data);
+    list_free(expressions);
 }

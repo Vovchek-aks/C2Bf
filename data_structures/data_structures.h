@@ -1,10 +1,10 @@
+#ifndef DATA_STRUCTURES
+#define DATA_STRUCTURES
+
 #include <malloc.h>
 #include <assert.h>
 #include <stdint.h>
 #include <stdbool.h>
-
-#ifndef DATA_STRUCTURES
-#define DATA_STRUCTURES
 
 #define LIST_INITIAL_SIZE 64
 
@@ -23,6 +23,13 @@
     (list).data = data;                                                                                                \
     (list).count = 0;                                                                                                  \
     (list).capacity = size;                                                                                            \
+} while(0)
+
+#define list_free(list) do {                                                                                           \
+    free((list).data);                                                                                                 \
+    (list).data = NULL;                                                                                                \
+    (list).count = 0;                                                                                                  \
+    (list).capacity = 0;                                                                                               \
 } while(0)
 
 #define list_last(list) ((list).data[(list).count - 1])

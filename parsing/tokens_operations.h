@@ -1,7 +1,7 @@
-#include "../tokenization/tokenization.h"
-
 #ifndef TOKENS_OPERATIONS
 #define TOKENS_OPERATIONS
+
+#include "../tokenization/tokenization.h"
 
 typedef enum {
     chop_direction_front,
@@ -27,6 +27,6 @@ tokens_t split_by(token_t *separator, tokens_t *right);
 
 void combine(tokens_t *left, tokens_t right);
 
-tokens_t move(tokens_t *tokens);
+tokens_t absorb(tokens_t *tokens);
 
 #endif

@@ -4,7 +4,7 @@ void fake_tokens_init() {
     list_alloc(fake_tokens);
 }
 
-void fake_tokens_start_new_list(size_t size) {
+void fake_tokens_new(size_t size) {
     tokens_t tokens;
     list_sized_alloc(tokens, size);
     list_push(fake_tokens, tokens);

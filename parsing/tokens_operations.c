@@ -108,7 +108,7 @@ void combine(tokens_t *left, tokens_t right) {
     left->count = right.data + right.count - left->data;
 }
 
-tokens_t move(tokens_t *tokens) {
+tokens_t absorb(tokens_t *tokens) {
     tokens_t new_tokens = *tokens;
     tokens->count = 0;
     tokens->data = 0;

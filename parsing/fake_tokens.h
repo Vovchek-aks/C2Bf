@@ -10,9 +10,9 @@ static fake_tokens_t fake_tokens;
 
 void fake_tokens_init();
 
-void fake_tokens_start_new_list(size_t size);
+void fake_tokens_new(size_t size);
 
-#define fake_tokens_last_list list_last(fake_tokens)
+#define fake_tokens_current list_last(fake_tokens)
 
 void fake_tokens_remove_last_list();
 
