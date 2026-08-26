@@ -1,7 +1,7 @@
-#include "tokenizer.h"
-
 #ifndef TOKEN_LITERAL
 #define TOKEN_LITERAL
+
+#include "tokenizer.h"
 
 #define TOKEN_LITERAL_NAME "TOKEN_LITERAL"
 

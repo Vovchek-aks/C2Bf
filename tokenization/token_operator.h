@@ -1,7 +1,7 @@
-#include "tokenizer.h"
-
 #ifndef TOKEN_OPERATOR
 #define TOKEN_OPERATOR
+
+#include "tokenizer.h"
 
 #define TOKEN_OPERATOR_NAME "TOKEN_OPERATOR"
 

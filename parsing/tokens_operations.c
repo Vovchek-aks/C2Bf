@@ -1,5 +1,4 @@
 #include "tokens_operations.h"
-#include "../data_structures/data_structures.h"
 #include <assert.h>
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 

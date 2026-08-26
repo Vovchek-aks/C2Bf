@@ -1,8 +1,8 @@
-#include "../../tokenization/tokenization.h"
-#include "expressions.h"
-
 #ifndef EXPRESSION_NAME
 #define EXPRESSION_NAME
+
+#include "../../tokenization/tokenization.h"
+#include "expressions.h"
 
 #define EXPRESSION_NAME_NAME "Name"
 

@@ -2,6 +2,7 @@
 #include "../string_helper/string_helper.h"
 #include <string.h>
 #include <ctype.h>
+#include <malloc.h>
 
 tokenization_status_t token_name_get_status(char *line) {
     if (isdigit(*line))

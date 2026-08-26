@@ -1,7 +1,7 @@
-#include "../../tokenization/tokenization.h"
-
 #ifndef EXPRESSIONS_DATAS
 #define EXPRESSIONS_DATAS
+
+#include "../../tokenization/tokenization.h"
 
 typedef struct expression_t expression_t;
 

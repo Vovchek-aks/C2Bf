@@ -1,7 +1,7 @@
-#include <string.h>
-
 #ifndef STRING_HELPER
 #define STRING_HELPER
+
+#include <string.h>
 
 #define string_for(line, element) for (char element = *(line); element; element = *(++(line)))
 

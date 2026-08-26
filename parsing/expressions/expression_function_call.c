@@ -1,5 +1,4 @@
 #include "expression_function_call.h"
-#include "../tokens_operations.h"
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
@@ -36,10 +35,20 @@ expression_parsing_result_t expression_function_call_get_data_from(tokens_t toke
     return EXPRESSION_PARSED(.as_function_call, data);
 }
 
-void write_expression_function_call_data_from(expression_function_call_data_t data, char **buffer) {
+static void write_function_name(expression_function_call_data_t data, char **buffer) {
+    if (data.function->kind == expression_kind_name) {
+        *buffer += snprintf(*buffer, TOKEN_MAX_LENGTH,
+                            "(\"%s\"):", data.function->data.as_name.token->name);
+        return;
+    }
+
     *buffer += snprintf(*buffer, 20, "(args=%llu):", data.arguments.count);
     string_extend(buffer, "\n.function = ");
     write_expression(data.function, buffer);
+}
+
+void write_expression_function_call_data_from(expression_function_call_data_t data, char **buffer) {
+    write_function_name(data, buffer);
 
     size_t index = 0;
     list_for(data.arguments, argument) {

@@ -1,7 +1,7 @@
 #ifndef FAKE_TOKENS
 #define FAKE_TOKENS
 
-#include "../data_structures/data_structures.h"
+#include "../data_structures.h"
 #include "../tokenization/tokenization.h"
 
 typedef LIST(tokens_t) fake_tokens_t;

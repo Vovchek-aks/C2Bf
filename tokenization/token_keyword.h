@@ -1,7 +1,7 @@
-#include "tokenizer.h"
-
 #ifndef TOKEN_KEYWORD
 #define TOKEN_KEYWORD
+
+#include "tokenizer.h"
 
 #define TOKEN_KEYWORD_NAME "TOKEN_KEYWORD"
 

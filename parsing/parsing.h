@@ -1,8 +1,8 @@
-#include "../tokenization/tokenization.h"
-#include "expressions/expressions.h"
-
 #ifndef PARSING
 #define PARSING
+
+#include "../tokenization/tokenization.h"
+#include "expressions/expressions.h"
 
 typedef struct {
 

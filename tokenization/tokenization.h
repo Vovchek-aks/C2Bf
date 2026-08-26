@@ -1,13 +1,13 @@
+#ifndef TOKENIZATION
+#define TOKENIZATION
+
 #include "token_type.h"
 #include "token_name.h"
 #include "token_operator.h"
 #include "token_keyword.h"
 #include "token_literal.h"
 #include "tokenizer.h"
-#include "../data_structures/data_structures.h"
-
-#ifndef TOKENIZATION
-#define TOKENIZATION
+#include "../data_structures.h"
 
 #define TOKEN_MAX_LENGTH 255
 

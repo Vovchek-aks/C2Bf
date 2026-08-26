@@ -43,21 +43,15 @@ expression_parsing_result_t expression_binary_operation_get_data_from(tokens_t t
         }
         free_expressions(parts);
     }
-
     if (!function_name)
         return FAILED_TO_PARSE_EXPRESSION;
 
     fake_tokens_new(1);
     fake_tokens_append_token_name(function_name);
-
     expression_t *function = parse_expression(list_view(fake_tokens_current));
-    if (!function)
-        return FAILED_TO_PARSE_EXPRESSION;
+    assert(function);
 
-    expression_function_call_data_t data = {
-            .function = function,
-            .arguments = parts
-    };
+    expression_function_call_data_t data = {function, parts};
 
     return EXPRESSION_PARSED(.as_function_call, data);
 }

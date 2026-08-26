@@ -1,8 +1,8 @@
-#include "../../tokenization/tokenization.h"
-#include "expressions_datas.h"
-
 #ifndef EXPRESSIONS
 #define EXPRESSIONS
+
+#include "../../tokenization/tokenization.h"
+#include "expressions_datas.h"
 
 #define EXPRESSION_PRINTING_MAX_LENGTH (1024 * 1024)
 
@@ -31,11 +31,11 @@ void expressions_parsing_init(void);
 
 expression_t *parse_expression(tokens_t tokens);
 
-bool parse_expressions_separated_by(operator_t separator, tokens_t tokens, expressions_t *result);
+bool parse_expressions_separated_by(operator_t separator, tokens_t tokens, expressions_t *parts);
 
 bool specifying_parse_expressions_separated_by(operator_t target,
                                                tokens_t tokens,
-                                               expressions_t *result,
+                                               expressions_t *parts,
                                                bool require_at_least_one_split);
 
 expression_t *strictly_parse_expression(tokens_t tokens);

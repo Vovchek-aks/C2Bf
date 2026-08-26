@@ -1,8 +1,8 @@
-#include "../../tokenization/tokenization.h"
-#include "expressions.h"
-
 #ifndef EXPRESSION_LITERAL
 #define EXPRESSION_LITERAL
+
+#include "../../tokenization/tokenization.h"
+#include "expressions.h"
 
 #define EXPRESSION_LITERAL_NAME "Literal"
 

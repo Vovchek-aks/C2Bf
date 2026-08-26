@@ -9,8 +9,6 @@
 #include "expression_unary_operation.c"
 #include "expression_binary_operation.c"
 #include "../tokens_operations.c"
-#include "../../string_helper/string_helper.h"
-
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
@@ -79,13 +77,13 @@ expression_t *strictly_parse_expression(tokens_t tokens) {
     assert(0);
 }
 
-bool parse_expressions_separated_by(operator_t target, tokens_t tokens, expressions_t *result) {
-    return specifying_parse_expressions_separated_by(target, tokens, result, false);
+bool parse_expressions_separated_by(operator_t target, tokens_t tokens, expressions_t *parts) {
+    return specifying_parse_expressions_separated_by(target, tokens, parts, false);
 }
 
 bool specifying_parse_expressions_separated_by(operator_t target,
                                                tokens_t tokens,
-                                               expressions_t *result,
+                                               expressions_t *parts,
                                                bool require_at_least_one_split) {
     tokens_t original = tokens;
     tokens_t accumulator = {};
@@ -99,7 +97,7 @@ bool specifying_parse_expressions_separated_by(operator_t target,
 
         expression_t *expression = parse_expression(accumulator);
         if (expression) {
-            list_push(*result, expression);
+            list_push(*parts, expression);
             accumulator.count = 0;
             accumulator.data = NULL;
         }
