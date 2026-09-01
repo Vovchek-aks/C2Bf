@@ -74,7 +74,7 @@ expression_t *strictly_parse_expression(tokens_t tokens) {
 
     printf("Cannot parse expression from:\n");
     print_tokens(tokens);
-    assert(0);
+    assert(false);
 }
 
 bool parse_expressions_separated_by(operator_t target, tokens_t tokens, expressions_t *parts) {
@@ -119,7 +119,7 @@ static char *str_expression_name(expression_t *expression) {
         case expression_kind_function_call:
             return EXPRESSION_FUNCTION_CALL_NAME;
         default:
-            assert(0);
+            assert(false);
     }
 }
 
@@ -136,7 +136,7 @@ static void write_expression_data(expression_t *expression, char **buffer) {
         case expression_kind_function_call:
             return write_expression_function_call_data_from(expression->data.as_function_call, buffer);
         default:
-            assert(0);
+            assert(false);
     }
 }
 
@@ -148,14 +148,14 @@ static void adjust_level(char *line, char **buffer) {
     }
 }
 
-static char print_buffer[EXPRESSION_PRINTING_MAX_LENGTH] = {};
+static char expression_print_buffer[EXPRESSION_PRINTING_MAX_LENGTH] = {};
 
 void print_expression(expression_t *expression) {
-    char *line_end = print_buffer;
+    char *line_end = expression_print_buffer;
     write_expression(expression, &line_end);
 
-    printf("%s\n", print_buffer);
-    memset(print_buffer, 0, EXPRESSION_PRINTING_MAX_LENGTH);
+    printf("%s\n", expression_print_buffer);
+    memset(expression_print_buffer, 0, EXPRESSION_PRINTING_MAX_LENGTH);
 }
 
 void write_expression(expression_t *expression, char **buffer) {
@@ -188,7 +188,7 @@ void free_expression(expression_t *expression) {
             free_expression_function_call_data(expression->data.as_function_call);
             break;
         default:
-            assert(0);
+            assert(false);
     }
 
     free(expression);

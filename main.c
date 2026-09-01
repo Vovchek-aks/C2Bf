@@ -9,15 +9,15 @@ int32_t main(void) {
     parsing_init();
 
 //    char *code = "int32_t main(void) { printf(\"Hello, World!\"); return 0; } ";
-    char *code = "aboba[((0))]++ <= ~biba + boba && !foo || bar.baz() && (2 + 2) * 67 < '\\n' ";
+    char *code = "desvor99(2 + 2); ";
 
     printf("%s\n=====================================================================\n", code);
 
     tokens_t tokens = tokenize(code);
 //    print_tokens(tokens);
 
-    expression_t *expression = strictly_parse_expression(list_view(tokens));
-    print_expression(expression);
+    statement_t *statement = strictly_parse_statement(list_view(tokens), true);
+    print_statement(statement);
 
 //    program_t *program = parse(tokens);
 //    char *bf = translate_to_bf(program);

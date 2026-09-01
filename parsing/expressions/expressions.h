@@ -10,6 +10,7 @@ typedef enum {
     expression_kind_indexing,
     expression_kind_name,
     expression_kind_struct_creation,
+    expression_kind_ternary_if,
     expression_kind_literal,
     expression_kind_function_call,
     expression_kind_element_access,
