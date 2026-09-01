@@ -1,5 +1,6 @@
 #include "expressions.h"
 #include "expression_name.h"
+#include "../parser_tokens_separator.h"
 #include "stdio.h"
 #include "expression_name.c"
 #include "expression_literal.c"
@@ -77,34 +78,8 @@ expression_t *strictly_parse_expression(tokens_t tokens) {
     assert(false);
 }
 
-bool parse_expressions_separated_by(operator_t target, tokens_t tokens, expressions_t *parts) {
-    return specifying_parse_expressions_separated_by(target, tokens, parts, false);
-}
-
-bool specifying_parse_expressions_separated_by(operator_t target,
-                                               tokens_t tokens,
-                                               expressions_t *parts,
-                                               bool require_at_least_one_split) {
-    tokens_t original = tokens;
-    tokens_t accumulator = {};
-    while (tokens.count > 0) {
-        token_t *separator = find_operator(tokens, target, chop_direction_front);
-        tokens_t part = separator ? split_by(separator, &tokens) : absorb(&tokens);
-        combine(&accumulator, part);
-
-        if (accumulator.count == original.count && require_at_least_one_split)
-            return false;
-
-        expression_t *expression = parse_expression(accumulator);
-        if (expression) {
-            list_push(*parts, expression);
-            accumulator.count = 0;
-            accumulator.data = NULL;
-        }
-    }
-
-    return accumulator.count == 0;
-}
+PARSER_TOKENS_SEPARATOR(parse_expressions_separated_by, specifying_parse_expressions_separated_by,
+                        expressions_t, operator_t, find_operator, parse_expression)
 
 static char *str_expression_name(expression_t *expression) {
     switch (expression->kind) {

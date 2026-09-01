@@ -9,14 +9,14 @@ int32_t main(void) {
     parsing_init();
 
 //    char *code = "int32_t main(void) { printf(\"Hello, World!\"); return 0; } ";
-    char *code = "desvor99(2 + 2); ";
+    char *code = "if (aboba) biba(); else if (aboba2) foo(); else if (aboba3) baz(); else bar(); ";
 
     printf("%s\n=====================================================================\n", code);
 
     tokens_t tokens = tokenize(code);
 //    print_tokens(tokens);
 
-    statement_t *statement = strictly_parse_statement(list_view(tokens), true);
+    statement_t *statement = strictly_parse_statement(list_view(tokens));
     print_statement(statement);
 
 //    program_t *program = parse(tokens);

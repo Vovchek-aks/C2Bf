@@ -14,9 +14,15 @@ token_t *chop_back(tokens_t *tokens, token_kind_t kind);
 
 token_t *chop_operator(tokens_t *tokens, operator_t kind, chop_direction_t direction);
 
+token_t *chop_keyword(tokens_t *tokens, keyword_t kind, chop_direction_t direction);
+
 token_t *find_operator(tokens_t tokens,
                        operator_t target,
                        chop_direction_t direction);
+
+token_t *find_keyword(tokens_t tokens,
+                      keyword_t target,
+                      chop_direction_t direction);
 
 token_t *get_paired_bracket(tokens_t tokens,
                             operator_t target,

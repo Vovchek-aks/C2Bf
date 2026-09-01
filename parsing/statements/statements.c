@@ -1,10 +1,12 @@
 #include "statements.h"
 #include "stdio.h"
 #include "statement_expression.c"
+#include "statement_if.c"
+#pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "bugprone-sizeof-statement"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
-static statement_parsers_t statement_parsers;
+statement_parsers_t statement_parsers;
 
 #define statement_parsers_push(kind_to_set, parser_to_set) do {                                                        \
     typeof(*statement_parsers.data) element = { kind_to_set, parser_to_set };                                          \
@@ -14,6 +16,7 @@ static statement_parsers_t statement_parsers;
 void statements_parsing_init(void) {
     list_alloc(statement_parsers);
     statement_parsers_push(statement_kind_expression, statement_expression_get_data_from);
+    statement_parsers_push(statement_kind_if, statement_if_get_data_from);
 }
 
 statement_t *parse_statement(tokens_t tokens) {
@@ -35,15 +38,8 @@ statement_t *parse_statement(tokens_t tokens) {
     return NULL;
 }
 
-statement_t *parse_statement_with_semicolon(tokens_t tokens) {
-    if (!chop_operator(&tokens, operator_semicolon, chop_direction_back))
-        return NULL;
-
-    return parse_statement(tokens);
-}
-
-statement_t *strictly_parse_statement(tokens_t tokens, bool is_semicolon_required) {
-    statement_t *statement = (is_semicolon_required ? parse_statement_with_semicolon : parse_statement)(tokens);
+statement_t *strictly_parse_statement(tokens_t tokens) {
+    statement_t *statement = parse_statement(tokens);
     if (statement)
         return statement;
 
@@ -52,11 +48,20 @@ statement_t *strictly_parse_statement(tokens_t tokens, bool is_semicolon_require
     assert(false);
 }
 
+PARSER_TOKENS_SEPARATOR(parse_statements_separated_by_operator, specifying_parse_statements_separated_by_operator,
+                        statements_t, operator_t, find_operator, parse_statement)
+
+PARSER_TOKENS_SEPARATOR(parse_statements_separated_by_keyword, specifying_parse_statements_separated_by_keyword,
+                        statements_t, keyword_t, find_keyword, parse_statement)
+
 static char *str_statement_name(statement_t *statement) {
     switch (statement->kind) {
         case statement_kind_expression:
             return STATEMENT_EXPRESSION_NAME;
+        case statement_kind_if:
+            return STATEMENT_IF_NAME;
         default:
+            printf("Statement has no name\n");
             assert(false);
     }
 }
@@ -65,7 +70,10 @@ static void write_statement_data(statement_t *statement, char **buffer) {
     switch (statement->kind) {
         case statement_kind_expression:
             return write_statement_expression_data_from(statement->data.as_expression, buffer);
+        case statement_kind_if:
+            return write_statement_if_data_from(statement->data.as_if, buffer);
         default:
+            printf("Statement cannot write data\n");
             assert(false);
     }
 }
@@ -97,7 +105,11 @@ void free_statement(statement_t *statement) {
         case statement_kind_expression:
             free_statement_expression_data(statement->data.as_expression);
             break;
+        case statement_kind_if:
+            free_statement_if_data(statement->data.as_if);
+            break;
         default:
+            printf("Cannot free statement\n");
             assert(false);
     }
 

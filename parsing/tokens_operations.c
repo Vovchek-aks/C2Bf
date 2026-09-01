@@ -25,31 +25,40 @@ token_t *chop_back(tokens_t *tokens, token_kind_t kind) {
     return token;
 }
 
-token_t *chop_operator(tokens_t *tokens, operator_t kind, chop_direction_t direction) {
-    tokens_t changed_tokens = *tokens;
-    token_t *op = (direction == chop_direction_front ? chop_front : chop_back)(&changed_tokens, token_kind_operator);
-    if (!op || op->data.as_operator.name != kind)
-        return NULL;
-
-    *tokens = changed_tokens;
-    return op;
-}
-
-token_t *find_operator(tokens_t tokens,
-                       operator_t target,
-                       chop_direction_t direction) {
-    while (tokens.count > 0) {
-        token_t *op = chop_operator(&tokens, target, direction);
-        if (op)
-            return op;
-
-        tokens.count--;
-        if (direction == chop_direction_front)
-            tokens.data++;
+#define CHOP_TOKEN_KIND(function_name, kind_t, token_kind, path_from_data)                                             \
+    token_t *function_name(tokens_t *tokens, kind_t kind, chop_direction_t direction) {                                \
+        tokens_t changed_tokens = *tokens;                                                                             \
+        token_t *op = (direction == chop_direction_front ? chop_front : chop_back)(&changed_tokens, token_kind);       \
+        if (!op || op->data path_from_data != kind)                                                                    \
+            return NULL;                                                                                               \
+        *tokens = changed_tokens;                                                                                      \
+        return op;                                                                                                     \
     }
 
-    return NULL;
-}
+CHOP_TOKEN_KIND(chop_operator, operator_t, token_kind_operator, .as_operator.name)
+
+CHOP_TOKEN_KIND(chop_keyword, keyword_t , token_kind_keyword, .as_keyword.name)
+
+#define FIND_TOKEN_KIND(function_name, target_t, chop)                                                                 \
+    token_t *function_name(tokens_t tokens,                                                                            \
+                           target_t target,                                                                            \
+                           chop_direction_t direction) {                                                               \
+        while (tokens.count > 0) {                                                                                     \
+            token_t *op = chop(&tokens, target, direction);                                                            \
+            if (op)                                                                                                    \
+                return op;                                                                                             \
+                                                                                                                       \
+            tokens.count--;                                                                                            \
+            if (direction == chop_direction_front)                                                                     \
+                tokens.data++;                                                                                         \
+        }                                                                                                              \
+                                                                                                                       \
+        return NULL;                                                                                                   \
+    }
+
+FIND_TOKEN_KIND(find_operator, operator_t , chop_operator)
+
+FIND_TOKEN_KIND(find_keyword, keyword_t , chop_keyword)
 
 
 token_t *get_paired_bracket(tokens_t tokens,
