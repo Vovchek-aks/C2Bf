@@ -5,7 +5,7 @@
 token_t *chop_front(tokens_t *tokens, token_kind_t kind) {
     assert(tokens->count > 0);
 
-    if (tokens->data[0].kind != kind)
+    if (tokens->data[0].kind != kind && kind != TOKEN_ANY_KIND)
         return NULL;
 
     token_t *token = &tokens->data[0];

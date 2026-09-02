@@ -17,9 +17,14 @@ typedef struct {
     statement_t *false_branch;
 } statement_if_data_t;
 
+typedef struct {
+    statements_t statements;
+} statement_scope_data_t;
+
 typedef union {
-    statement_if_data_t as_if;
     statement_expression_data_t as_expression;
+    statement_if_data_t as_if;
+    statement_scope_data_t as_scope;
 } statement_data_t;
 
 typedef enum {

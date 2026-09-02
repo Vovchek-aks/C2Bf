@@ -2,8 +2,8 @@
 #include "stdio.h"
 #include "statement_expression.c"
 #include "statement_if.c"
+#include "statement_scope.c"
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
-#pragma ide diagnostic ignored "bugprone-sizeof-statement"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
 statement_parsers_t statement_parsers;
@@ -17,6 +17,7 @@ void statements_parsing_init(void) {
     list_alloc(statement_parsers);
     statement_parsers_push(statement_kind_expression, statement_expression_get_data_from);
     statement_parsers_push(statement_kind_if, statement_if_get_data_from);
+    statement_parsers_push(statement_kind_scope, statement_scope_get_data_from);
 }
 
 statement_t *parse_statement(tokens_t tokens) {
@@ -60,6 +61,8 @@ static char *str_statement_name(statement_t *statement) {
             return STATEMENT_EXPRESSION_NAME;
         case statement_kind_if:
             return STATEMENT_IF_NAME;
+        case statement_kind_scope:
+            return STATEMENT_SCOPE_NAME;
         default:
             printf("Statement has no name\n");
             assert(false);
@@ -72,6 +75,8 @@ static void write_statement_data(statement_t *statement, char **buffer) {
             return write_statement_expression_data_from(statement->data.as_expression, buffer);
         case statement_kind_if:
             return write_statement_if_data_from(statement->data.as_if, buffer);
+        case statement_kind_scope:
+            return write_statement_scope_data_from(statement->data.as_scope, buffer);
         default:
             printf("Statement cannot write data\n");
             assert(false);
@@ -107,6 +112,9 @@ void free_statement(statement_t *statement) {
             break;
         case statement_kind_if:
             free_statement_if_data(statement->data.as_if);
+            break;
+        case statement_kind_scope:
+            free_statement_scope_data(statement->data.as_scope);
             break;
         default:
             printf("Cannot free statement\n");

@@ -1,11 +1,11 @@
 #include "statement_if.h"
 
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
-#pragma ide diagnostic ignored "bugprone-sizeof-statement"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
 statement_parsing_result_t statement_if_get_data_from(tokens_t tokens) {
-    assert(tokens.count >= 6); // if (a) {}
+    if (tokens.count < 6) // if (a) {}
+        return FAILED_TO_PARSE_STATEMENT;
 
     if (!chop_keyword(&tokens, keyword_if, chop_direction_front))
         return FAILED_TO_PARSE_STATEMENT;

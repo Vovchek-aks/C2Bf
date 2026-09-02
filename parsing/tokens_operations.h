@@ -3,6 +3,10 @@
 
 #include "../tokenization/tokenization.h"
 
+#define tokens_from(token) (tokens_t) {token, 1, 0}
+
+#define TOKEN_ANY_KIND token_kinds_count
+
 typedef enum {
     chop_direction_front,
     chop_direction_back

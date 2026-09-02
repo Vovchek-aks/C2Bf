@@ -1,10 +1,10 @@
 #include "statement_expression.h"
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
-#pragma ide diagnostic ignored "bugprone-sizeof-statement"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
 statement_parsing_result_t statement_expression_get_data_from(tokens_t tokens) {
-    assert(tokens.count >= 2);
+    if (tokens.count < 2)
+        return FAILED_TO_PARSE_STATEMENT;
     CHOP_SEMICOLON;
 
     expression_t *expression = parse_expression(tokens);
