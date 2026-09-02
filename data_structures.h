@@ -16,6 +16,12 @@
 
 #define list_view(list) (typeof(list)) { .data = (list).data, .count = (list).count, .capacity = 0}
 
+#define list_slice(list, start, stop) (typeof(list)) {                                                                 \
+    .data = (list).data + (start),                                                                                     \
+    .count = (stop >= 0 ? stop : (list).count + stop) - (start),                                                       \
+    .capacity = 0                                                                                                      \
+}
+
 #define list_sized_alloc(list, size) do {                                                                              \
     assert(size > 0);                                                                                                  \
     typeof(*(list).data) *data = malloc(sizeof(*(list).data) * size);                                                  \

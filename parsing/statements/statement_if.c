@@ -3,6 +3,35 @@
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
+static bool try_parse_branches(tokens_t *tokens, statement_t **true_branch, statement_t **false_branch) {
+    statements_t branches;
+    list_sized_alloc(branches, 2);
+    if ((!parse_statements_separated_by_keyword(keyword_else, (*tokens), &branches))
+        || branches.count == 0) {
+        free_statements(branches);
+        return false;
+    }
+
+    *true_branch = branches.data[0];
+    *false_branch = branches.count > 1 ? branches.data[1] : NULL;
+
+    if (branches.count < 2) {
+        list_free(branches);
+        return true;
+    }
+
+    statements_t slice = list_slice(branches, 1, -1);
+    list_for(slice, statement) {
+        if (statement->kind != statement_kind_if) {
+            free_statements(branches);
+            return false;
+        }
+        statement->data.as_if.false_branch = slice.data[FOR_IDX + 1];
+    }
+    list_free(branches);
+    return true;
+}
+
 statement_parsing_result_t statement_if_get_data_from(tokens_t tokens) {
     if (tokens.count < 6) // if (a) {}
         return FAILED_TO_PARSE_STATEMENT;
@@ -23,33 +52,12 @@ statement_parsing_result_t statement_if_get_data_from(tokens_t tokens) {
     if (!condition)
         return FAILED_TO_PARSE_STATEMENT;
 
-    statements_t branches;
-    list_sized_alloc(branches, 2);
-    if ((!parse_statements_separated_by_keyword(keyword_else, tokens, &branches))
-        || branches.count < 1) {
+    statement_if_data_t data = {condition};
+    if (!try_parse_branches(&tokens, &data.true_branch, &data.false_branch)) {
         free_expression(condition);
-        free_statements(branches);
         return FAILED_TO_PARSE_STATEMENT;
     }
 
-    statement_t *false_branch = branches.count == 2 ? branches.data[1] : NULL;
-    if (branches.count > 2) {
-        statements_t slice = {branches.data + 1, branches.count - 2}; // [1:-1]
-        list_for(slice, statement) {
-            if (statement->kind != statement_kind_if) {
-                free_expression(condition);
-                free_statements(branches);
-                return FAILED_TO_PARSE_STATEMENT;
-            }
-        }
-        for (int idx = 1; idx < branches.count - 1; ++idx)
-            branches.data[idx]->data.as_if.false_branch = branches.data[idx + 1];
-
-        false_branch = branches.data[1];
-    }
-
-    statement_if_data_t data = {condition, branches.data[0], false_branch};
-    list_free(branches);
     return STATEMENT_PARSED(.as_if, data);
 }
 

@@ -9,7 +9,7 @@ int32_t main(void) {
     parsing_init();
 
 //    char *code = "int32_t main(void) { printf(\"Hello, World!\"); return 0; } ";
-    char *code = "if (aboba < 2) {\n    biba();\n    boba();\n}\nelse if (aboba > 5)\n    foo();\nelse\n    bar(); ";
+    char *code = "if (aboba < 2) {\n    biba();\n    if (1 == 1)\n        boba();\n}\nelse if (aboba > 5)\n    foo();\nelse\n    bar(); ";
 
     printf("%s\n=====================================================================\n", code);
 
