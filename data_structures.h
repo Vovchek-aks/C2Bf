@@ -16,11 +16,12 @@
 
 #define list_view(list) (typeof(list)) { .data = (list).data, .count = (list).count, .capacity = 0}
 
-#define list_slice(list, start, stop) (typeof(list)) {                                                                 \
-    .data = (list).data + (start),                                                                                     \
-    .count = (stop >= 0 ? stop : (list).count + stop) - (start),                                                       \
-    .capacity = 0                                                                                                      \
-}
+#define list_slice(list, start, stop) ({                                                                               \
+    (typeof(list)) {                                                                                                   \
+        .data = (list).data + ((start) >= 0 ? (start) : (list).count + (start)),                                       \
+        .count = ((stop) >= 0 ? (stop) : (list).count + (stop)) - ((start) >= 0 ? (start) : (list).count + (start)),   \
+        .capacity = 0                                                                                                  \
+};})
 
 #define list_sized_alloc(list, size) do {                                                                              \
     assert(size > 0);                                                                                                  \
@@ -31,6 +32,8 @@
     (list).capacity = size;                                                                                            \
 } while(0)
 
+#define list_alloc(list) list_sized_alloc(list, LIST_INITIAL_SIZE)
+
 #define list_free(list) do {                                                                                           \
     free((list).data);                                                                                                 \
     (list).data = NULL;                                                                                                \
@@ -39,8 +42,6 @@
 } while(0)
 
 #define list_last(list) ((list).data[(list).count - 1])
-
-#define list_alloc(list) list_sized_alloc(list, LIST_INITIAL_SIZE)
 
 #define list_push(list, element) do {                                                                                  \
     assert((list).capacity > 0);                                                                                       \
@@ -54,9 +55,11 @@
     (list).data[(list).count++] = element;                                                                             \
 } while (0)
 
-#define list_for(list, name)                                                                                           \
-    size_t FOR_IDX = 0;                                                                                                \
-    for(typeof(*(list).data) name = (list).data[FOR_IDX]; FOR_IDX < (list).count; name = (list).data[++FOR_IDX])
+#define list_enumerated_for(list, element, index)                                                                      \
+    size_t index = 0;                                                                                                  \
+    for(typeof(*(list).data) element = (list).data[index]; (index) < (list).count; element = (list).data[++index])
+
+#define list_for(list, name) list_enumerated_for(list, name, FOR_IDX)
 
 #define list_index(list, value, result) do {                                                                           \
     for (size_t index = 0; index < (list).count; index++)                                                              \

@@ -21,12 +21,12 @@ static bool try_parse_branches(tokens_t *tokens, statement_t **true_branch, stat
     }
 
     statements_t slice = list_slice(branches, 1, -1);
-    list_for(slice, statement) {
+    list_enumerated_for(slice, statement, index) {
         if (statement->kind != statement_kind_if) {
             free_statements(branches);
             return false;
         }
-        statement->data.as_if.false_branch = slice.data[FOR_IDX + 1];
+        statement->data.as_if.false_branch = slice.data[index + 1];
     }
     list_free(branches);
     return true;
