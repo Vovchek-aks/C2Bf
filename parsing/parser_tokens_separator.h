@@ -1,14 +1,17 @@
 #ifndef PARSER_TOKENS_SEPARATOR
 
 #define PARSER_TOKENS_SEPARATOR(function_name, stuffy_function_name, list_t, target_t, find, parse)                    \
-    bool function_name(target_t target, tokens_t tokens, list_t *parts) {                                              \
-        return stuffy_function_name(target, tokens, parts, false);                                                     \
+    bool function_name(target_t target, tokens_t tokens, list_t *parts, bool is_end_separator_allowed) {               \
+        return stuffy_function_name(target, tokens, parts, is_end_separator_allowed, false);                           \
     }                                                                                                                  \
                                                                                                                        \
     bool stuffy_function_name(target_t target,                                                                         \
                               tokens_t tokens,                                                                         \
                               list_t *parts,                                                                           \
-                              bool require_at_least_one_split) {                                                       \
+                              bool is_end_separator_allowed,                                                           \
+                              bool is_at_least_one_split_required) {                                                   \
+        if ((!is_end_separator_allowed) && find(tokens_from(&list_last(tokens)), target, chop_direction_front))        \
+            return false;                                                                                              \
         tokens_t original = tokens;                                                                                    \
         tokens_t accumulator = {};                                                                                     \
         while (tokens.count > 0) {                                                                                     \
@@ -16,7 +19,7 @@
             tokens_t part = separator ? split_by(separator, &tokens) : absorb(&tokens);                                \
             combine(&accumulator, part);                                                                               \
                                                                                                                        \
-            if (accumulator.count == original.count && require_at_least_one_split)                                     \
+            if (accumulator.count == original.count && is_at_least_one_split_required)                                 \
                 return false;                                                                                          \
                                                                                                                        \
             typeof(*parts->data) parsed = parse(accumulator);                                                          \

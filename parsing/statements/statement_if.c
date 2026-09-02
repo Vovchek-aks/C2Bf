@@ -6,7 +6,7 @@
 static bool try_parse_branches(tokens_t *tokens, statement_t **true_branch, statement_t **false_branch) {
     statements_t branches;
     list_sized_alloc(branches, 2);
-    if ((!parse_statements_separated_by_keyword(keyword_else, (*tokens), &branches))
+    if ((!parse_statements_separated_by_keyword(keyword_else, (*tokens), &branches, false))
         || branches.count == 0) {
         free_statements(branches);
         return false;

@@ -37,7 +37,7 @@ expression_parsing_result_t expression_binary_operation_get_data_from(tokens_t t
     char *function_name = NULL;
     list_for(function_of_binary_operation, item) {
         list_sized_alloc(parts, 2);
-        if (specifying_parse_expressions_separated_by(item.key, tokens, &parts, true)) {
+        if (specifying_parse_expressions_separated_by(item.key, tokens, &parts, false, true)) {
             function_name = item.value;
             break;
         }

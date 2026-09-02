@@ -14,7 +14,7 @@ expression_parsing_result_t expression_literal_get_data_from(tokens_t tokens) {
 void write_expression_literal_data_from(expression_literal_data_t data, char **buffer) {
     string_extend(buffer, "(");
     write_token_literal_data(*data.token, buffer);
-    string_extend(buffer, ")");
+    string_extend(buffer, ");");
 }
 
 void free_expression_literal_data(expression_literal_data_t data) {}

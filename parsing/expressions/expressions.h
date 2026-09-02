@@ -32,11 +32,13 @@ void expressions_parsing_init(void);
 
 expression_t *parse_expression(tokens_t tokens);
 
-bool parse_expressions_separated_by(operator_t separator, tokens_t tokens, expressions_t *parts);
+bool parse_expressions_separated_by(operator_t separator, tokens_t tokens, expressions_t *parts,
+                                    bool is_end_separator_allowed);
 
 bool specifying_parse_expressions_separated_by(operator_t target,
                                                tokens_t tokens,
                                                expressions_t *parts,
+                                               bool is_end_separator_allowed,
                                                bool require_at_least_one_split);
 
 expression_t *strictly_parse_expression(tokens_t tokens);

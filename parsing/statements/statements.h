@@ -37,18 +37,22 @@ statement_t *parse_statement(tokens_t tokens);
 
 statement_t *strictly_parse_statement(tokens_t tokens);
 
-bool parse_statements_separated_by_operator(operator_t separator, tokens_t tokens, statements_t *parts);
+bool parse_statements_separated_by_operator(operator_t separator, tokens_t tokens, statements_t *parts,
+                                            bool is_end_separator_allowed);
 
 bool specifying_parse_statements_separated_by_operator(operator_t target,
                                                        tokens_t tokens,
                                                        statements_t *parts,
+                                                       bool is_end_separator_allowed,
                                                        bool require_at_least_one_split);
 
-bool parse_statements_separated_by_keyword(keyword_t separator, tokens_t tokens, statements_t *parts);
+bool parse_statements_separated_by_keyword(keyword_t separator, tokens_t tokens, statements_t *parts,
+                                           bool is_end_separator_allowed);
 
 bool specifying_parse_statements_separated_by_keyword(keyword_t target,
                                                       tokens_t tokens,
                                                       statements_t *parts,
+                                                      bool is_end_separator_allowed,
                                                       bool require_at_least_one_split);
 
 void write_statement(statement_t *statement, char **buffer);

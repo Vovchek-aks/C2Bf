@@ -14,7 +14,7 @@ expression_parsing_result_t expression_name_get_data_from(tokens_t tokens) {
 void write_expression_name_data_from(expression_name_data_t data, char **buffer) {
     string_extend(buffer, "(");
     write_token_name_data(*data.token, buffer);
-    string_extend(buffer, ")");
+    string_extend(buffer, ");");
 }
 
 void free_expression_name_data(expression_name_data_t data) {}

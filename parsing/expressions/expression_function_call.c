@@ -22,7 +22,7 @@ expression_parsing_result_t expression_function_call_get_data_from(tokens_t toke
 
     expressions_t arguments;
     list_sized_alloc(arguments, 4);
-    if (!parse_expressions_separated_by(operator_comma, tokens, &arguments)) {
+    if (!parse_expressions_separated_by(operator_comma, tokens, &arguments, false)) {
         free_expression(function);
         free_expressions(arguments);
         return FAILED_TO_PARSE_EXPRESSION;
@@ -38,17 +38,18 @@ expression_parsing_result_t expression_function_call_get_data_from(tokens_t toke
 static void write_function_name(expression_function_call_data_t data, char **buffer) {
     if (data.function->kind == expression_kind_name) {
         *buffer += snprintf(*buffer, TOKEN_MAX_LENGTH,
-                            "(\"%s\"):", data.function->data.as_name.token->name);
+                            "(\"%s\")", data.function->data.as_name.token->name);
         return;
     }
 
-    *buffer += snprintf(*buffer, 20, "(args=%llu):", data.arguments.count);
+    *buffer += snprintf(*buffer, 20, "(args=%llu)", data.arguments.count);
     string_extend(buffer, "\n.function = ");
     write_expression(data.function, buffer);
 }
 
 void write_expression_function_call_data_from(expression_function_call_data_t data, char **buffer) {
     write_function_name(data, buffer);
+    string_append(buffer, data.arguments.count > 0 ? ':' : ';');
 
     size_t index = 0;
     list_for(data.arguments, argument) {
