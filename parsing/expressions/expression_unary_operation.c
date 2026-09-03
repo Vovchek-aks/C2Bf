@@ -12,8 +12,7 @@
         if (!operator)                                                                                                 \
             return FAILED_TO_PARSE_EXPRESSION;                                                                         \
                                                                                                                        \
-        char *function_name = NULL;                                                                                    \
-        dict_get(dict, operator->data.as_operator.name, function_name);                                                \
+        char *function_name = dict_get(dict, operator->data.as_operator.name, NULL);                                   \
         if (!function_name)                                                                                            \
             return FAILED_TO_PARSE_EXPRESSION;                                                                         \
                                                                                                                        \

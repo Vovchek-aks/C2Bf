@@ -1,5 +1,4 @@
 #include "token_name.h"
-#include "../string_helper/string_helper.h"
 #include <string.h>
 #include <ctype.h>
 #include <malloc.h>

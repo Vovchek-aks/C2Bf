@@ -28,8 +28,7 @@
     }                                                                                                                  \
                                                                                                                        \
     data_t get_data_name(char *line) {                                                                                 \
-        TK name;                                                                                                       \
-        dict_get_key_cmp(dict_name, line, name, strcmp);                                                               \
+        TK name = dict_get_key_cmp(dict_name, line, strcmp);                                                           \
                                                                                                                        \
         return (data_t) {                                                                                              \
                 .name = name                                                                                           \
@@ -41,9 +40,8 @@
     TOKEN_DICT(data_t, TK, TV, dict_t, dict_name, get_status_name, get_data_name)                                      \
                                                                                                                        \
     void write_data_name(data_t data, char **buffer) {                                                                 \
-        char *line = NULL;                                                                                             \
-        dict_get(dict_name, data.name, line);                                                                          \
-        assert(line != NULL);                                                                                          \
+        char *line = dict_get(dict_name, data.name, NULL);                                                             \
+        assert(line);                                                                                                  \
                                                                                                                        \
         string_extend(buffer, line);                                                                                   \
     }

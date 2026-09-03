@@ -96,9 +96,7 @@ tokens_t tokenize(char *code) {
         }
 
         token_kind_t kind;
-        tokenization_status_t status = get_best_status(buffer, &kind);
-
-        if (status != tokenization_status_incorrect)
+        if (get_best_status(buffer, &kind) != tokenization_status_incorrect)
             continue;
 
         if (index <= 1) {

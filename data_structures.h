@@ -6,6 +6,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#define CONCAT(a, b) CONCAT_(a, b)
+#define CONCAT_(a, b) a##b
+#define UNIQ_ID(prefix) CONCAT(prefix, __COUNTER__)
+
+#define DEFAULT_CMP(a, b) ((a) == (b) ? 0 : 1)
+
 #define LIST_INITIAL_SIZE 64
 
 #define LIST(type) struct {                                                                                            \
@@ -14,14 +20,22 @@
     size_t capacity;                                                                                                   \
 }
 
-#define list_view(list) (typeof(list)) { .data = (list).data, .count = (list).count, .capacity = 0}
+#define TO_END SIZE_MAX
 
 #define list_slice(list, start, stop) ({                                                                               \
+    typeof(start) start_ = (start) >= 0 ? (start) : (list).count + (start);                                            \
+    typeof(stop) stop_ = (stop) >= 0 ? (stop) : (list).count + (stop);                                                 \
+    if (stop_ == TO_END)                                                                                               \
+        stop_ = (list).count;                                                                                          \
+    assert(start_ <= stop_);                                                                                           \
+    assert(stop_ <= (list).count);                                                                                     \
     (typeof(list)) {                                                                                                   \
-        .data = (list).data + ((start) >= 0 ? (start) : (list).count + (start)),                                       \
-        .count = ((stop) >= 0 ? (stop) : (list).count + (stop)) - ((start) >= 0 ? (start) : (list).count + (start)),   \
+        .data = (list).data + start_,                                                                                  \
+        .count = stop_ - start_,                                                                                       \
         .capacity = 0                                                                                                  \
 };})
+
+#define list_view(list) list_slice(list, 0, TO_END)
 
 #define list_sized_alloc(list, size) do {                                                                              \
     assert(size > 0);                                                                                                  \
@@ -59,15 +73,17 @@
     size_t index = 0;                                                                                                  \
     for(typeof(*(list).data) element = (list).data[index]; (index) < (list).count; element = (list).data[++index])
 
-#define list_for(list, name) list_enumerated_for(list, name, FOR_IDX)
+#define list_for(list, name) list_enumerated_for(list, name, CONCAT(FOR_IDX_, __LINE__))
 
-#define list_index(list, value, result) do {                                                                           \
+#define list_index(list, value) ({                                                                                     \
+    size_t result = SIZE_MAX;                                                                                          \
     for (size_t index = 0; index < (list).count; index++)                                                              \
         if ((list).data[index] == value) {                                                                             \
             result = index;                                                                                            \
             break;                                                                                                     \
         }                                                                                                              \
-} while (0)
+    result;                                                                                                            \
+})
 
 #define DICT(TK, TV) LIST(struct {TK key; TV value;})
 
@@ -75,106 +91,64 @@
 
 #define dict_for(dict, name) list_for(dict, name)
 
-#define dict_get(dict, key_to_check, result) do {                                                                      \
-    {dict_for((dict), item) {                                                                                          \
-        if ((item).key == (key_to_check)) {                                                                            \
+#define dict_get(dict, key, default_result) dict_get_cmp(dict, key, default_result, DEFAULT_CMP)
+
+#define dict_get_cmp(dict, key_, default_result, cmp) ({                                                               \
+    typeof((dict.data[0].value)) result = (default_result);                                                            \
+    dict_for((dict), item) {                                                                                           \
+        if (cmp((item).key, (key_)) == 0) {                                                                            \
             (result) = item.value;                                                                                     \
             break;                                                                                                     \
         }                                                                                                              \
-    }}                                                                                                                 \
-} while (0)
+    }                                                                                                                  \
+    result;                                                                                                            \
+})
 
-#define dict_get_cmp(dict, key_to_check, result, cmp) do {                                                             \
-    {dict_for((dict), item) {                                                                                          \
-        if (cmp((item).key, (key_to_check)) == 0) {                                                                    \
-            (result) = item.value;                                                                                     \
-            break;                                                                                                     \
-        }                                                                                                              \
-    }}                                                                                                                 \
-} while (0)
+#define dict_get_key(dict, value) dict_get_key_cmp(dict, value, DEFAULT_CMP)
 
-#define dict_get_key(dict, value_to_check, result) do {                                                                \
-    {dict_for((dict), item) {                                                                                          \
-        if ((item).value == (value_to_check)) {                                                                        \
-            (result) = item.key;                                                                                       \
+#define dict_get_key_cmp(dict, value_, cmp) ({                                                                         \
+    typeof((dict.data[0].key)) result;                                                                                 \
+    bool was_found = false;                                                                                            \
+    dict_for((dict), item) {                                                                                           \
+        if (cmp(item.value, (value_)) == 0) {                                                                          \
+            result = item.key;                                                                                         \
+            was_found = true;                                                                                          \
             break;                                                                                                     \
         }                                                                                                              \
     }                                                                                                                  \
-    assert(FOR_IDX < (dict).count);                                                                                    \
-    }                                                                                                                  \
-} while (0)
+    assert(was_found);                                                                                                 \
+    result;                                                                                                            \
+})
 
-#define dict_get_key_cmp(dict, value_to_check, result, cmp) do {                                                       \
-    {dict_for((dict), item) {                                                                                          \
-        if ((cmp)(item.value, (value_to_check)) == 0) {                                                                \
-            (result) = item.key;                                                                                       \
+#define dict_contains(dict, key) dict_contains_cmp(dict, key, DEFAULT_CMP)
+
+#define dict_contains_cmp(dict, key_, cmp) ({                                                                          \
+    bool result = false;                                                                                               \
+    dict_for((dict), item) {                                                                                           \
+        if (cmp(item.key, (key_)) == 0) {                                                                              \
+            result = true;                                                                                             \
             break;                                                                                                     \
         }                                                                                                              \
     }                                                                                                                  \
-    assert(FOR_IDX < (dict).count);                                                                                    \
+    result;                                                                                                            \
+})
+
+#define dict_contains_value(dict, value_) ({                                                                           \
+    bool result = false;                                                                                               \
+    dict_for((dict), item) {                                                                                           \
+        if (item.value == (value_)) {                                                                                  \
+            result = true;                                                                                             \
+            break;                                                                                                     \
+        }                                                                                                              \
     }                                                                                                                  \
-} while (0)
+    result;                                                                                                            \
+})
 
-#define dict_contains(dict, key_to_check, result) do {                                                                 \
-    (result) = false;                                                                                                  \
-    {dict_for((dict), item) {                                                                                          \
-        if (item.key == (key_to_check)) {                                                                              \
-            (result) = true;                                                                                           \
-            break;                                                                                                     \
-        }                                                                                                              \
-    }}                                                                                                                 \
-} while (0)
+#define dict_set(dict, key, value) dict_set_cmp(dict, key, value, DEFAULT_CMP)
 
-#define dict_contains_cmp(dict, key_to_check, result, cmp) do {                                                        \
-    (result) = false;                                                                                                  \
-    {dict_for((dict), item) {                                                                                          \
-        if ((cmp)(item.key, (key_to_check)) == 0) {                                                                    \
-            (result) = true;                                                                                           \
-            break;                                                                                                     \
-        }                                                                                                              \
-    }}                                                                                                                 \
-} while (0)
-
-#define dict_contains_value(dict, value_to_check, result) do {                                                         \
-    (result) = false;                                                                                                  \
-    {dict_for((dict), item) {                                                                                          \
-        if (item.value == (value_to_check)) {                                                                          \
-            (result) = true;                                                                                           \
-            break;                                                                                                     \
-        }                                                                                                              \
-    }}                                                                                                                 \
-} while (0)
-
-#define dict_set(dict, key, value_to_set) do {                                                                         \
-    bool is_contains;                                                                                                  \
-    dict_contains((dict), (key), is_contains);                                                                         \
-    if (!is_contains) {                                                                                                \
-        typeof(*(dict).data) item = {(key), (value_to_set)};                                                           \
-        list_push((dict), item);                                                                                       \
-        break;                                                                                                         \
-    }                                                                                                                  \
-                                                                                                                       \
-    size_t index = 0;                                                                                                  \
-    typeof(&(dict).data->value) old_value = NULL;                                                                      \
-    dict_get((dict), (key), *old_value);                                                                               \
-    typeof(*(dict).data) item = {(key), *old_value};                                                                   \
-    _dict_index((dict), item, index);                                                                                  \
-    (dict).data[index].value = (value_to_set);                                                                         \
-} while (0)
-
-#define _dict_index(dict, item, result) do {                                                                           \
-    for (size_t idx = 0; idx < (dict).count; idx++)                                                                    \
-        if ((dict).data[idx].key == (item).key && (dict).data[idx].value == (item).value) {                            \
-            (result) = idx;                                                                                            \
-            break;                                                                                                     \
-        }                                                                                                              \
-} while (0)
-
-#define dict_set_cmp(dict, key, value_to_set, cmp) do {                                                                \
-    bool is_contains;                                                                                                  \
-    dict_contains_cmp((dict), (key), is_contains, (cmp));                                                              \
-    if (!is_contains) {                                                                                                \
-        typeof(*(dict).data) item = {(key), (value_to_set)};                                                           \
+#define dict_set_cmp(dict, key, value_, cmp) do {                                                                      \
+    if (!dict_contains_cmp((dict), (key), cmp)) {                                                                      \
+        typeof(*(dict).data) item = {(key), (value_)};                                                                 \
         list_push((dict), item);                                                                                       \
         break;                                                                                                         \
     }                                                                                                                  \
@@ -184,7 +158,7 @@
     dict_get_cmp((dict), (key), *old_value, cmp);                                                                      \
     typeof(*(dict).data) item = {(key), *old_value};                                                                   \
     _dict_index((dict), item, index);                                                                                  \
-    (dict).data[index].value = (value_to_set);                                                                         \
+    (dict).data[index].value = (value_);                                                                               \
 } while (0)
 
 #define _dict_index(dict, item, result) do {                                                                           \

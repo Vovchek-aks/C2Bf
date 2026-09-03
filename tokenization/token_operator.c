@@ -102,9 +102,8 @@ void token_operator_init(void) {
 
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 void write_token_operator_data(token_operator_data_t data, char **buffer) {
-    char *line = NULL;
-    dict_get(name_of, data.name, line);
-    assert(line != NULL);
+    char *line = dict_get(name_of, data.name, NULL);
+    assert(line);
 
     string_extend(buffer, line);
 }

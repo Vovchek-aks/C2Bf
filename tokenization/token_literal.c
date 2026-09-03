@@ -57,15 +57,14 @@ static void escape_str(char *line, char *buffer) {
     uint8_t is_just_escaped = 0;
     size_t index = 0;
     buffer[index++] = *(line++);
-    for (char alpha = *line; alpha; alpha = *(++line)) {
+    string_for(line, alpha) {
         buffer[index++] = alpha;
         if (buffer[index - 2] != '\\' || is_just_escaped) {
             is_just_escaped = 0;
             continue;
         }
 
-        char escaped = CANNOT_BE_ESCAPE_RESULT;
-        dict_get_cmp(escape_character_of, &buffer[index - 2], escaped, strcmp);
+        char escaped = dict_get_cmp(escape_character_of, &buffer[index - 2], CANNOT_BE_ESCAPE_RESULT, strcmp);
         assert(escaped != CANNOT_BE_ESCAPE_RESULT);
         buffer[--index - 1] = escaped;
         buffer[index] = 0;
@@ -75,16 +74,13 @@ static void escape_str(char *line, char *buffer) {
 
 static void unescape_str(char *line, char *buffer) {
     size_t index = 0;
-    for (char alpha = *line; alpha; alpha = *(++line)) {
-        uint8_t is_contains;
-        dict_contains_value(escape_character_of, alpha, is_contains);
-        if (!is_contains) {
+    string_for(line, alpha) {
+        if (!dict_contains_value(escape_character_of, alpha)) {
             buffer[index++] = alpha;
             continue;
         }
 
-        char *key;
-        dict_get_key(escape_character_of, alpha, key);
+        char *key = dict_get_key(escape_character_of, alpha);
         strcpy(&buffer[index], key);
         index += strlen(key);
     }
