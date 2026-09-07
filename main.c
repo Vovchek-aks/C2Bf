@@ -1,15 +1,20 @@
 #include <stdint.h>
 #include "string_helper/string_helper.c"
+#include "files.c"
 #include "tokenization/tokenization.c"
 #include "parsing/parsing.c"
 #include "translation/translation.c"
 
-int32_t main(void) {
+int32_t main(int32_t argc, char **argv) {
     tokenization_init();
     parsing_init();
 
-//    char *code = "int32_t main(void) { printf(\"Hello, World!\"); return 0; } ";
-    char *code = "if (aboba < 2) {\n    biba();\n    if (1 == 1)\n        boba();\n}\nelse if (aboba > 5)\n    foo();\nelse\n    bar(); ";
+    if (argc < 2) {
+        printf("Correct usage: c2bf filename.c\n");
+        return -1;
+    }
+    char *filename = argv[1];
+    char *code = read_entire_file(filename);
 
     printf("%s\n=====================================================================\n", code);
 
