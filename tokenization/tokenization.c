@@ -36,14 +36,21 @@ static tokenization_status_t get_best_status(char *line, token_kind_t *kind) {
     return min;
 }
 
-static token_t try_get_token(char *line) {
+static token_t try_get_token(char *buffer, char *rest_code, size_t line, size_t symbol) {
     token_kind_t kind;
-    tokenization_status_t status = get_best_status(line, &kind);
+    tokenization_status_t status = get_best_status(buffer, &kind);
 
     assert(status == tokenization_status_correct);
+    size_t length = strlen(buffer);
     return (token_t) {
+            .info = {
+                .line = line,
+                .symbol = symbol - length + 1,
+                .count = length,
+                .symbols = rest_code - length + 1
+            },
             .kind = kind,
-            .data = get_data_from(line, kind)
+            .data = get_data_from(buffer, kind)
     };
 }
 
@@ -52,15 +59,22 @@ tokens_t tokenize(char *code) {
 
     tokens_t tokens = {};
     list_alloc(tokens);
-
+    size_t line = 1;
+    size_t symbol = 0;
     char buffer[TOKEN_MAX_LENGTH + 1] = {};
     size_t index = 0;
-    uint8_t is_line_literal = 0;
-    for (char alpha = *code; alpha; alpha = *(++code)) {
+    bool is_line_literal = false;
+    string_for(code, alpha) {
+        symbol++;
+        if (alpha == '\n') {
+            line++;
+            symbol = 0;
+        }
+
         if (strcnt("'\"", alpha) != 0 && !is_line_literal) {
-            is_line_literal = 1;
+            is_line_literal = true;
             if (index > 0) {
-                list_push(tokens, try_get_token(buffer));
+                list_push(tokens, try_get_token(buffer, code - 1, line, symbol - 1));
                 memset(buffer, 0, index);
                 index = 0;
             }
@@ -70,7 +84,7 @@ tokens_t tokenize(char *code) {
             if (index == 0)
                 continue;
 
-            list_push(tokens, try_get_token(buffer));
+            list_push(tokens, try_get_token(buffer, code - 1, line, symbol - 1));
             memset(buffer, 0, index);
             index = 0;
             continue;
@@ -86,6 +100,12 @@ tokens_t tokenize(char *code) {
 
             is_line_literal = 0;
             token_t token = {
+                    .info = {
+                            .line = line,
+                            .symbol = symbol - index + 1,
+                            .count = index,
+                            .symbols = code - index + 1
+                    },
                     .kind = token_kind_literal,
                     .data = (token_data_t) token_literal_str_or_char_try_get_data_from(buffer)
             };
@@ -106,7 +126,8 @@ tokens_t tokenize(char *code) {
 
         code--;
         buffer[--index] = 0;
-        list_push(tokens, try_get_token(buffer));
+        symbol--;
+        list_push(tokens, try_get_token(buffer, code, line, symbol));
         memset(buffer, 0, index);
         index = 0;
     }

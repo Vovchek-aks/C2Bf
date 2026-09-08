@@ -31,6 +31,7 @@ typedef union {
 typedef struct {
     size_t line;
     size_t symbol;
+    size_t count;
     char *symbols;
 } token_info_t;
 

@@ -19,10 +19,10 @@ int32_t main(int32_t argc, char **argv) {
     printf("%s\n=====================================================================\n", code);
 
     tokens_t tokens = tokenize(code);
-//    print_tokens(tokens);
+    print_tokens(tokens);
 
-    statement_t *statement = strictly_parse_statement(list_view(tokens));
-    print_statement(statement);
+//    statement_t *statement = strictly_parse_statement(list_view(tokens));
+//    print_statement(statement);
 
 //    program_t *program = parse(tokens);
 //    char *bf = translate_to_bf(program);
