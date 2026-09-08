@@ -37,6 +37,22 @@
 
 #define list_view(list) list_slice(list, 0, TO_END)
 
+#define list_view_on(element, list_type) (list_type) {                                                                 \
+    .data = element,                                                                                                   \
+    .count = 1,                                                                                                        \
+    .capacity = 0                                                                                                      \
+}
+
+#define is_list_view(list) ((list).capacity == 0)
+
+#define list_view_chop_first(list) ({                                                                                  \
+    assert(is_list_view(list));                                                                                        \
+    assert((list).count > 0);                                                                                          \
+    typeof((list).data) first = (list).data++;                                                                         \
+    (list).count--;                                                                                                    \
+    first;                                                                                                             \
+})
+
 #define list_sized_alloc(list, size) do {                                                                              \
     assert(size > 0);                                                                                                  \
     typeof(*(list).data) *data = malloc(sizeof(*(list).data) * size);                                                  \

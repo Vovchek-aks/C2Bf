@@ -3,11 +3,17 @@
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
-static bool try_parse_branches(tokens_t *tokens, statement_t **true_branch, statement_t **false_branch) {
+static bool try_parse_branches(tokens_t *tokens,
+                               statement_t **true_branch,
+                               statement_t **false_branch,
+                               bool is_strict) {
     statements_t branches;
     list_sized_alloc(branches, 2);
-    if ((!parse_statements_separated_by_keyword(keyword_else, (*tokens), &branches, true, false))
+    if ((!parse_statements_separated_by_keyword(keyword_else, *tokens, &branches, false, false))
         || branches.count == 0) {
+        if (is_strict && branches.count == 0)
+            assert(!parse_statement(*tokens, true));
+
         free_statements(branches);
         return false;
     }
@@ -53,7 +59,7 @@ statement_parsing_result_t statement_if_get_data_from(tokens_t tokens, bool is_s
         return FAILED_TO_PARSE_STATEMENT;
 
     statement_if_data_t data = {condition};
-    if (!try_parse_branches(&tokens, &data.true_branch, &data.false_branch)) {
+    if (!try_parse_branches(&tokens, &data.true_branch, &data.false_branch, is_strict)) {
         free_expression(condition);
         return FAILED_TO_PARSE_STATEMENT;
     }

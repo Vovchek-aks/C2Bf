@@ -1,9 +1,11 @@
 #include <stdint.h>
+#include "errors_display/errors_display.h"
 #include "string_helper/string_helper.c"
 #include "files.c"
 #include "tokenization/tokenization.c"
 #include "parsing/parsing.c"
 #include "translation/translation.c"
+#include "errors_display/errors_display.c"
 
 int32_t main(int32_t argc, char **argv) {
     tokenization_init();
@@ -15,14 +17,14 @@ int32_t main(int32_t argc, char **argv) {
     }
     char *filename = argv[1];
     char *code = read_entire_file(filename);
-
-    printf("%s\n=====================================================================\n", code);
+    set_file(filename, code);
 
     tokens_t tokens = tokenize(code);
-//    print_tokens(tokens);
-
     statement_t *statement = parse_statement(list_view(tokens), true);
+
+    printf("%s\n=====================================================================\n", code);
     print_statement(statement);
+//    print_tokens(tokens);
 
 //    program_t *program = parse(tokens);
 //    char *bf = translate_to_bf(program);

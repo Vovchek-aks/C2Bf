@@ -1,7 +1,7 @@
 #ifndef PARSER_TOKENS_SEPARATOR
 #include "../data_structures.h"
 
-#define PARSER_TOKENS_SEPARATOR(function_name, list_t, target_t, find, parse)                                          \
+#define PARSER_TOKENS_SEPARATOR(function_name, list_t, target_t, find, parse, error_message)                           \
     bool function_name(target_t target,                                                                                \
                        tokens_t tokens,                                                                                \
                        list_t *parts,                                                                                  \
@@ -36,12 +36,10 @@
             }                                                                                                          \
         }                                                                                                              \
                                                                                                                        \
-        bool is_ok =  accumulator.count == 0;                                                                          \
-        if (is_strict && !is_ok) {                                                                                     \
-            printf("Cannot separate:\n");                                                                              \
-            print_tokens(accumulator);                                                                                 \
-            assert(false);                                                                                             \
-        }                                                                                                              \
+        bool is_ok = accumulator.count == 0;                                                                           \
+        if (is_strict && !is_ok)                                                                                       \
+            display_parsing_error(accumulator, error_message);                                                         \
+                                                                                                                       \
         return is_ok;                                                                                                  \
     }                                                                                                                  \
 

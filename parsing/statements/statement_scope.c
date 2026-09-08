@@ -26,9 +26,9 @@ statement_parsing_result_t statement_scope_get_data_from(tokens_t tokens, bool i
         window.count--;
     }
     bool is_ok = window.data >= tokens.data + tokens.count;
-    if (is_strict && !is_ok) {
-        assert(false);
-    }
+    if (is_strict && !is_ok)
+        display_parsing_error(list_slice(tokens, window.data - tokens.data, TO_END),
+                              "Cannot parse statement.");
 
     if (!is_ok) {
         free_statements(statements);

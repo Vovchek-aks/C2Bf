@@ -67,12 +67,11 @@ expression_t *parse_expression(tokens_t tokens, bool is_strict) {
     if (!is_strict)
         return NULL;
 
-    printf("Cannot identify expression:\n");
-    print_tokens(tokens);
-    assert(false);
+    display_parsing_error(tokens, "Cannot identify expression.");
 }
 
-PARSER_TOKENS_SEPARATOR(parse_expressions_separated_by, expressions_t, operator_t, find_operator, parse_expression)
+PARSER_TOKENS_SEPARATOR(parse_expressions_separated_by, expressions_t, operator_t, find_operator,
+                        parse_expression, "Cannot divide by expressions.")
 
 static char *str_expression_name(expression_t *expression) {
     switch (expression->kind) {

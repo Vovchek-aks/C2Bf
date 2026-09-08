@@ -119,10 +119,8 @@ tokens_t tokenize(char *code) {
         if (get_best_status(buffer, &kind) != tokenization_status_incorrect)
             continue;
 
-        if (index <= 1) {
-            printf("No token can start with '%c'.", alpha);
-            assert(0);
-        }
+        if (index <= 1)
+            display_tokenization_error(line, symbol, "This symbol cannot be placed here.");
 
         code--;
         buffer[--index] = 0;

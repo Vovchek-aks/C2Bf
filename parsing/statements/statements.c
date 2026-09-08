@@ -39,16 +39,14 @@ statement_t *parse_statement(tokens_t tokens, bool is_strict) {
     if (!is_strict)
         return NULL;
 
-    printf("Cannot parse statement from:\n");
-    print_tokens(tokens);
-    assert(false);
+    display_parsing_error(tokens, "Cannot parse statement.");
 }
 
 PARSER_TOKENS_SEPARATOR(parse_statements_separated_by_operator, statements_t, operator_t, find_operator,
-                        parse_statement)
+                        parse_statement, "Cannot divide by statements.")
 
 PARSER_TOKENS_SEPARATOR(parse_statements_separated_by_keyword, statements_t, keyword_t, find_keyword,
-                        parse_statement)
+                        parse_statement, "Cannot divide by statements.")
 
 static char *str_statement_name(statement_t *statement) {
     switch (statement->kind) {
