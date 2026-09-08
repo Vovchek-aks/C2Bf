@@ -1,7 +1,7 @@
 #include "expression_element_access.h"
 #include "../tokens_operations.h"
 
-expression_parsing_result_t expression_element_access_get_data_from(tokens_t tokens) {
+expression_parsing_result_t expression_element_access_get_data_from(tokens_t tokens, bool is_strict) {
     if (tokens.count < 3)
         return FAILED_TO_PARSE_EXPRESSION;
 
@@ -12,7 +12,7 @@ expression_parsing_result_t expression_element_access_get_data_from(tokens_t tok
     if (!chop_operator(&tokens, operator_dot, chop_direction_back))
         return FAILED_TO_PARSE_EXPRESSION;
 
-    expression_t *source = parse_expression(tokens);
+    expression_t *source = parse_expression(tokens, is_strict);
     if (!source)
         return FAILED_TO_PARSE_EXPRESSION;
 

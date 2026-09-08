@@ -1,13 +1,19 @@
 #ifndef PARSER_TOKENS_SEPARATOR
+#include "../data_structures.h"
 
-#define PARSER_TOKENS_SEPARATOR(function_name, stuffy_function_name, list_t, target_t, find, parse)                    \
-    bool function_name(target_t target, tokens_t tokens, list_t *parts, bool is_end_separator_allowed) {               \
-        return stuffy_function_name(target, tokens, parts, is_end_separator_allowed, false);                           \
+#define PARSER_TOKENS_SEPARATOR(function_name, list_t, target_t, find, parse)                                          \
+    bool function_name(target_t target,                                                                                \
+                       tokens_t tokens,                                                                                \
+                       list_t *parts,                                                                                  \
+                       bool is_strict,                                                                                 \
+                       bool is_end_separator_allowed) {                                                                \
+        return CONCAT(specifying_, function_name)(target, tokens, parts, is_strict, is_end_separator_allowed, false);  \
     }                                                                                                                  \
                                                                                                                        \
-    bool stuffy_function_name(target_t target,                                                                         \
+    bool CONCAT(specifying_, function_name)(target_t target,                                                           \
                               tokens_t tokens,                                                                         \
                               list_t *parts,                                                                           \
+                              bool is_strict,                                                                          \
                               bool is_end_separator_allowed,                                                           \
                               bool is_at_least_one_split_required) {                                                   \
         if ((!is_end_separator_allowed) && find(tokens_from(&list_last(tokens)), target, chop_direction_front))        \
@@ -22,7 +28,7 @@
             if (accumulator.count == original.count && is_at_least_one_split_required)                                 \
                 return false;                                                                                          \
                                                                                                                        \
-            typeof(*parts->data) parsed = parse(accumulator);                                                          \
+            typeof(*parts->data) parsed = parse(accumulator, false);                                                   \
             if (parsed) {                                                                                              \
                 list_push(*parts, parsed);                                                                             \
                 accumulator.count = 0;                                                                                 \
@@ -30,7 +36,13 @@
             }                                                                                                          \
         }                                                                                                              \
                                                                                                                        \
-        return accumulator.count == 0;                                                                                 \
+        bool is_ok =  accumulator.count == 0;                                                                          \
+        if (is_strict && !is_ok) {                                                                                     \
+            printf("Cannot separate:\n");                                                                              \
+            print_tokens(accumulator);                                                                                 \
+            assert(false);                                                                                             \
+        }                                                                                                              \
+        return is_ok;                                                                                                  \
     }                                                                                                                  \
 
 #endif

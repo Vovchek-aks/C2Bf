@@ -6,7 +6,7 @@
 
 #define EXPRESSION_NAME_NAME "Name"
 
-expression_parsing_result_t expression_name_get_data_from(tokens_t tokens);
+expression_parsing_result_t expression_name_get_data_from(tokens_t tokens, bool is_strict);
 
 void write_expression_name_data_from(expression_name_data_t data, char **buffer);
 

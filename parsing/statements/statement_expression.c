@@ -2,12 +2,12 @@
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
-statement_parsing_result_t statement_expression_get_data_from(tokens_t tokens) {
+statement_parsing_result_t statement_expression_get_data_from(tokens_t tokens, bool is_strict) {
     if (tokens.count < 2)
         return FAILED_TO_PARSE_STATEMENT;
     CHOP_SEMICOLON;
 
-    expression_t *expression = parse_expression(tokens);
+    expression_t *expression = parse_expression(tokens, false);
     if (!expression)
         return FAILED_TO_PARSE_STATEMENT;
 

@@ -2,7 +2,7 @@
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
-statement_parsing_result_t statement_scope_get_data_from(tokens_t tokens) {
+statement_parsing_result_t statement_scope_get_data_from(tokens_t tokens, bool is_strict) {
     if (tokens.count < 2)
         return FAILED_TO_PARSE_STATEMENT;
 
@@ -15,7 +15,7 @@ statement_parsing_result_t statement_scope_get_data_from(tokens_t tokens) {
     statements_t statements;
     list_sized_alloc(statements, 8);
     while (window.count > 0 && window.data < tokens.data + tokens.count) {
-        statement_t *statement = parse_statement(window);
+        statement_t *statement = parse_statement(window, false);
         if (statement) {
             list_push(statements, statement);
             window.data += window.count;
@@ -25,7 +25,12 @@ statement_parsing_result_t statement_scope_get_data_from(tokens_t tokens) {
 
         window.count--;
     }
-    if (window.data < tokens.data + tokens.count) {
+    bool is_ok = window.data >= tokens.data + tokens.count;
+    if (is_strict && !is_ok) {
+        assert(false);
+    }
+
+    if (!is_ok) {
         free_statements(statements);
         return FAILED_TO_PARSE_STATEMENT;
     }

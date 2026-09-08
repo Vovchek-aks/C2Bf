@@ -29,7 +29,7 @@ void expression_binary_operation_init() {
     dict_set(function_of_binary_operation, operator_hat, "BUILTIN_bitwise_xor");
 }
 
-expression_parsing_result_t expression_binary_operation_get_data_from(tokens_t tokens) {
+expression_parsing_result_t expression_binary_operation_get_data_from(tokens_t tokens, bool is_strict) {
     if (tokens.count < 3)
         return FAILED_TO_PARSE_EXPRESSION;
 
@@ -37,7 +37,7 @@ expression_parsing_result_t expression_binary_operation_get_data_from(tokens_t t
     char *function_name = NULL;
     list_for(function_of_binary_operation, item) {
         list_sized_alloc(parts, 2);
-        if (specifying_parse_expressions_separated_by(item.key, tokens, &parts, false, true)) {
+        if (specifying_parse_expressions_separated_by(item.key, tokens, &parts, false, false, true)) {
             function_name = item.value;
             break;
         }
@@ -48,7 +48,7 @@ expression_parsing_result_t expression_binary_operation_get_data_from(tokens_t t
 
     fake_tokens_new(1);
     fake_tokens_append_token_name(function_name);
-    expression_t *function = parse_expression(list_view(fake_tokens_current));
+    expression_t *function = parse_expression(list_view(fake_tokens_current), false);
     assert(function);
 
     expression_function_call_data_t data = {function, parts};

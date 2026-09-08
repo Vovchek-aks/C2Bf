@@ -6,7 +6,7 @@
 
 #define EXPRESSION_FUNCTION_CALL_NAME "FunctionCall"
 
-expression_parsing_result_t expression_function_call_get_data_from(tokens_t tokens);
+expression_parsing_result_t expression_function_call_get_data_from(tokens_t tokens, bool is_strict);
 
 void write_expression_function_call_data_from(expression_function_call_data_t data, char **buffer);
 

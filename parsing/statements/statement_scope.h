@@ -6,7 +6,7 @@
 
 #define STATEMENT_SCOPE_NAME "Scope"
 
-statement_parsing_result_t statement_scope_get_data_from(tokens_t tokens);
+statement_parsing_result_t statement_scope_get_data_from(tokens_t tokens, bool is_strict);
 
 void write_statement_scope_data_from(statement_scope_data_t data, char **buffer);
 

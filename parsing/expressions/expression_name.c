@@ -1,6 +1,6 @@
 #include "expression_name.h"
 
-expression_parsing_result_t expression_name_get_data_from(tokens_t tokens) {
+expression_parsing_result_t expression_name_get_data_from(tokens_t tokens, bool is_strict) {
     if (tokens.count != 1)
         return FAILED_TO_PARSE_EXPRESSION;
 

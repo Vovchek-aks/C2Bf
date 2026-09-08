@@ -6,7 +6,7 @@
 
 #define EXPRESSION_ELEMENT_ACCESS_NAME "ElementAccess"
 
-expression_parsing_result_t expression_element_access_get_data_from(tokens_t tokens);
+expression_parsing_result_t expression_element_access_get_data_from(tokens_t tokens, bool is_strict);
 
 void write_expression_element_access_data_from(expression_element_access_data_t data, char **buffer);
 

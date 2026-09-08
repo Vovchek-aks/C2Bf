@@ -6,7 +6,7 @@
 
 #define EXPRESSION_LITERAL_NAME "Literal"
 
-expression_parsing_result_t expression_literal_get_data_from(tokens_t tokens);
+expression_parsing_result_t expression_literal_get_data_from(tokens_t tokens, bool is_strict);
 
 void write_expression_literal_data_from(expression_literal_data_t data, char **buffer);
 

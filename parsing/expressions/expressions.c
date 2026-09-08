@@ -48,12 +48,12 @@ static void strip_brackets(tokens_t *tokens) {
     }
 }
 
-expression_t *parse_expression(tokens_t tokens) {
+expression_t *parse_expression(tokens_t tokens, bool is_strict) {
     assert(tokens.capacity == 0);
 
     strip_brackets(&tokens);
     list_for(expression_parsers, parser) {
-        expression_parsing_result_t result = parser.parse(tokens);
+        expression_parsing_result_t result = parser.parse(tokens, is_strict);
         if (result.status == expression_parsing_result_fail)
             continue;
 
@@ -64,22 +64,15 @@ expression_t *parse_expression(tokens_t tokens) {
 
         return expression;
     }
+    if (!is_strict)
+        return NULL;
 
-    return NULL;
-}
-
-expression_t *strictly_parse_expression(tokens_t tokens) {
-    expression_t *expression = parse_expression(tokens);
-    if (expression)
-        return expression;
-
-    printf("Cannot parse expression from:\n");
+    printf("Cannot identify expression:\n");
     print_tokens(tokens);
     assert(false);
 }
 
-PARSER_TOKENS_SEPARATOR(parse_expressions_separated_by, specifying_parse_expressions_separated_by,
-                        expressions_t, operator_t, find_operator, parse_expression)
+PARSER_TOKENS_SEPARATOR(parse_expressions_separated_by, expressions_t, operator_t, find_operator, parse_expression)
 
 static char *str_expression_name(expression_t *expression) {
     switch (expression->kind) {

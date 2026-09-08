@@ -4,7 +4,7 @@
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
 #define EXPRESSION_UNARY_OPERATION_PARSER(parser, chop, dict)                                                          \
-    expression_parsing_result_t parser(tokens_t tokens) {                                                              \
+    expression_parsing_result_t parser(tokens_t tokens, bool is_strict) {                                              \
         if (tokens.count < 2)                                                                                          \
             return FAILED_TO_PARSE_EXPRESSION;                                                                         \
                                                                                                                        \
@@ -16,7 +16,7 @@
         if (!function_name)                                                                                            \
             return FAILED_TO_PARSE_EXPRESSION;                                                                         \
                                                                                                                        \
-        expression_t *argument = parse_expression(tokens);                                                             \
+        expression_t *argument = parse_expression(tokens, is_strict);                                                  \
         if (!argument)                                                                                                 \
             return FAILED_TO_PARSE_EXPRESSION;                                                                         \
                                                                                                                        \
@@ -26,7 +26,7 @@
                                                                                                                        \
         fake_tokens_new(1);                                                                                            \
         fake_tokens_append_token_name(function_name);                                                                  \
-        expression_t *function = parse_expression(list_view(fake_tokens_current));                                     \
+        expression_t *function = parse_expression(list_view(fake_tokens_current), false);                              \
         assert(function);                                                                                              \
                                                                                                                        \
         expression_function_call_data_t data = {function, arguments};                                                  \

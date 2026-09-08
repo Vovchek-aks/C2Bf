@@ -20,11 +20,11 @@ void statements_parsing_init(void) {
     statement_parsers_push(statement_kind_scope, statement_scope_get_data_from);
 }
 
-statement_t *parse_statement(tokens_t tokens) {
+statement_t *parse_statement(tokens_t tokens, bool is_strict) {
     assert(tokens.capacity == 0);
 
     list_for(statement_parsers, parser) {
-        statement_parsing_result_t result = parser.parse(tokens);
+        statement_parsing_result_t result = parser.parse(tokens, is_strict);
         if (result.status == statement_parsing_result_fail)
             continue;
 
@@ -36,24 +36,19 @@ statement_t *parse_statement(tokens_t tokens) {
         return statement;
     }
 
-    return NULL;
-}
-
-statement_t *strictly_parse_statement(tokens_t tokens) {
-    statement_t *statement = parse_statement(tokens);
-    if (statement)
-        return statement;
+    if (!is_strict)
+        return NULL;
 
     printf("Cannot parse statement from:\n");
     print_tokens(tokens);
     assert(false);
 }
 
-PARSER_TOKENS_SEPARATOR(parse_statements_separated_by_operator, specifying_parse_statements_separated_by_operator,
-                        statements_t, operator_t, find_operator, parse_statement)
+PARSER_TOKENS_SEPARATOR(parse_statements_separated_by_operator, statements_t, operator_t, find_operator,
+                        parse_statement)
 
-PARSER_TOKENS_SEPARATOR(parse_statements_separated_by_keyword, specifying_parse_statements_separated_by_keyword,
-                        statements_t, keyword_t, find_keyword, parse_statement)
+PARSER_TOKENS_SEPARATOR(parse_statements_separated_by_keyword, statements_t, keyword_t, find_keyword,
+                        parse_statement)
 
 static char *str_statement_name(statement_t *statement) {
     switch (statement->kind) {

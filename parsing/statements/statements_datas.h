@@ -53,6 +53,6 @@ typedef struct {
     statement_data_t data;
 } statement_parsing_result_t;
 
-typedef statement_parsing_result_t (*statement_parser_t)(tokens_t tokens);
+typedef statement_parsing_result_t (*statement_parser_t)(tokens_t tokens, bool is_strict);
 
 #endif

@@ -2,7 +2,7 @@
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
-expression_parsing_result_t expression_function_call_get_data_from(tokens_t tokens) {
+expression_parsing_result_t expression_function_call_get_data_from(tokens_t tokens, bool is_strict) {
     if (tokens.count < 3)
         return FAILED_TO_PARSE_EXPRESSION;
 
@@ -16,13 +16,13 @@ expression_parsing_result_t expression_function_call_get_data_from(tokens_t toke
 
     tokens_t left = split_by(bracket, &tokens);
 
-    expression_t *function = parse_expression(left);
+    expression_t *function = parse_expression(left, is_strict);
     if (!function)
         return FAILED_TO_PARSE_EXPRESSION;
 
     expressions_t arguments;
     list_sized_alloc(arguments, 4);
-    if (!parse_expressions_separated_by(operator_comma, tokens, &arguments, false)) {
+    if (!parse_expressions_separated_by(operator_comma, tokens, &arguments, is_strict, false)) {
         free_expression(function);
         free_expressions(arguments);
         return FAILED_TO_PARSE_EXPRESSION;

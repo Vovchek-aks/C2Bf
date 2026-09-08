@@ -59,6 +59,6 @@ typedef struct {
     expression_data_t data;
 } expression_parsing_result_t;
 
-typedef expression_parsing_result_t (*expression_parser_t)(tokens_t tokens);
+typedef expression_parsing_result_t (*expression_parser_t)(tokens_t tokens, bool is_strict);
 
 #endif

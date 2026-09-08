@@ -1,6 +1,6 @@
 #include "expression_indexing.h"
 
-expression_parsing_result_t expression_indexing_get_data_from(tokens_t tokens) {
+expression_parsing_result_t expression_indexing_get_data_from(tokens_t tokens, bool is_strict) {
     if (tokens.count < 4)
         return FAILED_TO_PARSE_EXPRESSION;
 
@@ -14,11 +14,11 @@ expression_parsing_result_t expression_indexing_get_data_from(tokens_t tokens) {
 
     tokens_t left = split_by(bracket, &tokens);
 
-    expression_t *array = parse_expression(left);
+    expression_t *array = parse_expression(left, is_strict);
     if (!array)
         return FAILED_TO_PARSE_EXPRESSION;
 
-    expression_t *index = parse_expression(tokens);
+    expression_t *index = parse_expression(tokens, is_strict);
     if (!index) {
         free_expression(array);
         return FAILED_TO_PARSE_EXPRESSION;

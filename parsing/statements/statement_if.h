@@ -6,7 +6,7 @@
 
 #define STATEMENT_IF_NAME "If"
 
-statement_parsing_result_t statement_if_get_data_from(tokens_t tokens);
+statement_parsing_result_t statement_if_get_data_from(tokens_t tokens, bool is_strict);
 
 void write_statement_if_data_from(statement_if_data_t data, char **buffer);
 
