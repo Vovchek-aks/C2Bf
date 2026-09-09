@@ -5,7 +5,7 @@ TOKEN_DICT_WITH_WRITE(token_keyword_data_t, keyword_t, char *, keyword_name_to_s
                       token_keyword_get_status, token_keyword_get_data_from, write_token_keyword_data)
 
 
-void token_keyword_init(void) {
+void init_keyword_tokenization(void) {
     dict_alloc(keyword_to_str);
     dict_set(keyword_to_str, keyword_return, "return");
     dict_set(keyword_to_str, keyword_if, "if");

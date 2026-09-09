@@ -43,7 +43,7 @@ typedef struct {
 
 typedef LIST(token_t) tokens_t;
 
-void tokenization_init(void);
+void init_tokenization(void);
 
 tokens_t tokenize(char *code);
 

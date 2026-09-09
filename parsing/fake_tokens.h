@@ -8,7 +8,7 @@ typedef LIST(tokens_t) fake_tokens_t;
 
 static fake_tokens_t fake_tokens;
 
-void fake_tokens_init();
+void init_fake_tokens();
 
 void fake_tokens_new(size_t size);
 

@@ -13,7 +13,7 @@ statement_parsers_t statement_parsers;
     list_push(statement_parsers, element);                                                                             \
 } while(0)
 
-void statements_parsing_init(void) {
+void init_statements_parsing(void) {
     list_alloc(statement_parsers);
     statement_parsers_push(statement_kind_expression, statement_expression_get_data_from);
     statement_parsers_push(statement_kind_if, statement_if_get_data_from);

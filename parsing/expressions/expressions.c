@@ -20,7 +20,7 @@ static expression_parsers_t expression_parsers;
     list_push(expression_parsers, element);                                                                            \
 } while(0)
 
-void expressions_parsing_init(void) {
+void init_expressions_parsing(void) {
     list_alloc(expression_parsers);
     expression_parsers_set(expression_kind_name, expression_name_get_data_from);
     expression_parsers_set(expression_kind_literal, expression_literal_get_data_from);
@@ -31,8 +31,8 @@ void expressions_parsing_init(void) {
     expression_parsers_set(expression_kind_function_call, expression_unary_prefix_operation_get_data_from);
     expression_parsers_set(expression_kind_function_call, expression_unary_postfix_operation_get_data_from);
 
-    expression_unary_operation_init();
-    expression_binary_operation_init();
+    init_expression_unary_operation_parsing();
+    init_expression_binary_operation_parsing();
 }
 
 static void strip_brackets(tokens_t *tokens) {

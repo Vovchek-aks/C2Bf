@@ -28,7 +28,7 @@ typedef LIST(struct {
     expression_parser_t parse;
 }) expression_parsers_t;
 
-void expressions_parsing_init(void);
+void init_expressions_parsing(void);
 
 expression_t *parse_expression(tokens_t tokens, bool is_strict);
 

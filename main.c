@@ -1,3 +1,4 @@
+#include "shut_windows_yapping_up.c"
 #include <stdint.h>
 #include "errors_display/errors_display.h"
 #include "string_helper/string_helper.c"
@@ -8,8 +9,8 @@
 #include "errors_display/errors_display.c"
 
 int32_t main(int32_t argc, char **argv) {
-    tokenization_init();
-    parsing_init();
+    init_tokenization();
+    init_parsing();
 
     if (argc < 2) {
         printf("Correct usage: c2bf filename.c\n");

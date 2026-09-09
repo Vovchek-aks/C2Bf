@@ -9,7 +9,7 @@
 
 DICT(char *, char) escape_character_of;
 
-void token_literal_init(void) {
+void init_literal_tokenization(void) {
     dict_alloc(escape_character_of);
     set_escape_character_of("\\n", '\n');
     set_escape_character_of("\\r", '\n');

@@ -31,7 +31,7 @@ typedef LIST(struct {
     statement_parser_t parse;
 }) statement_parsers_t;
 
-void statements_parsing_init(void);
+void init_statements_parsing(void);
 
 statement_t *parse_statement(tokens_t tokens, bool is_strict);
 

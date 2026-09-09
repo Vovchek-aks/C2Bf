@@ -36,7 +36,7 @@
 static DICT(operator_t, char *) function_of_unary_prefix;
 static DICT(operator_t, char *) function_of_unary_postfix;
 
-void expression_unary_operation_init() {
+void init_expression_unary_operation_parsing() {
     dict_alloc(function_of_unary_prefix);
     dict_set(function_of_unary_prefix, operator_minus, "BUILTIN_negative");
     dict_set(function_of_unary_prefix, operator_double_minus, "BUILTIN_prefix_decrement");

@@ -8,7 +8,7 @@ typedef struct {
 
 } program_t;
 
-void parsing_init();
+void init_parsing();
 
 program_t *parse(tokens_t tokens);
 

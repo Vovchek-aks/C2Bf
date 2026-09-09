@@ -22,7 +22,7 @@ typedef struct {
     builtin_type_t name;
 } token_type_data_t;
 
-void token_type_init(void);
+void init_type_tokenization(void);
 
 tokenization_status_t token_type_get_status(char *line);
 

@@ -1,6 +1,6 @@
 #include "fake_tokens.h"
 
-void fake_tokens_init() {
+void init_fake_tokens() {
     list_alloc(fake_tokens);
 }
 

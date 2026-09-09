@@ -10,7 +10,7 @@
 
 static DICT(token_kind_t, tokenizer_t) tokenizers;
 
-void tokenization_init(void) {
+void init_tokenization(void) {
     dict_alloc(tokenizers);
     dict_set(tokenizers, token_kind_type, token_type_get_status);
     dict_set(tokenizers, token_kind_keyword, token_keyword_get_status);
@@ -18,10 +18,10 @@ void tokenization_init(void) {
     dict_set(tokenizers, token_kind_operator, token_operator_get_status);
     dict_set(tokenizers, token_kind_literal, token_literal_number_get_status);
 
-    token_type_init();
-    token_operator_init();
-    token_keyword_init();
-    token_literal_init();
+    init_type_tokenization();
+    init_operator_tokenization();
+    init_keyword_tokenization();
+    init_literal_tokenization();
 }
 
 static tokenization_status_t get_best_status(char *line, token_kind_t *kind) {

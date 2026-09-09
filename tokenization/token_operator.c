@@ -6,7 +6,7 @@ TOKEN_DICT(token_operator_data_t, operator_t, char *, operator_to_str_t, operato
 
 static operator_to_str_t name_of;
 
-void token_operator_init(void) {
+void init_operator_tokenization(void) {
     dict_alloc(operator_to_str);
     dict_set(operator_to_str, operator_semicolon, ";");
     dict_set(operator_to_str, operator_colon, ":");

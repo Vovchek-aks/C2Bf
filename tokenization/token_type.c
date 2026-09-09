@@ -4,7 +4,7 @@
 TOKEN_DICT_WITH_WRITE(token_type_data_t, builtin_type_t, char *, type_name_to_str_t, type_name_to_str,
                       token_type_get_status, token_type_get_data_from, write_token_type_data)
 
-void token_type_init(void) {
+void init_type_tokenization(void) {
     dict_alloc(type_name_to_str);
     dict_set(type_name_to_str, builtin_type_void, "void");
     dict_set(type_name_to_str, builtin_type_uint8, "uint8_t");

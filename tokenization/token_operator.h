@@ -57,7 +57,7 @@ typedef struct {
     operator_t name;
 } token_operator_data_t;
 
-void token_operator_init(void);
+void init_operator_tokenization(void);
 
 tokenization_status_t token_operator_get_status(char *line);
 

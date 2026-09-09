@@ -5,7 +5,7 @@
 
 static DICT(operator_t, char *) function_of_binary_operation = {};
 
-void expression_binary_operation_init() {
+void init_expression_binary_operation_parsing() {
     assert(function_of_binary_operation.count == 0);
 
     dict_alloc(function_of_binary_operation);

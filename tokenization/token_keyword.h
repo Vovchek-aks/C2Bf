@@ -32,7 +32,7 @@ typedef struct {
     keyword_t name;
 } token_keyword_data_t;
 
-void token_keyword_init(void);
+void init_keyword_tokenization(void);
 
 tokenization_status_t token_keyword_get_status(char *line);
 
