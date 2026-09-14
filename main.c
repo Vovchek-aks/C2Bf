@@ -24,6 +24,7 @@ int32_t main(int32_t argc, char **argv) {
     program_t *program = parse_program(list_view(tokens));
 
     printf("%s\n=====================================================================\n", code);
+    printf("%lld %lld\n", program->main->tokens.data[0].info.line, program->main->tokens.data[0].info.symbol);
     print_program(program);
 //    print_statement(statement);
 //    print_tokens(tokens);

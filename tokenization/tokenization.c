@@ -65,6 +65,10 @@ tokens_t tokenize(char *code) {
     size_t index = 0;
     bool is_line_literal = false;
     string_for(code, alpha) {
+        if (alpha == '#')
+            while (alpha != '\n')
+                alpha = *(++(code));
+        
         symbol++;
         if (alpha == '\n') {
             line++;
