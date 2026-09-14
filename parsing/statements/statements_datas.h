@@ -22,10 +22,15 @@ typedef struct {
     statements_t statements;
 } statement_scope_data_t;
 
+typedef struct {
+    expression_t *value;
+} statement_return_data_t;
+
 typedef union {
     statement_expression_data_t as_expression;
     statement_if_data_t as_if;
     statement_scope_data_t as_scope;
+    statement_return_data_t as_return;
 } statement_data_t;
 
 typedef enum {
