@@ -101,5 +101,5 @@ void print_program(program_t *program) {
     char *buffer = program_printing_buffer;
 
     write_function(program->main, &buffer);
-    printf("%s", program_printing_buffer);
+    printf("%s\n", program_printing_buffer);
 }

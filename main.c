@@ -23,11 +23,8 @@ int32_t main(int32_t argc, char **argv) {
     tokens_t tokens = tokenize(code);
     program_t *program = parse_program(list_view(tokens));
 
-    printf("%s\n=====================================================================\n", code);
-    printf("%lld %lld\n", program->main->tokens.data[0].info.line, program->main->tokens.data[0].info.symbol);
+//    printf("%s\n=====================================================================\n", code);
     print_program(program);
-//    print_statement(statement);
-//    print_tokens(tokens);
 
 //    char *bf = translate_to_bf(program);
 //

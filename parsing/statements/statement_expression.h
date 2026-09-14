@@ -4,7 +4,7 @@
 #include "../../tokenization/tokenization.h"
 #include "statements.h"
 
-#define STATEMENT_EXPRESSION_NAME "Expression"
+#define STATEMENT_EXPRESSION_NAME ""
 
 statement_parsing_result_t statement_expression_get_data_from(tokens_t tokens, bool is_strict);
 

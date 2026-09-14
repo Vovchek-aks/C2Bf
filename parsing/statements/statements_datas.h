@@ -3,6 +3,7 @@
 
 #include "../../tokenization/tokenization.h"
 #include "../tokens_operations.h"
+#include "../types/types.h"
 
 typedef struct statement_t statement_t;
 
@@ -26,11 +27,18 @@ typedef struct {
     expression_t *value;
 } statement_return_data_t;
 
+typedef struct {
+    type_t *type;
+    token_name_data_t *name;
+    expression_t *value;
+} statement_variable_declaration_data_t;
+
 typedef union {
     statement_expression_data_t as_expression;
     statement_if_data_t as_if;
     statement_scope_data_t as_scope;
     statement_return_data_t as_return;
+    statement_variable_declaration_data_t as_variable_declaration;
 } statement_data_t;
 
 typedef enum {

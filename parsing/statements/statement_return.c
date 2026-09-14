@@ -32,5 +32,6 @@ void write_statement_return_data_from(statement_return_data_t data, char **buffe
 }
 
 void free_statement_return_data(statement_return_data_t data) {
-    free_expression(data.value);
+    if (data.value)
+        free_expression(data.value);
 }

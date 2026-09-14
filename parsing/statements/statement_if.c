@@ -21,6 +21,12 @@ static bool try_parse_branches(tokens_t *tokens,
     *true_branch = branches.data[0];
     *false_branch = branches.count > 1 ? branches.data[1] : NULL;
 
+    if ((*true_branch)->kind == statement_kind_variable_declaration)
+        display_parsing_error((*true_branch)->tokens, "Variable declaration cannot appear here.");
+
+    if (list_last(branches)->kind == statement_kind_variable_declaration)
+        display_parsing_error(list_last(branches)->tokens, "Variable declaration cannot appear here.");
+
     if (branches.count < 2) {
         list_free(branches);
         return true;

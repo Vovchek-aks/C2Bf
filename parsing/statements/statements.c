@@ -4,6 +4,7 @@
 #include "statement_if.c"
 #include "statement_scope.c"
 #include "statement_return.c"
+#include "statement_variable_declaration.c"
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
@@ -20,6 +21,7 @@ void init_statements_parsing(void) {
     statement_parsers_push(statement_kind_if, statement_if_get_data_from);
     statement_parsers_push(statement_kind_scope, statement_scope_get_data_from);
     statement_parsers_push(statement_kind_return, statement_return_get_data_from);
+    statement_parsers_push(statement_kind_variable_declaration, statement_variable_declaration_get_data_from);
 }
 
 statement_t *parse_statement(tokens_t tokens, bool is_strict) {
@@ -60,6 +62,8 @@ static char *str_statement_name(statement_t *statement) {
             return STATEMENT_SCOPE_NAME;
         case statement_kind_return:
             return STATEMENT_RETURN_NAME;
+        case statement_kind_variable_declaration:
+            return STATEMENT_VARIABLE_DECLARATION_NAME;
         default:
             printf("Statement has no name\n");
             assert(false);
@@ -76,6 +80,8 @@ static void write_statement_data(statement_t *statement, char **buffer) {
             return write_statement_scope_data_from(statement->data.as_scope, buffer);
         case statement_kind_return:
             return write_statement_return_data_from(statement->data.as_return, buffer);
+        case statement_kind_variable_declaration:
+            return write_statement_variable_declaration_data_from(statement->data.as_variable_declaration, buffer);
         default:
             printf("Statement cannot write data\n");
             assert(false);
@@ -117,6 +123,9 @@ void free_statement(statement_t *statement) {
             break;
         case statement_kind_return:
             free_statement_return_data(statement->data.as_return);
+            break;
+        case statement_kind_variable_declaration:
+            free_statement_variable_declaration_data(statement->data.as_variable_declaration);
             break;
         default:
             printf("Cannot free statement\n");

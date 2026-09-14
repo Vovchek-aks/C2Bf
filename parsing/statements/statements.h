@@ -12,7 +12,7 @@ typedef enum {
     statement_kind_while,
     statement_kind_do_while,
     statement_kind_scope,
-    statement_kind_variable_definition,
+    statement_kind_variable_declaration,
     statement_kind_assignment,
     statement_kind_return,
     statement_kind_break,
