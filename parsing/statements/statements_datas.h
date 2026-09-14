@@ -2,6 +2,7 @@
 #define STATEMENTS_DATAS
 
 #include "../../tokenization/tokenization.h"
+#include "../tokens_operations.h"
 
 typedef struct statement_t statement_t;
 

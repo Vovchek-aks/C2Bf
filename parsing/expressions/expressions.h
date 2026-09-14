@@ -44,6 +44,8 @@ bool specifying_parse_expressions_separated_by(operator_t target,
 
 void write_expression(expression_t *expression, char **buffer);
 
+void adjust_level(char *line, char **buffer);
+
 void print_expression(expression_t *expression);
 
 void free_expression(expression_t *expression);

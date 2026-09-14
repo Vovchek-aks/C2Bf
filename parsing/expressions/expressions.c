@@ -107,7 +107,7 @@ static void write_expression_data(expression_t *expression, char **buffer) {
     }
 }
 
-static void adjust_level(char *line, char **buffer) {
+void adjust_level(char *line, char **buffer) {
     string_for(line, alpha) {
         string_append(buffer, alpha);
         if (alpha == '\n')

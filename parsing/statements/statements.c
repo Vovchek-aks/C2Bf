@@ -39,7 +39,7 @@ statement_t *parse_statement(tokens_t tokens, bool is_strict) {
     if (!is_strict)
         return NULL;
 
-    display_parsing_error(tokens, "Cannot parse statement.");
+    display_parsing_error(tokens, "Cannot identify statement.");
 }
 
 PARSER_TOKENS_SEPARATOR(parse_statements_separated_by_operator, statements_t, operator_t, find_operator,

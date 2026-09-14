@@ -35,7 +35,7 @@ type_t *parse_type(tokens_t tokens, bool is_strict) {
     if (!is_strict)
         return NULL;
 
-    display_parsing_error(tokens, "Cannot parse type.");
+    display_parsing_error(tokens, "Cannot identify type.");
 }
 
 static char *str_type_name(type_t *type) {
