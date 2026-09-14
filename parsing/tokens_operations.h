@@ -20,6 +20,8 @@ token_t *chop_operator(tokens_t *tokens, operator_t kind, chop_direction_t direc
 
 token_t *chop_keyword(tokens_t *tokens, keyword_t kind, chop_direction_t direction);
 
+token_t *chop_type(tokens_t *tokens, builtin_type_t kind, chop_direction_t direction);
+
 token_t *find_operator(tokens_t tokens,
                        operator_t target,
                        chop_direction_t direction);

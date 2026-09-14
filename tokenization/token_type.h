@@ -7,6 +7,7 @@
 
 typedef enum {
     builtin_type_void,
+    builtin_type_bool,
     builtin_type_uint8,
     builtin_type_int8,
     builtin_type_uint16,

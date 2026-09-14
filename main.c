@@ -21,10 +21,11 @@ int32_t main(int32_t argc, char **argv) {
     set_file(filename, code);
 
     tokens_t tokens = tokenize(code);
-    statement_t *statement = parse_statement(list_view(tokens), true);
+    type_t *type = parse_type(list_view(tokens), true);
 
     printf("%s\n=====================================================================\n", code);
-    print_statement(statement);
+    print_type(type);
+//    print_statement(statement);
 //    print_tokens(tokens);
 
 //    program_t *program = parse(tokens);
