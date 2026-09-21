@@ -4,7 +4,7 @@
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
 statement_parsing_result_t statement_do_while_get_data_from(tokens_t tokens, bool is_strict) {
-    if (tokens.count < 5)  // do_while (c);
+    if (tokens.count < 8)  // do {} while (c);
         return FAILED_TO_PARSE_STATEMENT;
     CHOP_SEMICOLON;
 

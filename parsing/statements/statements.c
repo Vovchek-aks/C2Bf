@@ -7,6 +7,7 @@
 #include "statement_variable_declaration.c"
 #include "statement_while.c"
 #include "statement_do_while.c"
+#include "statement_for.c"
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
@@ -26,6 +27,7 @@ void init_statements_parsing(void) {
     statement_parsers_push(statement_kind_variable_declaration, statement_variable_declaration_get_data_from);
     statement_parsers_push(statement_kind_while, statement_while_get_data_from);
     statement_parsers_push(statement_kind_do_while, statement_do_while_get_data_from);
+    statement_parsers_push(statement_kind_for, statement_for_get_data_from);
 }
 
 statement_t *parse_statement(tokens_t tokens, bool is_strict) {
@@ -72,6 +74,8 @@ static char *str_statement_name(statement_t *statement) {
             return STATEMENT_WHILE_NAME;
         case statement_kind_do_while:
             return STATEMENT_DO_WHILE_NAME;
+        case statement_kind_for:
+            return STATEMENT_FOR_NAME;
         default:
             printf("Statement has no name\n");
             assert(false);
@@ -93,7 +97,9 @@ static void write_statement_data(statement_t *statement, char **buffer) {
         case statement_kind_while:
             return write_statement_while_data_from(statement->data.as_while, buffer);
         case statement_kind_do_while:
-            return write_statement_while_data_from(statement->data.as_do_while, buffer);
+            return write_statement_do_while_data_from(statement->data.as_do_while, buffer);
+        case statement_kind_for:
+            return write_statement_for_data_from(statement->data.as_for, buffer);
         default:
             printf("Statement cannot write data\n");
             assert(false);
@@ -143,7 +149,10 @@ void free_statement(statement_t *statement) {
             free_statement_while_data(statement->data.as_while);
             break;
         case statement_kind_do_while:
-            free_statement_while_data(statement->data.as_do_while);
+            free_statement_do_while_data(statement->data.as_do_while);
+            break;
+        case statement_kind_for:
+            free_statement_for_data(statement->data.as_for);
             break;
         default:
             printf("Cannot free statement\n");
