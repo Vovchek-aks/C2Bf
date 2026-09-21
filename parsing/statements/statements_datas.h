@@ -33,12 +33,18 @@ typedef struct {
     expression_t *value;
 } statement_variable_declaration_data_t;
 
+typedef struct {
+    expression_t *condition;
+    statement_t *body;
+} statement_while_data_t;
+
 typedef union {
     statement_expression_data_t as_expression;
     statement_if_data_t as_if;
     statement_scope_data_t as_scope;
     statement_return_data_t as_return;
     statement_variable_declaration_data_t as_variable_declaration;
+    statement_while_data_t as_while;
 } statement_data_t;
 
 typedef enum {

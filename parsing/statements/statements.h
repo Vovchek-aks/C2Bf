@@ -11,6 +11,7 @@ typedef enum {
     statement_kind_if,
     statement_kind_while,
     statement_kind_do_while,
+    statement_kind_for,
     statement_kind_scope,
     statement_kind_variable_declaration,
     statement_kind_assignment,

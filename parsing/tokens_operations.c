@@ -71,11 +71,13 @@ token_t *get_paired_bracket(tokens_t tokens,
     token_t *op;
     while (tokens.count > 0) {
         op = chop_operator(&tokens, target, direction);
-        if (op && --level == 0)
-            break;
-
-        op = chop_operator(&tokens, initial, direction);
         if (op) {
+            if (--level == 0)
+                break;
+            continue;
+        }
+
+        if (chop_operator(&tokens, initial, direction)) {
             level++;
             continue;
         }

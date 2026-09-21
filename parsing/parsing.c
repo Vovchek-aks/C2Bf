@@ -31,6 +31,9 @@ program_t *parse_program(tokens_t tokens) {
 }
 
 function_t *parse_function(tokens_t tokens) {
+    if (tokens.count < 7)  // void a(void) {}
+        return NULL;
+
     tokens_t original_tokens = tokens;
 
     if (!chop_operator(&tokens, operator_close_curly, chop_direction_back))
