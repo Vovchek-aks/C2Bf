@@ -9,6 +9,7 @@
 #include "statement_do_while.c"
 #include "statement_for.c"
 #include "statement_break.c"
+#include "statement_continue.c"
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
@@ -49,6 +50,7 @@ void init_statements_parsing(void) {
     register_statement(_do_while);
     register_statement(_for);
     register_statement(_break);
+    register_statement(_continue);
 }
 
 statement_t *parse_statement(tokens_t tokens, bool is_strict) {

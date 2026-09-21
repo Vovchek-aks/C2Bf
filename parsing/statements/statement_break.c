@@ -10,6 +10,9 @@ statement_parsing_result_t statement_break_get_data_from(tokens_t tokens, bool i
     if (!chop_keyword(&tokens, keyword_break, chop_direction_front))
         return FAILED_TO_PARSE_STATEMENT;
 
+    if (tokens.count > 0)
+        return FAILED_TO_PARSE_STATEMENT;
+
     statement_break_data_t data = {};
     return STATEMENT_PARSED(.as_break, data);
 }
