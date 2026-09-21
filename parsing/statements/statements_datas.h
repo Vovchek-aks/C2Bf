@@ -45,6 +45,7 @@ typedef union {
     statement_return_data_t as_return;
     statement_variable_declaration_data_t as_variable_declaration;
     statement_while_data_t as_while;
+    statement_while_data_t as_do_while;
 } statement_data_t;
 
 typedef enum {
