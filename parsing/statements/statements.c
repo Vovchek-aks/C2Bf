@@ -8,26 +8,47 @@
 #include "statement_while.c"
 #include "statement_do_while.c"
 #include "statement_for.c"
+#include "statement_break.c"
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
 statement_parsers_t statement_parsers;
 
-#define statement_parsers_push(kind_to_set, parser_to_set) do {                                                        \
-    typeof(*statement_parsers.data) element = { kind_to_set, parser_to_set };                                          \
+DICT(statement_kind_t, char *) statement_names;
+
+typedef void (*statement_writer)(statement_data_t, char **);
+DICT(statement_kind_t, statement_writer) statement_writers;
+
+typedef void (*statement_freer)(statement_data_t);
+DICT(statement_kind_t, statement_freer) statement_freers;
+
+#define register_statement(_statement) do {                                                                            \
+    statement_kind_t kind = CONCAT(statement_kind, _statement);                                                        \
+    typeof(*statement_parsers.data) element = {                                                                        \
+        kind,                                                                                                          \
+        CONCAT(CONCAT(statement, _statement), _get_data_from)                                                          \
+    };                                                                                                                 \
     list_push(statement_parsers, element);                                                                             \
+    dict_set(statement_names, kind, CONCAT(CONCAT(STATEMENT, _statement), _NAME));                                     \
+    dict_set(statement_writers, kind, CONCAT(CONCAT(write_statement, _statement), _data_from));                        \
+    dict_set(statement_freers, kind, CONCAT(CONCAT(free_statement, _statement), _data));                               \
 } while(0)
 
 void init_statements_parsing(void) {
     list_alloc(statement_parsers);
-    statement_parsers_push(statement_kind_expression, statement_expression_get_data_from);
-    statement_parsers_push(statement_kind_if, statement_if_get_data_from);
-    statement_parsers_push(statement_kind_scope, statement_scope_get_data_from);
-    statement_parsers_push(statement_kind_return, statement_return_get_data_from);
-    statement_parsers_push(statement_kind_variable_declaration, statement_variable_declaration_get_data_from);
-    statement_parsers_push(statement_kind_while, statement_while_get_data_from);
-    statement_parsers_push(statement_kind_do_while, statement_do_while_get_data_from);
-    statement_parsers_push(statement_kind_for, statement_for_get_data_from);
+    list_alloc(statement_names);
+    list_alloc(statement_writers);
+    list_alloc(statement_freers);
+
+    register_statement(_expression);
+    register_statement(_if);
+    register_statement(_scope);
+    register_statement(_return);
+    register_statement(_variable_declaration);
+    register_statement(_while);
+    register_statement(_do_while);
+    register_statement(_for);
+    register_statement(_break);
 }
 
 statement_t *parse_statement(tokens_t tokens, bool is_strict) {
@@ -59,51 +80,21 @@ PARSER_TOKENS_SEPARATOR(parse_statements_separated_by_keyword, statements_t, key
                         parse_statement, "Cannot divide by statements.")
 
 static char *str_statement_name(statement_t *statement) {
-    switch (statement->kind) {
-        case statement_kind_expression:
-            return STATEMENT_EXPRESSION_NAME;
-        case statement_kind_if:
-            return STATEMENT_IF_NAME;
-        case statement_kind_scope:
-            return STATEMENT_SCOPE_NAME;
-        case statement_kind_return:
-            return STATEMENT_RETURN_NAME;
-        case statement_kind_variable_declaration:
-            return STATEMENT_VARIABLE_DECLARATION_NAME;
-        case statement_kind_while:
-            return STATEMENT_WHILE_NAME;
-        case statement_kind_do_while:
-            return STATEMENT_DO_WHILE_NAME;
-        case statement_kind_for:
-            return STATEMENT_FOR_NAME;
-        default:
-            printf("Statement has no name\n");
-            assert(false);
-    }
+    char *name = dict_get(statement_names, statement->kind, NULL);
+    if (name)
+        return name;
+
+    printf("Statement has no name\n");
+    assert(false);
 }
 
 static void write_statement_data(statement_t *statement, char **buffer) {
-    switch (statement->kind) {
-        case statement_kind_expression:
-            return write_statement_expression_data_from(statement->data.as_expression, buffer);
-        case statement_kind_if:
-            return write_statement_if_data_from(statement->data.as_if, buffer);
-        case statement_kind_scope:
-            return write_statement_scope_data_from(statement->data.as_scope, buffer);
-        case statement_kind_return:
-            return write_statement_return_data_from(statement->data.as_return, buffer);
-        case statement_kind_variable_declaration:
-            return write_statement_variable_declaration_data_from(statement->data.as_variable_declaration, buffer);
-        case statement_kind_while:
-            return write_statement_while_data_from(statement->data.as_while, buffer);
-        case statement_kind_do_while:
-            return write_statement_do_while_data_from(statement->data.as_do_while, buffer);
-        case statement_kind_for:
-            return write_statement_for_data_from(statement->data.as_for, buffer);
-        default:
-            printf("Statement cannot write data\n");
-            assert(false);
+    statement_writer writer = dict_get(statement_writers, statement->kind, NULL);
+    if (!writer) {
+        printf("Statement cannot write data\n");
+        assert(false);
     }
+    writer(statement->data, buffer);
 }
 
 char statement_print_buffer[STATEMENT_PRINTING_MAX_LENGTH] = {};
@@ -129,36 +120,12 @@ void write_statement(statement_t *statement, char **buffer) {
 }
 
 void free_statement(statement_t *statement) {
-    switch (statement->kind) {
-        case statement_kind_expression:
-            free_statement_expression_data(statement->data.as_expression);
-            break;
-        case statement_kind_if:
-            free_statement_if_data(statement->data.as_if);
-            break;
-        case statement_kind_scope:
-            free_statement_scope_data(statement->data.as_scope);
-            break;
-        case statement_kind_return:
-            free_statement_return_data(statement->data.as_return);
-            break;
-        case statement_kind_variable_declaration:
-            free_statement_variable_declaration_data(statement->data.as_variable_declaration);
-            break;
-        case statement_kind_while:
-            free_statement_while_data(statement->data.as_while);
-            break;
-        case statement_kind_do_while:
-            free_statement_do_while_data(statement->data.as_do_while);
-            break;
-        case statement_kind_for:
-            free_statement_for_data(statement->data.as_for);
-            break;
-        default:
-            printf("Cannot free statement\n");
-            assert(false);
+    statement_freer freer = dict_get(statement_freers, statement->kind, NULL);
+    if (!freer) {
+        printf("Cannot free statement\n");
+        assert(false);
     }
-
+    freer(statement->data);
     free(statement);
 }
 

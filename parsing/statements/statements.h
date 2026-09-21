@@ -27,10 +27,12 @@ struct statement_t {
     statement_data_t data;
 };
 
-typedef LIST(struct {
-    statement_kind_t kind;
-    statement_parser_t parse;
-}) statement_parsers_t;
+typedef LIST(
+        struct {
+            statement_kind_t kind;
+            statement_parser_t parse;
+        }
+) statement_parsers_t;
 
 void init_statements_parsing(void);
 

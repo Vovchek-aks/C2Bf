@@ -39,10 +39,10 @@ statement_parsing_result_t statement_do_while_get_data_from(tokens_t tokens, boo
     return STATEMENT_PARSED(.as_do_while, data);
 }
 
-void write_statement_do_while_data_from(statement_while_data_t data, char **buffer) {
+void write_statement_do_while_data_from(statement_data_t data, char **buffer) {
     write_statement_while_data_from(data, buffer);
 }
 
-void free_statement_do_while_data(statement_while_data_t data) {
+void free_statement_do_while_data(statement_data_t data) {
     free_statement_while_data(data);
 }

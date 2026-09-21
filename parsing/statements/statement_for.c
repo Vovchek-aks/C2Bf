@@ -94,34 +94,34 @@ statement_parsing_result_t statement_for_get_data_from(tokens_t tokens, bool is_
     return STATEMENT_PARSED(.as_for, data);
 }
 
-void write_statement_for_data_from(statement_for_data_t data, char **buffer) {
+void write_statement_for_data_from(statement_data_t data, char **buffer) {
     string_extend(buffer, "():");
 
-    if (data.before_first) {
+    if (data.as_for.before_first) {
         string_extend(buffer, "\n.before_first = ");
-        write_statement(data.before_first, buffer);
+        write_statement(data.as_for.before_first, buffer);
     }
 
     string_extend(buffer, "\n.condition = ");
-    write_expression(data.condition, buffer);
+    write_expression(data.as_for.condition, buffer);
 
-    if (data.body) {
+    if (data.as_for.body) {
         string_extend(buffer, "\n.body = ");
-        write_statement(data.body, buffer);
+        write_statement(data.as_for.body, buffer);
     }
 
-    if (data.after_each) {
+    if (data.as_for.after_each) {
         string_extend(buffer, "\n.after_each = ");
-        write_statement(data.after_each, buffer);
+        write_statement(data.as_for.after_each, buffer);
     }
 }
 
-void free_statement_for_data(statement_for_data_t data) {
-    free_expression(data.condition);
-    if (data.before_first)
-        free_statement(data.before_first);
-    if (data.after_each)
-        free_statement(data.after_each);
-    if (data.body)
-        free_statement(data.body);
+void free_statement_for_data(statement_data_t data) {
+    free_expression(data.as_for.condition);
+    if (data.as_for.before_first)
+        free_statement(data.as_for.before_first);
+    if (data.as_for.after_each)
+        free_statement(data.as_for.after_each);
+    if (data.as_for.body)
+        free_statement(data.as_for.body);
 }

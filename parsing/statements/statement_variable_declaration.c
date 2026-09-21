@@ -31,21 +31,21 @@ statement_parsing_result_t statement_variable_declaration_get_data_from(tokens_t
     return STATEMENT_PARSED(.as_variable_declaration, data);
 }
 
-void write_statement_variable_declaration_data_from(statement_variable_declaration_data_t data, char **buffer) {
-    *buffer += sprintf(*buffer, "(\"%s\"):", data.name->name);
+void write_statement_variable_declaration_data_from(statement_data_t data, char **buffer) {
+    *buffer += sprintf(*buffer, "(\"%s\"):", data.as_variable_declaration.name->name);
 
     string_extend(buffer, "\n.type = ");
-    write_type(data.type, buffer);
+    write_type(data.as_variable_declaration.type, buffer);
 
-    if (!data.value)
+    if (!data.as_variable_declaration.value)
         return;
 
     string_extend(buffer, "\n.value = ");
-    write_expression(data.value, buffer);
+    write_expression(data.as_variable_declaration.value, buffer);
 }
 
-void free_statement_variable_declaration_data(statement_variable_declaration_data_t data) {
-    free_type(data.type);
-    if (data.value)
-        free_expression(data.value);
+void free_statement_variable_declaration_data(statement_data_t data) {
+    free_type(data.as_variable_declaration.type);
+    if (data.as_variable_declaration.value)
+        free_expression(data.as_variable_declaration.value);
 }

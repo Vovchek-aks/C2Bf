@@ -73,24 +73,24 @@ statement_parsing_result_t statement_if_get_data_from(tokens_t tokens, bool is_s
     return STATEMENT_PARSED(.as_if, data);
 }
 
-void write_statement_if_data_from(statement_if_data_t data, char **buffer) {
+void write_statement_if_data_from(statement_data_t data, char **buffer) {
     string_extend(buffer, "():");
 
     string_extend(buffer, "\n.condition = ");
-    write_expression(data.condition, buffer);
+    write_expression(data.as_if.condition, buffer);
 
     string_extend(buffer, "\n.true_branch = ");
-    write_statement(data.true_branch, buffer);
+    write_statement(data.as_if.true_branch, buffer);
 
-    if (data.false_branch) {
+    if (data.as_if.false_branch) {
         string_extend(buffer, "\n.false_branch = ");
-        write_statement(data.false_branch, buffer);
+        write_statement(data.as_if.false_branch, buffer);
     }
 }
 
-void free_statement_if_data(statement_if_data_t data) {
-    free_expression(data.condition);
-    free_statement(data.true_branch);
-    if (data.false_branch)
-        free_statement(data.false_branch);
+void free_statement_if_data(statement_data_t data) {
+    free_expression(data.as_if.condition);
+    free_statement(data.as_if.true_branch);
+    if (data.as_if.false_branch)
+        free_statement(data.as_if.false_branch);
 }

@@ -4,12 +4,12 @@
 #include "../../tokenization/tokenization.h"
 #include "statements.h"
 
-#define STATEMENT_SCOPE_NAME "Scope"
+#define STATEMENT_scope_NAME "Scope"
 
 statement_parsing_result_t statement_scope_get_data_from(tokens_t tokens, bool is_strict);
 
-void write_statement_scope_data_from(statement_scope_data_t data, char **buffer);
+void write_statement_scope_data_from(statement_data_t data, char **buffer);
 
-void free_statement_scope_data(statement_scope_data_t data);
+void free_statement_scope_data(statement_data_t data);
 
 #endif

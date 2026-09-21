@@ -45,6 +45,8 @@ typedef struct {
     statement_t *body;
 } statement_for_data_t;
 
+typedef struct {} statement_break_data_t;
+
 typedef union {
     statement_expression_data_t as_expression;
     statement_if_data_t as_if;
@@ -54,6 +56,7 @@ typedef union {
     statement_while_data_t as_while;
     statement_while_data_t as_do_while;
     statement_for_data_t as_for;
+    statement_break_data_t as_break;
 } statement_data_t;
 
 typedef enum {

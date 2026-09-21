@@ -43,21 +43,21 @@ statement_parsing_result_t statement_while_get_data_from(tokens_t tokens, bool i
     return STATEMENT_PARSED(.as_while, data);
 }
 
-void write_statement_while_data_from(statement_while_data_t data, char **buffer) {
+void write_statement_while_data_from(statement_data_t data, char **buffer) {
     string_extend(buffer, "():");
 
     string_extend(buffer, "\n.condition = ");
-    write_expression(data.condition, buffer);
+    write_expression(data.as_while.condition, buffer);
 
-    if (!data.body)
+    if (!data.as_while.body)
         return;
 
     string_extend(buffer, "\n.body = ");
-    write_statement(data.body, buffer);
+    write_statement(data.as_while.body, buffer);
 }
 
-void free_statement_while_data(statement_while_data_t data) {
-    free_expression(data.condition);
-    if (data.body)
-        free_statement(data.body);
+void free_statement_while_data(statement_data_t data) {
+    free_expression(data.as_while.condition);
+    if (data.as_while.body)
+        free_statement(data.as_while.body);
 }

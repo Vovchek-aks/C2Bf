@@ -39,16 +39,16 @@ statement_parsing_result_t statement_scope_get_data_from(tokens_t tokens, bool i
     return STATEMENT_PARSED(.as_scope, data);
 }
 
-void write_statement_scope_data_from(statement_scope_data_t data, char **buffer) {
-    *buffer += snprintf(*buffer, 20, "(stmts=%llu):", data.statements.count);
+void write_statement_scope_data_from(statement_data_t data, char **buffer) {
+    *buffer += snprintf(*buffer, 20, "(stmts=%llu):", data.as_scope.statements.count);
 
     size_t index = 0;
-    list_for(data.statements, statement) {
+    list_for(data.as_scope.statements, statement) {
         *buffer += snprintf(*buffer, 20, "\n.statement_%llu = ", index++);
         write_statement(statement, buffer);
     }
 }
 
-void free_statement_scope_data(statement_scope_data_t data) {
-    free_statements(data.statements);
+void free_statement_scope_data(statement_data_t data) {
+    free_statements(data.as_scope.statements);
 }

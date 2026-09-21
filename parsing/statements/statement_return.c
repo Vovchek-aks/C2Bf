@@ -21,17 +21,17 @@ statement_parsing_result_t statement_return_get_data_from(tokens_t tokens, bool 
     return STATEMENT_PARSED(.as_return, data);
 }
 
-void write_statement_return_data_from(statement_return_data_t data, char **buffer) {
+void write_statement_return_data_from(statement_data_t data, char **buffer) {
     string_extend(buffer, "()");
-    string_append(buffer, data.value ? ':' : ';');
+    string_append(buffer, data.as_return.value ? ':' : ';');
 
-    if (data.value) {
+    if (data.as_return.value) {
         string_extend(buffer, "\n.value = ");
-        write_expression(data.value, buffer);
+        write_expression(data.as_return.value, buffer);
     }
 }
 
-void free_statement_return_data(statement_return_data_t data) {
-    if (data.value)
-        free_expression(data.value);
+void free_statement_return_data(statement_data_t data) {
+    if (data.as_return.value)
+        free_expression(data.as_return.value);
 }
