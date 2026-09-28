@@ -18,6 +18,7 @@ void init_types_parsing(void) {
 
 type_t *parse_type(tokens_t tokens, bool is_strict) {
     assert(tokens.capacity == 0);
+    assert(tokens.count > 0);
 
     list_for(type_parsers, parser) {
         type_parsing_result_t result = parser.parse(tokens, is_strict);

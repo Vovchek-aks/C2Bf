@@ -49,6 +49,11 @@ typedef struct {} statement_break_data_t;
 
 typedef struct {} statement_continue_data_t;
 
+typedef struct {
+    expression_t *left;
+    expression_t *right;
+} statement_assignment_data_t;
+
 typedef union {
     statement_expression_data_t as_expression;
     statement_if_data_t as_if;
@@ -60,6 +65,7 @@ typedef union {
     statement_for_data_t as_for;
     statement_break_data_t as_break;
     statement_continue_data_t as_continue;
+    statement_assignment_data_t as_assignment;
 } statement_data_t;
 
 typedef enum {

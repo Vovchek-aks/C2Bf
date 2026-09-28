@@ -10,6 +10,7 @@
 #include "statement_for.c"
 #include "statement_break.c"
 #include "statement_continue.c"
+#include "statement_assignment.c"
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
@@ -51,10 +52,14 @@ void init_statements_parsing(void) {
     register_statement(_for);
     register_statement(_break);
     register_statement(_continue);
+    register_statement(_assignment);
+
+    init_assignment_parsing();
 }
 
 statement_t *parse_statement(tokens_t tokens, bool is_strict) {
     assert(tokens.capacity == 0);
+    assert(tokens.count > 0);
 
     list_for(statement_parsers, parser) {
         statement_parsing_result_t result = parser.parse(tokens, is_strict);

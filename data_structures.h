@@ -94,14 +94,14 @@
 #define list_index(list, value) ({                                                                                     \
     size_t result = SIZE_MAX;                                                                                          \
     for (size_t index = 0; index < (list).count; index++)                                                              \
-        if ((list).data[index] == value) {                                                                             \
+        if ((list).data[index] == (value)) {                                                                           \
             result = index;                                                                                            \
             break;                                                                                                     \
         }                                                                                                              \
     result;                                                                                                            \
 })
 
-#define list_contains(list, value) list_index(list, value) != SIZE_MAX
+#define list_contains(list, value) (list_index(list, value) != SIZE_MAX)
 
 #define DICT(TK, TV) LIST(struct {TK key; TV value;})
 

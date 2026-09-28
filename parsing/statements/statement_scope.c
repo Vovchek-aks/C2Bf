@@ -26,9 +26,16 @@ statement_parsing_result_t statement_scope_get_data_from(tokens_t tokens, bool i
         window.count--;
     }
     bool is_ok = window.data >= tokens.data + tokens.count;
-    if (is_strict && !is_ok)
-        display_parsing_error(list_slice(tokens, window.data - tokens.data, TO_END),
-                              "Cannot parse statement.");
+    if (is_strict && !is_ok) {
+        tokens_t unparsed = list_slice(tokens, window.data - tokens.data, TO_END);
+        token_t *semicolon = find_operator(unparsed, operator_semicolon, chop_direction_front);
+        if (semicolon) {
+            tokens_t left = split_by(semicolon, &unparsed);
+            unparsed = left;
+            unparsed.count++;
+        }
+        parse_statement(unparsed, true);
+    }
 
     if (!is_ok) {
         free_statements(statements);
