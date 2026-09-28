@@ -101,6 +101,8 @@
     result;                                                                                                            \
 })
 
+#define list_contains(list, value) list_index(list, value) != SIZE_MAX
+
 #define DICT(TK, TV) LIST(struct {TK key; TV value;})
 
 #define dict_alloc(dict) list_sized_alloc(dict, 8)
