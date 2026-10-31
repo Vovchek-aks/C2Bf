@@ -172,9 +172,8 @@
     }                                                                                                                  \
                                                                                                                        \
     size_t index = 0;                                                                                                  \
-    typeof(&(dict).data->value) old_value = NULL;                                                                      \
-    dict_get_cmp((dict), (key), *old_value, cmp);                                                                      \
-    typeof(*(dict).data) item = {(key), *old_value};                                                                   \
+    typeof((dict).data->value) old_value = dict_get_cmp((dict), (key), NULL, cmp);                                     \
+    typeof(*(dict).data) item = {(key), old_value};                                                                    \
     _dict_index((dict), item, index);                                                                                  \
     (dict).data[index].value = (value_);                                                                               \
 } while (0)

@@ -74,9 +74,3 @@ __MINGW_ATTRIB_NORETURN void display_parsing_error(tokens_t tokens, char *messag
     fprintf(stderr, "%s\n", message);
     abort();
 }
-
-__MINGW_ATTRIB_NORETURN void display_validation_error(statement_t *statement, char *message) {
-    display_bad_tokens(statement->tokens);
-    fprintf(stderr, "%s\n", message);
-    abort();
-}

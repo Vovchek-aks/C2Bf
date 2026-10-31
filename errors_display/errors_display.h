@@ -11,6 +11,10 @@ void display_bad_tokens(tokens_t tokens);
 
 __MINGW_ATTRIB_NORETURN void display_parsing_error(tokens_t tokens, char *message);
 
-__MINGW_ATTRIB_NORETURN void display_validation_error(statement_t *statement, char *message);
+#define display_validation_error(statement_or_expression, message) ({                                                  \
+    display_bad_tokens((statement_or_expression)->tokens);                                                             \
+    fprintf (stderr, "%s\n", (message));                                                                               \
+    abort();                                                                                                           \
+})
 
 #endif

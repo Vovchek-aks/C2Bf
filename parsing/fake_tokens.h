@@ -26,4 +26,6 @@ void fake_tokens_append_token_literal(token_literal_kind_t kind, char *line);
 
 void fake_tokens_append_token_operator(operator_t kind);
 
+void fake_tokens_append_token_builtin_type(builtin_type_t builtin_type);
+
 #endif
