@@ -7,6 +7,7 @@
 #define EXPRESSION_PRINTING_MAX_LENGTH (1024 * 1024)
 
 typedef enum {
+    expression_kind_type_conversion,
     expression_kind_indexing,
     expression_kind_name,
     expression_kind_struct_creation,

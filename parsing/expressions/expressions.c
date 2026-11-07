@@ -6,6 +6,7 @@
 #include "expression_literal.c"
 #include "expression_element_access.c"
 #include "expression_indexing.c"
+#include "expression_type_conversion.c"
 #include "expression_function_call.c"
 #include "expression_unary_operation.c"
 #include "expression_binary_operation.c"
@@ -30,6 +31,7 @@ void init_expressions_parsing(void) {
     expression_parsers_set(expression_kind_function_call, expression_binary_operation_get_data_from);
     expression_parsers_set(expression_kind_function_call, expression_unary_prefix_operation_get_data_from);
     expression_parsers_set(expression_kind_function_call, expression_unary_postfix_operation_get_data_from);
+    expression_parsers_set(expression_kind_type_conversion, expression_type_conversion_get_data_from);
 
     init_expression_unary_operation_parsing();
     init_expression_binary_operation_parsing();
@@ -85,6 +87,8 @@ static char *str_expression_name(expression_t *expression) {
             return EXPRESSION_INDEXING_NAME;
         case expression_kind_function_call:
             return EXPRESSION_FUNCTION_CALL_NAME;
+        case expression_kind_type_conversion:
+            return EXPRESSION_TYPE_CONVERSION_NAME;
         default:
             assert(false);
     }
@@ -102,6 +106,8 @@ static void write_expression_data(expression_t *expression, char **buffer) {
             return write_expression_indexing_data_from(expression->data.as_indexing, buffer);
         case expression_kind_function_call:
             return write_expression_function_call_data_from(expression->data.as_function_call, buffer);
+        case expression_kind_type_conversion:
+            return write_expression_type_conversion_data_from(expression->data.as_type_conversion, buffer);
         default:
             assert(false);
     }
@@ -153,6 +159,9 @@ void free_expression(expression_t *expression) {
             break;
         case expression_kind_function_call:
             free_expression_function_call_data(expression->data.as_function_call);
+            break;
+        case expression_kind_type_conversion:
+            free_expression_type_conversion_data(expression->data.as_type_conversion);
             break;
         default:
             assert(false);

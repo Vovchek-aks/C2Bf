@@ -2,6 +2,7 @@
 #define EXPRESSIONS_DATAS
 
 #include "../../tokenization/tokenization.h"
+#include "../types/types_datas.h"
 
 typedef struct expression_t expression_t;
 
@@ -26,6 +27,11 @@ typedef struct {
 } expression_indexing_data_t;
 
 typedef struct {
+    parsed_type_t *type;
+    expression_t *expression;
+} expression_type_conversion_data_t;
+
+typedef struct {
     expression_t *function;
     expressions_t arguments;
 } expression_function_call_data_t;
@@ -35,6 +41,7 @@ typedef union {
     expression_literal_data_t as_literal;
     expression_element_access_data_t as_element_access;
     expression_indexing_data_t as_indexing;
+    expression_type_conversion_data_t as_type_conversion;
     expression_function_call_data_t as_function_call;
 } expression_data_t;
 

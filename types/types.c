@@ -86,7 +86,9 @@ type_t *get_type_of(expression_t *expression) {
 
         case expression_kind_name:
             return get_variable_type(expression->data.as_name.token->name);
-            break;
+
+        case expression_kind_type_conversion:
+            return get_type_from_parsed(expression->data.as_type_conversion.type);
 
         default:
             return NULL;
