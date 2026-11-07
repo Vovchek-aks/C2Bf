@@ -5,6 +5,7 @@
 #include "files.c"
 #include "tokenization/tokenization.c"
 #include "parsing/parsing.c"
+#include "types/types.c"
 #include "code_validation/code_validation.c"
 #include "translation/translation.c"
 #include "errors_display/errors_display.c"
@@ -12,6 +13,7 @@
 int32_t main(int32_t argc, char **argv) {
     init_tokenization();
     init_parsing();
+    init_types();
     init_program_validation();
 
     if (argc < 2) {

@@ -4,7 +4,7 @@
 #include "../tokenization/tokenization.h"
 #include "expressions/expressions.h"
 #include "statements/statements.h"
-#include "types/types.h"
+#include "types/parsed_types.h"
 
 #define PROGRAM_PRINTING_MAX_LENGTH (1024 * 1024)
 

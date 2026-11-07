@@ -1,5 +1,7 @@
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
+#include "variables_filler.h"
+
 struct variables_tree_t {
     struct variables_tree_t *parent;
     LIST(struct variables_tree_t) children;
@@ -46,5 +48,16 @@ void variables_filler_pull_observer(statement_t *statement) {
         return;
 
     statement_variable_declaration_data_t data = statement->data.as_variable_declaration;
-    dict_set_cmp(variables_tree->type_of, data.name->name, data.type, strcmp);
+    dict_set_cmp(variables_tree->type_of, data.name->name, get_type_from_parsed(data.type), strcmp);
+}
+
+type_t *get_variable_type(char *name) {
+    variables_tree_t *scope = variables_tree;
+    while (scope) {
+        type_t *type = dict_get_cmp(scope->type_of, name, NULL, strcmp);
+        if (type)
+            return type;
+        scope = scope->parent;
+    }
+    return NULL;
 }

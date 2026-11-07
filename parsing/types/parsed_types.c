@@ -1,4 +1,4 @@
-#include "types.h"
+#include "parsed_types.h"
 #include "stdio.h"
 #include "type_name.c"
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
@@ -94,7 +94,7 @@ void free_type(parsed_type_t *type) {
     free(type);
 }
 
-void free_types(types_t types) {
+void free_types(parsed_types_t types) {
     list_for(types, type)
     free_type(type);
 

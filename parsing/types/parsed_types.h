@@ -32,7 +32,7 @@ void print_type(parsed_type_t *type);
 
 void free_type(parsed_type_t *type);
 
-void free_types(types_t types);
+void free_types(parsed_types_t types);
 
 
 #endif

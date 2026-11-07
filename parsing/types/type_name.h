@@ -2,7 +2,7 @@
 #define TYPE_NAME
 
 #include "../../tokenization/tokenization.h"
-#include "types.h"
+#include "parsed_types.h"
 
 #define TYPE_NAME_NAME "NameType"
 

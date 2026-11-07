@@ -2,7 +2,7 @@
 #include "fake_tokens.c"
 #include "expressions/expressions.c"
 #include "statements/statements.c"
-#include "types/types.c"
+#include "types/parsed_types.c"
 
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"

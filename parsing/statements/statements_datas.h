@@ -3,7 +3,7 @@
 
 #include "../../tokenization/tokenization.h"
 #include "../tokens_operations.h"
-#include "../types/types.h"
+#include "../types/parsed_types.h"
 
 typedef struct statement_t statement_t;
 

@@ -5,7 +5,7 @@
 
 typedef struct parsed_type_t parsed_type_t;
 
-typedef LIST(parsed_type_t *) types_t;
+typedef LIST(parsed_type_t *) parsed_types_t;
 
 typedef struct {
     char *name;
