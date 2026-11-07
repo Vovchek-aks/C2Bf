@@ -37,9 +37,7 @@ token_t *chop_back(tokens_t *tokens, token_kind_t kind) {
 
 CHOP_TOKEN_KIND(chop_operator, operator_t, token_kind_operator, .as_operator.name)
 
-CHOP_TOKEN_KIND(chop_keyword, keyword_t , token_kind_keyword, .as_keyword.name)
-
-CHOP_TOKEN_KIND(chop_type, builtin_type_t , token_kind_type, .as_type.name)
+CHOP_TOKEN_KIND(chop_keyword, keyword_t, token_kind_keyword, .as_keyword.name)
 
 #define FIND_TOKEN_KIND(function_name, target_t, chop)                                                                 \
     token_t *function_name(tokens_t tokens,                                                                            \

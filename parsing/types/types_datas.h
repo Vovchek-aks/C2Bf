@@ -3,17 +3,17 @@
 
 #include "../../tokenization/tokenization.h"
 
-typedef struct type_t type_t;
+typedef struct parsed_type_t parsed_type_t;
 
-typedef LIST(type_t *) types_t;
+typedef LIST(parsed_type_t *) types_t;
 
 typedef struct {
-    token_type_data_t *token;
-} type_builtin_data_t;
+    char *name;
+} type_name_data_t;
 
 typedef union {
-    type_builtin_data_t as_builtin;
-} type_data_t;
+    type_name_data_t as_name;
+} parsed_type_data_t;
 
 typedef enum {
     type_parsing_result_fail,
@@ -33,7 +33,7 @@ typedef enum {
 
 typedef struct {
     type_parsing_result_status_t status;
-    type_data_t data;
+    parsed_type_data_t data;
 } type_parsing_result_t;
 
 typedef type_parsing_result_t (*type_parser_t)(tokens_t tokens, bool is_strict);

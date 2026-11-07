@@ -17,7 +17,7 @@ statement_parsing_result_t statement_variable_declaration_get_data_from(tokens_t
     if (left.count == 0)
         return FAILED_TO_PARSE_STATEMENT;
     
-    type_t *type = parse_type(left, is_strict);
+    parsed_type_t *type = parse_type(left, is_strict);
     if (!type)
         return FAILED_TO_PARSE_STATEMENT;
 

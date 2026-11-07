@@ -1,5 +1,4 @@
 #include "tokenization.h"
-#include "token_type.c"
 #include "token_name.c"
 #include "token_operator.c"
 #include "token_keyword.c"
@@ -12,13 +11,11 @@ static DICT(token_kind_t, tokenizer_t) tokenizers;
 
 void init_tokenization(void) {
     dict_alloc(tokenizers);
-    dict_set(tokenizers, token_kind_type, token_type_get_status);
     dict_set(tokenizers, token_kind_keyword, token_keyword_get_status);
     dict_set(tokenizers, token_kind_name, token_name_get_status);
     dict_set(tokenizers, token_kind_operator, token_operator_get_status);
     dict_set(tokenizers, token_kind_literal, token_literal_number_get_status);
 
-    init_type_tokenization();
     init_operator_tokenization();
     init_keyword_tokenization();
     init_literal_tokenization();
@@ -140,8 +137,6 @@ tokens_t tokenize(char *code) {
 
 token_data_t get_data_from(char *line, token_kind_t kind) {
     switch (kind) {
-        case token_kind_type:
-            return (token_data_t) {.as_type = token_type_get_data_from(line)};
         case token_kind_name:
             return (token_data_t) {.as_name = token_name_get_data_from(line)};
         case token_kind_operator:
@@ -163,8 +158,6 @@ void print_tokens(tokens_t tokens) {
 
 static char *str_token_name(token_t token) {
     switch (token.kind) {
-        case token_kind_type:
-            return TOKEN_TYPE_NAME;
         case token_kind_name:
             return TOKEN_NAME_NAME;
         case token_kind_operator:
@@ -180,9 +173,6 @@ static char *str_token_name(token_t token) {
 
 static void write_token_data(token_t token, char **buffer) {
     switch (token.kind) {
-        case token_kind_type:
-            write_token_type_data(token.data.as_type, buffer);
-            return;
         case token_kind_name:
             write_token_name_data(token.data.as_name, buffer);
             return;

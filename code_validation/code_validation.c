@@ -1,5 +1,6 @@
 #include "code_validation.h"
 #include "cycle_flow_validator.c"
+#include "types_validator.c"
 #include "variable_validators/variables_filler.c"
 #include "variable_validators/variables_usage_after_declaration_validation.c"
 #pragma ide diagnostic ignored "misc-no-recursion"
@@ -21,6 +22,8 @@ void init_program_validation() {
     init_cycle_flow_validator();
     list_push(statement_push_observers, cycle_flow_push_observer);
     list_push(statement_pull_observers, cycle_flow_pull_observer);
+
+    init_types_validation();
 
     init_variables_filler_validator();
     list_push(statement_push_observers, variables_filler_push_observer);

@@ -15,7 +15,7 @@
 typedef struct {
     tokens_t tokens;
     token_name_data_t *name;
-    type_t *type;
+    parsed_type_t *type;
     statement_t *body;
 } function_t;
 

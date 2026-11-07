@@ -28,7 +28,7 @@ typedef struct {
 } statement_return_data_t;
 
 typedef struct {
-    type_t *type;
+    parsed_type_t *type;
     token_name_data_t *name;
     expression_t *value;
 } statement_variable_declaration_data_t;

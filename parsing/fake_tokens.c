@@ -48,11 +48,3 @@ void fake_tokens_append_token_operator(operator_t kind) {
     };
     fake_tokens_append_token(token);
 }
-
-void fake_tokens_append_token_builtin_type(builtin_type_t builtin_type) {
-    token_t token = {
-            .kind = token_kind_type,
-            .data.as_type = {builtin_type}
-    };
-    fake_tokens_append_token(token);
-}

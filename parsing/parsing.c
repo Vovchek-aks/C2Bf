@@ -51,7 +51,7 @@ function_t *parse_function(tokens_t tokens) {
     if (!chop_operator(&left, operator_close_round, chop_direction_back))
         return NULL;
 
-    if (!chop_type(&left, builtin_type_void, chop_direction_back)) // todo
+    if (!chop_back(&left, token_kind_name)) // todo
         return NULL;
 
     if (!chop_operator(&left, operator_open_round, chop_direction_back))
@@ -61,7 +61,7 @@ function_t *parse_function(tokens_t tokens) {
     if (!name)
         return NULL;
 
-    type_t *type = parse_type(left, true);
+    parsed_type_t *type = parse_type(left, true);
     if (!type)
         return NULL;
 

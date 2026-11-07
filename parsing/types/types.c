@@ -1,6 +1,6 @@
 #include "types.h"
 #include "stdio.h"
-#include "type_builtin.c"
+#include "type_name.c"
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
@@ -13,10 +13,10 @@ type_parsers_t type_parsers;
 
 void init_types_parsing(void) {
     list_alloc(type_parsers);
-    type_parsers_push(type_kind_builtin, type_builtin_get_data_from);
+    type_parsers_push(parsed_type_kind_name, type_name_get_data_from);
 }
 
-type_t *parse_type(tokens_t tokens, bool is_strict) {
+parsed_type_t *parse_type(tokens_t tokens, bool is_strict) {
     assert(tokens.capacity == 0);
     assert(tokens.count > 0);
 
@@ -25,7 +25,7 @@ type_t *parse_type(tokens_t tokens, bool is_strict) {
         if (result.status == type_parsing_result_fail)
             continue;
 
-        type_t *type = malloc(sizeof(type_t));
+        parsed_type_t *type = malloc(sizeof(parsed_type_t));
         type->tokens = tokens;
         type->kind = parser.kind;
         type->data = result.data;
@@ -39,20 +39,20 @@ type_t *parse_type(tokens_t tokens, bool is_strict) {
     display_parsing_error(tokens, "Cannot identify type.");
 }
 
-static char *str_type_name(type_t *type) {
+static char *str_type_name(parsed_type_t *type) {
     switch (type->kind) {
-        case type_kind_builtin:
-            return TYPE_BUILTIN_NAME;
+        case parsed_type_kind_name:
+            return TYPE_NAME_NAME;
         default:
             printf("Type has no name\n");
             assert(false);
     }
 }
 
-static void write_type_data(type_t *type, char **buffer) {
+static void write_type_data(parsed_type_t *type, char **buffer) {
     switch (type->kind) {
-        case type_kind_builtin:
-            return write_type_builtin_data_from(type->data.as_builtin, buffer);
+        case parsed_type_kind_name:
+            return write_type_name_data_from(type->data.as_name, buffer);
         default:
             printf("Type cannot write data\n");
             assert(false);
@@ -61,7 +61,7 @@ static void write_type_data(type_t *type, char **buffer) {
 
 char type_print_buffer[TYPE_PRINTING_MAX_LENGTH] = {};
 
-void print_type(type_t *type) {
+void print_type(parsed_type_t *type) {
     char *line_end = type_print_buffer;
     write_type(type, &line_end);
 
@@ -69,7 +69,7 @@ void print_type(type_t *type) {
     memset(type_print_buffer, 0, TYPE_PRINTING_MAX_LENGTH);
 }
 
-void write_type(type_t *type, char **buffer) {
+void write_type(parsed_type_t *type, char **buffer) {
     char *line = malloc(TYPE_PRINTING_MAX_LENGTH);
     memset(line, 0, TYPE_PRINTING_MAX_LENGTH);
     char *line_end = line;
@@ -81,10 +81,10 @@ void write_type(type_t *type, char **buffer) {
     free(line);
 }
 
-void free_type(type_t *type) {
+void free_type(parsed_type_t *type) {
     switch (type->kind) {
-        case type_kind_builtin:
-            free_type_builtin_data(type->data.as_builtin);
+        case parsed_type_kind_name:
+            free_type_name_data(type->data.as_name);
             break;
         default:
             printf("Cannot free type\n");

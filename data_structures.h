@@ -111,8 +111,21 @@
 
 #define dict_get(dict, key, default_result) dict_get_cmp(dict, key, default_result, DEFAULT_CMP)
 
+#define dict_get_no_default(dict, key) dict_get_cmp_no_default(dict, key, DEFAULT_CMP)
+
 #define dict_get_cmp(dict, key_, default_result, cmp) ({                                                               \
     typeof((dict.data[0].value)) result = (default_result);                                                            \
+    dict_for((dict), item) {                                                                                           \
+        if (cmp((item).key, (key_)) == 0) {                                                                            \
+            (result) = item.value;                                                                                     \
+            break;                                                                                                     \
+        }                                                                                                              \
+    }                                                                                                                  \
+    result;                                                                                                            \
+})
+
+#define dict_get_cmp_no_default(dict, key_, cmp) ({                                                                    \
+    typeof((dict.data[0].value)) result;                                                                               \
     dict_for((dict), item) {                                                                                           \
         if (cmp((item).key, (key_)) == 0) {                                                                            \
             (result) = item.value;                                                                                     \
@@ -171,19 +184,18 @@
         break;                                                                                                         \
     }                                                                                                                  \
                                                                                                                        \
-    size_t index = 0;                                                                                                  \
-    typeof((dict).data->value) old_value = dict_get_cmp((dict), (key), NULL, cmp);                                     \
-    typeof(*(dict).data) item = {(key), old_value};                                                                    \
-    _dict_index((dict), item, index);                                                                                  \
+    size_t index = _dict_index((dict), (key), cmp);                                                                    \
     (dict).data[index].value = (value_);                                                                               \
 } while (0)
 
-#define _dict_index(dict, item, result) do {                                                                           \
+#define _dict_index(dict, key_, cmp) ({                                                                                \
+    size_t _index = 0;                                                                                                 \
     for (size_t idx = 0; idx < (dict).count; idx++)                                                                    \
-        if ((dict).data[idx].key == (item).key && (dict).data[idx].value == (item).value) {                            \
-            (result) = idx;                                                                                            \
+        if (cmp((dict).data[idx].key, (key_)) == 0) {                                                                  \
+            _index = idx;                                                                                              \
             break;                                                                                                     \
         }                                                                                                              \
-} while (0)
+    _index;                                                                                                            \
+})
 
 #endif
