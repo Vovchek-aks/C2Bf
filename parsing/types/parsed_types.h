@@ -2,16 +2,17 @@
 #define PARSED_TYPES
 
 #include "../../tokenization/tokenization.h"
-#include "types_datas.h"
+#include "parsed_type_datas.h"
 
 #define TYPE_PRINTING_MAX_LENGTH (1024 * 1024)
 
 typedef enum {
     parsed_type_kind_name,
+    parsed_type_kind_array,
     parsed_type_kinds_count __attribute__((unused))
 } parsed_type_kind_t;
 
-struct parsed_type_t {
+struct parsed_type {
     tokens_t tokens;
     parsed_type_kind_t kind;
     parsed_type_data_t data;

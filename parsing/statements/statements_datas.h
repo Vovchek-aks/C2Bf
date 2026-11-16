@@ -5,7 +5,7 @@
 #include "../tokens_operations.h"
 #include "../types/parsed_types.h"
 
-typedef struct statement_t statement_t;
+typedef struct statement statement_t;
 
 typedef LIST(statement_t *) statements_t;
 

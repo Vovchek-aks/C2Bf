@@ -21,7 +21,7 @@ typedef enum {
     statement_kinds_count __attribute__((unused))
 } statement_kind_t;
 
-struct statement_t {
+struct statement {
     tokens_t tokens;
     statement_kind_t kind;
     statement_data_t data;

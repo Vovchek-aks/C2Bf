@@ -10,15 +10,15 @@ type_parsing_result_t type_name_get_data_from(tokens_t tokens, bool is_strict) {
     if (!token)
         return FAILED_TO_PARSE_TYPE;
 
-    type_name_data_t data = {token->data.as_name.name};
+    parsed_type_name_data_t data = {token->data.as_name.name};
     return TYPE_PARSED(.as_name, data);
 }
 
-void write_type_name_data_from(type_name_data_t data, char **buffer) {
+void write_type_name_data_from(parsed_type_name_data_t data, char **buffer) {
     string_extend(buffer, "(\"");
     string_extend(buffer, data.name);
     string_extend(buffer, "\");");
 }
 
-void free_type_name_data(type_name_data_t data) {
+void free_type_name_data(parsed_type_name_data_t data) {
 }

@@ -27,7 +27,7 @@ void declaration_types_checker_push_observer(statement_t *statement) {
     type_t *left = get_type_from_parsed(statement->data.as_variable_declaration.type);
     if (!left)
         display_validation_error(statement, "Cannot identify type.");
-    
+
     type_t *right = get_type_of(statement->data.as_variable_declaration.value);
     if (!right)
         display_validation_error(statement->data.as_variable_declaration.value, "Cannot identify type.");

@@ -148,3 +148,11 @@ void write_token_literal_data(token_literal_data_t data, char **buffer) {
     string_extend(buffer, sub_buffer);
     string_extend(buffer, quote);
 }
+
+int64_t get_token_literal_value_as_int(token_literal_data_t data) {
+    assert(data.kind == token_literal_kind_int);
+
+    int64_t result;
+    sscanf(data.line, "%lld", &result);
+    return result;
+}

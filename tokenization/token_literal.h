@@ -26,4 +26,6 @@ token_literal_data_t token_literal_str_or_char_try_get_data_from(char *line);
 
 void write_token_literal_data(token_literal_data_t data, char **buffer);
 
+int64_t get_token_literal_value_as_int(token_literal_data_t data);
+
 #endif

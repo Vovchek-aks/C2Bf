@@ -19,7 +19,7 @@ typedef enum {
     expression_kinds_count __attribute__((unused))
 } expression_kind_t;
 
-struct expression_t {
+struct expression {
     tokens_t tokens;
     expression_kind_t kind;
     expression_data_t data;

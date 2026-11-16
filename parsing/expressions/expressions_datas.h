@@ -2,9 +2,12 @@
 #define EXPRESSIONS_DATAS
 
 #include "../../tokenization/tokenization.h"
-#include "../types/types_datas.h"
+#include "../types/parsed_types.h"
 
-typedef struct expression_t expression_t;
+#ifndef EXPRESSION_T
+#define EXPRESSION_T
+typedef struct expression expression_t;
+#endif
 
 typedef LIST(expression_t *) expressions_t;
 

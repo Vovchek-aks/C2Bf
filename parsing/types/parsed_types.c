@@ -1,6 +1,7 @@
 #include "parsed_types.h"
 #include "stdio.h"
 #include "type_name.c"
+#include "type_array.c"
 #pragma ide diagnostic ignored "bugprone-sizeof-expression"
 #pragma ide diagnostic ignored "modernize-use-nullptr"
 
@@ -43,6 +44,8 @@ static char *str_type_name(parsed_type_t *type) {
     switch (type->kind) {
         case parsed_type_kind_name:
             return TYPE_NAME_NAME;
+        case parsed_type_kind_array:
+            return TYPE_ARRAY_NAME;
         default:
             printf("Type has no name\n");
             assert(false);
@@ -53,6 +56,8 @@ static void write_type_data(parsed_type_t *type, char **buffer) {
     switch (type->kind) {
         case parsed_type_kind_name:
             return write_type_name_data_from(type->data.as_name, buffer);
+        case parsed_type_kind_array:
+            return write_type_array_data_from(type->data.as_array, buffer);
         default:
             printf("Type cannot write data\n");
             assert(false);
@@ -85,6 +90,9 @@ void free_type(parsed_type_t *type) {
     switch (type->kind) {
         case parsed_type_kind_name:
             free_type_name_data(type->data.as_name);
+            break;
+        case parsed_type_kind_array:
+            free_type_array_data(type->data.as_array);
             break;
         default:
             printf("Cannot free type\n");
