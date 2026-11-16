@@ -26,11 +26,11 @@ void declaration_types_checker_push_observer(statement_t *statement) {
 
     type_t *left = get_type_from_parsed(statement->data.as_variable_declaration.type);
     if (!left)
-        display_validation_error(statement->data.as_assignment.left, "Cannot identify type.");
+        display_validation_error(statement, "Cannot identify type.");
     
     type_t *right = get_type_of(statement->data.as_variable_declaration.value);
     if (!right)
-        display_validation_error(statement->data.as_assignment.right, "Cannot identify type.");
+        display_validation_error(statement->data.as_variable_declaration.value, "Cannot identify type.");
 
     if (!is_able_to_assign(left, right))
         display_validation_error(statement, "Incompatible types.");

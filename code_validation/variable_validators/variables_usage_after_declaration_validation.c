@@ -12,8 +12,9 @@ void variables_usage_after_declaration_statement_push_observer(statement_t *stat
     if (statement->kind != statement_kind_variable_declaration)
         return;
 
-    if (!get_variable_type(statement->data.as_variable_declaration.name->name))
-        return;
+    if (get_variable_type(statement->data.as_variable_declaration.name->name))
+        display_validation_error(statement, "Variable has been already declared above.");
 
-    display_validation_error(statement, "Variable has been already declared above.");
+    if (get_type_named(statement->data.as_variable_declaration.name->name))
+        display_validation_error(statement, "Type cannot be a variable name.");
 }

@@ -12,7 +12,7 @@ void display_bad_tokens(tokens_t tokens);
 __MINGW_ATTRIB_NORETURN void display_parsing_error(tokens_t tokens, char *message);
 
 #define display_validation_error(statement_or_expression, message) ({                                                  \
-    display_bad_tokens((statement_or_expression)->tokens);                                                             \
+    display_bad_tokens(list_view((statement_or_expression)->tokens));                                                  \
     fprintf (stderr, "%s\n", (message));                                                                               \
     abort();                                                                                                           \
 })
